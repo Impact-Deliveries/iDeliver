@@ -15,7 +15,7 @@ namespace IDeliverObjects.Objects
         public bool IsDeleted { get; set; }
         public DateTime ModifiedDate { get; set; }
         public DateTime CreationDate { get; set; }
-
+        //
         public virtual Location Location { get; set; }
         public virtual MerchantBranch MerchantBranch { get; set; }
     }

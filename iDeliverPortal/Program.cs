@@ -13,7 +13,6 @@ if (!app.Environment.IsDevelopment())
 
 app.Use(async (context, next) =>
 {
-    //
     await next();
     if (context.Response.StatusCode == 404)
     {

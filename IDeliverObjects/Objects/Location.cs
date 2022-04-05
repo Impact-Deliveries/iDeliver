@@ -10,6 +10,7 @@ namespace IDeliverObjects.Objects
         public Location()
         {
             MerchantBranches = new HashSet<MerchantBranch>();
+            MerchantDeliveryPrices = new HashSet<MerchantDeliveryPrice>();
         }
 
         public long Id { get; set; }
@@ -22,5 +23,6 @@ namespace IDeliverObjects.Objects
 
         public virtual Country Country { get; set; }
         public virtual ICollection<MerchantBranch> MerchantBranches { get; set; }
+        public virtual ICollection<MerchantDeliveryPrice> MerchantDeliveryPrices { get; set; }
     }
 }

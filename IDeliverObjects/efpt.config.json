@@ -34,6 +34,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[MerchantDeliveryPrice]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[MerchantEmployee]",
          "ObjectType": 0
       },
@@ -50,7 +54,7 @@
          "ObjectType": 0
       }
    ],
-   "UiHint": "DESKTOP-T7UIV44.iDeliverDB",
+   "UiHint": "..\\iDeliverDB\\iDeliverDB.sqlproj",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDbContextSplitting": false,

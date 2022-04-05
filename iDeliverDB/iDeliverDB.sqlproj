@@ -82,5 +82,6 @@
     <Build Include="dbo\tables\Merchant.sql" />
     <Build Include="dbo\tables\MerchantBranch.sql" />
     <Build Include="dbo\tables\MerchantEmployee.sql" />
+    <Build Include="dbo\tables\MerchantDeliveryPrice.sql" />
   </ItemGroup>
 </Project>

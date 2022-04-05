@@ -9,6 +9,7 @@ namespace IDeliverObjects.Objects
     {
         public MerchantBranch()
         {
+            MerchantDeliveryPrices = new HashSet<MerchantDeliveryPrice>();
             MerchantEmployees = new HashSet<MerchantEmployee>();
         }
 
@@ -29,6 +30,7 @@ namespace IDeliverObjects.Objects
 
         public virtual Location Location { get; set; }
         public virtual Merchant Merchant { get; set; }
+        public virtual ICollection<MerchantDeliveryPrice> MerchantDeliveryPrices { get; set; }
         public virtual ICollection<MerchantEmployee> MerchantEmployees { get; set; }
     }
 }

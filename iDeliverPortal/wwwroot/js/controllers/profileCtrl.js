@@ -3,8 +3,9 @@
 
     app.controller('profileCtrl', ['$scope', '$rootScope', '$log', 'httpService', 'commonService',
         function ($scope, $rootScope, $log, httpService, commonService) {
+          
             $scope.profile = null;
-
+            $scope.SelectedModules = "0";
             $scope.loggedin = function () {
                 let promise = httpService.httpGet('Authentication/loggedin', null, { 'Content-Type': 'application/json' });
 
@@ -54,26 +55,36 @@
                         icon: "fas fa-car me-2"
                     }
                 ]
+            },
+            {
+                id: 3,
+                name: "Driver",
+                active: false,
+                icon: "fas fa-car me-2",
+                child: []
             }];
 
             $scope.goto = function (id) {
                 if (!id) return;
-
                 let isExist = $scope.modules.some(v => v.id === id && v.active === true);
                 if (!isExist) {
                     $scope.modules.filter(f => f.active === true)[0].active = false;
                     $scope.modules.filter(f => f.id === id)[0].active = true;
                 }
+                $scope.SelectedModules = id.toString();
             };
-
-
 
             $scope.init = function () {
                 $rootScope.page.loaded = false;
                 $scope.loggedin();
             };
 
+
+
+
+
             $scope.init();
+
         }]);
 
 })(angular.module("iDeliver"));

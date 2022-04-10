@@ -1,6 +1,6 @@
 ﻿(function () {
     "use strict";
-    var app = angular.module("iDeliver", []);
+    var app = angular.module("iDeliver", ["720kb.datepicker", 'ui.bootstrap', 'thatisuday.dropzone', 'ngSanitize', 'ngTable', 'ngResource']);
 
     app.constant("appsettings", {
         apiBaseUrl: "http://localhost:5117/api/",

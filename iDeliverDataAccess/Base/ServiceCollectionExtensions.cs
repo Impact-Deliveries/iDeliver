@@ -14,6 +14,11 @@ namespace iDeliverDataAccess.Base
         {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+            services.AddScoped<IDriverRepository, DriverRepository>();
+            services.AddScoped<IDriverDetailsRepository, DriverDetailRepository>();
+            services.AddScoped<IDriverSchaduleRepository, DriverSchaduleRepository>();
+            services.AddScoped<IEnrolmentRepository, EnrolmentRepository>();
         }
     }
 }

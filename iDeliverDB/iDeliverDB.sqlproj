@@ -83,5 +83,9 @@
     <Build Include="dbo\tables\MerchantBranch.sql" />
     <Build Include="dbo\tables\MerchantEmployee.sql" />
     <Build Include="dbo\tables\MerchantDeliveryPrice.sql" />
+    <Build Include="dbo\tables\Driver.sql" />
+    <Build Include="dbo\tables\DriverDetails.sql" />
+    <Build Include="dbo\tables\DriverSchadule.sql" />
+    <Build Include="dbo\tables\Attachment.sql" />
   </ItemGroup>
 </Project>

@@ -14,7 +14,23 @@
    "SelectedToBeGenerated": 2,
    "Tables": [
       {
+         "Name": "[dbo].[Attachment]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Country]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Driver]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DriverDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DriverSchadule]",
          "ObjectType": 0
       },
       {

@@ -77,4 +77,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="MerchantBranchID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="e2ffc29f-91eb-4497-8234-27c15f57f243" ChangeDateTime="04/08/2022 11:58:45">
+    <Property Name="ElementName" Value="[dbo].[Attachment].[Extention]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Attachment]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Extension" />
+  </Operation>
 </Operations>

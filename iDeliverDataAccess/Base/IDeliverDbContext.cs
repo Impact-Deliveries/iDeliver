@@ -20,7 +20,11 @@ namespace iDeliverDataAccess.Base
         {
         }
 
+        public virtual DbSet<Attachment> Attachments { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
+        public virtual DbSet<Driver> Drivers { get; set; }
+        public virtual DbSet<DriverDetail> DriverDetails { get; set; }
+        public virtual DbSet<DriverSchadule> DriverSchadules { get; set; }
         public virtual DbSet<Enrolment> Enrolments { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Merchant> Merchants { get; set; }
@@ -34,6 +38,37 @@ namespace iDeliverDataAccess.Base
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Scaffolding:ConnectionString", "Data Source=(local);Initial Catalog=iDeliverDB;Integrated Security=true");
+
+            modelBuilder.Entity<Attachment>(entity =>
+            {
+                entity.ToTable("Attachment");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.CreatorId).HasColumnName("CreatorID");
+
+                entity.Property(e => e.Extension)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsFixedLength();
+
+                entity.Property(e => e.FileName)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.GroupId)
+                    .HasMaxLength(10)
+                    .HasColumnName("GroupID")
+                    .IsFixedLength();
+
+                entity.Property(e => e.ModuleId).HasColumnName("ModuleID");
+
+                entity.Property(e => e.Path)
+                    .IsRequired()
+                    .HasMaxLength(500);
+            });
 
             modelBuilder.Entity<Country>(entity =>
             {
@@ -56,6 +91,79 @@ namespace iDeliverDataAccess.Base
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Driver>(entity =>
+            {
+                entity.ToTable("Driver");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Address).HasMaxLength(200);
+
+                entity.Property(e => e.Birthday).HasColumnType("datetime");
+
+                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.FirstName).HasMaxLength(50);
+
+                entity.Property(e => e.LastName).HasMaxLength(50);
+
+                entity.Property(e => e.Reason).HasMaxLength(500);
+
+                entity.Property(e => e.SecondName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<DriverDetail>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.AvancedStudies).HasMaxLength(50);
+
+                entity.Property(e => e.College).HasMaxLength(50);
+
+                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.DriverId).HasColumnName("DriverID");
+
+                entity.Property(e => e.Estimate).HasMaxLength(50);
+
+                entity.Property(e => e.FromTime).HasColumnType("datetime");
+
+                entity.Property(e => e.GraduationYear).HasMaxLength(50);
+
+                entity.Property(e => e.Major).HasMaxLength(50);
+
+                entity.Property(e => e.StartJob).HasColumnType("datetime");
+
+                entity.Property(e => e.ToTime).HasColumnType("datetime");
+
+                entity.Property(e => e.University).HasMaxLength(50);
+
+                entity.HasOne(d => d.Driver)
+                    .WithMany(p => p.DriverDetails)
+                    .HasForeignKey(d => d.DriverId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_DriverDetails_Driver");
+            });
+
+            modelBuilder.Entity<DriverSchadule>(entity =>
+            {
+                entity.ToTable("DriverSchadule");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.DayId).HasColumnName("DayID");
+
+                entity.Property(e => e.DriverId).HasColumnName("DriverID");
+
+                entity.HasOne(d => d.Driver)
+                    .WithMany(p => p.DriverSchadules)
+                    .HasForeignKey(d => d.DriverId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_DriverSchadule_Driver");
             });
 
             modelBuilder.Entity<Enrolment>(entity =>

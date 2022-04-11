@@ -34,6 +34,4 @@ namespace IDeliverObjects.Enum
         Thursday = 6,
         Friday = 7
     }
- 
-
 }

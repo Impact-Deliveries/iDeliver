@@ -6,19 +6,15 @@
     "iisExpress": {
       "applicationUrl": "http://localhost:26235",
       "sslPort": 0
-    },
-    "iis": {
-      "applicationUrl": "http://localhost",
-      "sslPort": 0
     }
   },
   "profiles": {
-    "IIS": {
-      "commandName": "IIS",
+    "iDeliverService": {
+      "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost/iDeliverService",
+      "applicationUrl": "http://localhost:5117",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

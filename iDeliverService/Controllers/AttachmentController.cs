@@ -84,14 +84,15 @@ namespace iDeliverService.Controllers
 
                         string replace_filename = filename.Replace("~/", "").Split(file_extension)[0] + "_" + creation_date + file_extension;
 
-                        var path = Path.Combine(_env.ContentRootPath, data.Path); //Server.MapPath(data.Path);
+                        var path = _env.ContentRootPath + data.Path.Replace("~/", "\\").Replace("/", "\\"); 
+                        //Path.Combine(_env.ContentRootPath, data.Path.Replace("~/", "\\").Replace("/", "\\")); //Server.MapPath(data.Path);
                         if (!Directory.Exists(path))
                         {
                             Directory.CreateDirectory(path);
                         }
 
-                        string physical_path = data.Path; //+ replace_filename;
-                        string file_path = Path.Combine(physical_path + replace_filename);
+                       // string physical_path = data.Path; //+ replace_filename;
+                       string file_path = Path.Combine(path + replace_filename);
                         // files.SaveAs(file_path);
 
                         using (var stream = System.IO.File.Create(file_path))
@@ -107,7 +108,7 @@ namespace iDeliverService.Controllers
                             IsDeleted = false,
                             ModuleId = data.ModuleID,
                             ModuleType = data.ModuleTypeID,
-                            Extension = file_extension,
+                            Extension = file_extension.Trim(),
                             GroupId = data.GroupID.ToString(),
                             AttachmentType = data.AttachmentType
                         };

@@ -1,8 +1,8 @@
 ﻿(function (app) {
     'use strict';
-    app.controller('Driver', ['$scope', '$rootScope', '$log', 'httpService', 'commonService', 'appsettings', 'NgTableParams', '$resource',
-        function ($scope, $rootScope, $log, httpService,commonService, appsettings, NgTableParams, $resource) {
-            $scope.SocialStatus = [
+    app.controller('Driver', ['$scope', '$rootScope', '$log', 'httpService', 'commonService', 'appsettings', 'NgTableParams', '$resource','$timeout',
+        function ($scope, $rootScope, $log, httpService, commonService, appsettings, NgTableParams, $resource, $timeout) {
+            $scope.socialStatus = [
                 { ID: 1, EnglishTitle: "Single" },
                 { ID: 2, EnglishTitle: "Engaged" },
                 { ID: 3, EnglishTitle: "Married" },
@@ -28,6 +28,7 @@
                 myDropzone: null,
                 driverid: 0,
                 obj: {
+                    DriverID:null,
                     firstname: '',
                     middlename: '',
                     lastname: '',
@@ -35,10 +36,10 @@
                     mobile2: null,
                     mobile: null,
                     birthday: moment(new Date()).format("DD-MM-yyyy"),
-                    SocialStatus: "0",
+                    socialStatus: "0",
                     isHaveProblem: false,
                     reason: null,
-                    WorkTime: "0",
+                    workTime: "0",
                     fromTime: null,
                     toTime: null,
                     startJob: moment(new Date()).format("DD-MM-yyyy"),
@@ -48,7 +49,9 @@
                     graduationyear: '',
                     estimate: '',
                     avancedstudies: '',
-                    selecteddays: []
+                    selecteddays: [],
+                    Attachments: null,
+                    IsActive:true
                 },
 
             };
@@ -64,9 +67,12 @@
             $scope.driverTable = {
                 page: 1,
                 count: 10,
+                data: null,
+                showResult: false,
+                isvalid:false,
                 objects: {
                     DriverID: "0",
-                    IsActive: "1",
+                    IsActive:"true",
                     DriverName: '',
                     Mobile: "0",
                 }
@@ -91,15 +97,15 @@
                 $scope.driver.isvalid = true;
                 if ($scope.driver.obj.firstname == '' || $scope.driver.obj.middlename == '' ||
                     $scope.driver.obj.lastname == '' || $scope.driver.obj.address == '' ||
-                    $scope.driver.obj.birthday == '' || $scope.driver.obj.SocialStatus == "0" || $scope.driver.obj.mobile == '') {
+                    $scope.driver.obj.birthday == '' || $scope.driver.obj.socialStatus == "0" || $scope.driver.obj.mobile == '') {
                     return;
                 }
                 if ($scope.driver.obj.isHaveProblem == null || ($scope.driver.obj.isHaveProblem == true
                     && $scope.driver.obj.reason == '')
-                    || $scope.driver.obj.WorkTime == "0" || $scope.driver.obj.startJob == '') {
+                    || $scope.driver.obj.workTime == "0" || $scope.driver.obj.startJob == '') {
                     return;
                 }
-                if ($scope.driver.obj.WorkTime == '2' && totaldays == null && totaldays.length == 0
+                if ($scope.driver.obj.workTime == '2' && totaldays == null && totaldays.length == 0
                     || moment($scope.driver.obj.fromTime).format("HH:mm:ss a") > moment($scope.driver.obj.toTime).format("HH:mm:ss a")
                 ) {
                     return;
@@ -130,28 +136,97 @@
             };
 
             //#region drivers table
+            $scope.$watch('driverTable.objects.IsActive  + driverTable.objects.DriverName', function (newvalue, oldvalue) {
+                $scope.driverTable.showResult = false;
+            });
             $scope.getDriversTable = function () {
-                var resource = $resource(appsettings.apiBaseUrl + "Driver/GetDrivers");
-                $scope.dtDrivers = new NgTableParams($scope.driverTable, {
-                    filterDelay: 300,
-                    total: 1,
-                    getData: function ($defer) {
-                       // $scope.result.processing = true;
-                        // request to api
-                        return resource.get($defer.url()).$promise.then(function (response) {
-                            // $scope.result.processing = false;
-                            $defer.total(response.total);
-                            return response.results;
-                        }).catch(function (response) {
-                            //$scope.result.processing = false;
-                        });
+                $scope.driverTable.isvalid = true;
+                if ($scope.driverTable.objects.IsActive=='') {
+                    return;
+                }
+                let promise = httpService.httpGet('Driver/GetDrivers', {
+                    IsActive:$scope.driverTable.objects.IsActive ,
+                    DriverName :$scope.driverTable.objects.DriverName
+                }, { 'Content-Type': 'application/json' });
+
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.driverTable.data = res.data;
+                            $scope.driverTable.showResult = true;
+                            break;
+                        default:
+                            break;
                     }
+                    // $rootScope.page.loaded = true;
+                }, function (res) {
+
                 });
-                $scope.tableRows = function (index) {
-                    if (index === null) return;
-                    var result = (($scope.dtDrivers.page() - 1) * $scope.dtDrivers.count()) + (index + 1);
-                    return result;
-                };
+
+            //$scope.getDriversTable = function () {
+            //    var resource = $resource(appsettings.apiBaseUrl + "Driver/GetDrivers");
+            //    $scope.dtDrivers = new NgTableParams($scope.driverTable, {
+            //        filterDelay: 300,
+            //        total: 1,
+            //        getData: function ($defer) {
+            //            // $scope.result.processing = true;
+            //            // request to api
+            //            return resource.get(JSON.stringify($defer.url())).$promise.then(function (response) {
+            //                // $scope.result.processing = false;
+            //                $defer.total(response.total);
+            //                return response.results;
+            //            }).catch(function (response) {
+            //                //$scope.result.processing = false;
+            //            });
+            //        }
+            //    });
+                //$scope.tableRows = function (index) {
+                //    if (index === null) return;
+                //    var result = (($scope.dtDrivers.page() - 1) * $scope.dtDrivers.count()) + (index + 1);
+                //    return result;
+                //};
+            };
+
+            $scope.getDriver = function (id) {
+                //$rootScope.page.loaded = false;
+                let promise = httpService.httpGet('Driver/'+id, null, { 'Content-Type': 'application/json' });
+
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            //(res.data)
+                            $scope.driver.obj = res.data;
+
+                            $scope.driver.obj.birthday= moment($scope.driver.obj.birthday).format("DD-MM-yyyy")
+                            $scope.driver.obj.startJob = moment($scope.driver.obj.startJob).format("DD-MM-yyyy")
+                            debugger
+                           // $scope.driver.obj.fromTime = moment($scope.driver.obj.fromTime).format("HH:mm")
+                            //  $scope.driver.obj.toTime = moment($scope.driver.obj.toTime).format("HH:mm")
+                            var from = moment($scope.driver.obj.fromTime).format("HH:mm");
+                            var to = moment($scope.driver.obj.toTime).format("HH:mm");
+                            console.log(from)
+                            $timeout(function () {
+                                $("#fromtime").val(from);
+                                $("#totime").val(to);
+                            }, 100)
+                            if ($scope.driver.obj.workTime.toString() == "2" && $scope.driver.obj.selecteddays != null && $scope.driver.obj.selecteddays.length>0) {
+                                for (var i = 0; i < $scope.driver.obj.selecteddays.length; i++) {
+                                    $scope.Days.filter(a => a.ID == $scope.driver.obj.selecteddays[i])[0].checked = true;
+                                }
+                                console.log($scope.Days)
+                            }
+                            $scope.driver.obj.socialStatus = $scope.driver.obj.socialStatus.toString();
+                            $scope.driver.obj.workTime = $scope.driver.obj.workTime.toString();
+                         
+                            break;
+                        default:
+                            break;
+                    }
+                    $scope.changeTab(3);
+                   // $rootScope.page.loaded = true;
+                }, function (res) {
+
+                });
             };
             //#endregion
 

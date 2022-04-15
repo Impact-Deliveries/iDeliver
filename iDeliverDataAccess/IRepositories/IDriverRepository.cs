@@ -18,5 +18,7 @@ namespace iDeliverDataAccess.Repositories
         Task Update(Driver Driver);
         Task Delete(Driver Driver);
         Task<DriverTableDTO> GetDrivers(NgDriverTableFilter filter, int pageIndex, int pageSize);
+        Task<List<Driver>> GetAllDrivers(bool? IsActive, string? DriverName);
+        Task<DriverDTO> GetDriverById(long id);   
     }
 }

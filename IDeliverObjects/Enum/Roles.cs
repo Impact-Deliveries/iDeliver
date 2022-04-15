@@ -34,4 +34,11 @@ namespace IDeliverObjects.Enum
         Thursday = 6,
         Friday = 7
     }
+    public enum Module
+    {
+        administrator = 1,
+        marchent = 2,
+        driver = 3,
+        MerchantBranch=4
+    }
 }

@@ -16,7 +16,7 @@
             let response = $http({
                 url: appsettings.apiBaseUrl + url,
                 method: 'GET',
-                data: params,
+                params: params,
                 headers: headers
             });
 

@@ -15,5 +15,7 @@ namespace iDeliverDataAccess.Repositories
         Task Add(DriverSchadule DriverSchadule);
         Task Update(DriverSchadule DriverSchadule);
         Task Delete(DriverSchadule DriverSchadule);
+        Task<List<DriverSchadule>> GetByDriverID(long id);
+         Task DeleteScheduleByDriverID(List<DriverSchadule> selected);
     }
 }

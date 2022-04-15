@@ -83,5 +83,25 @@ namespace iDeliverDataAccess.Repositories
                 throw;
             }
         }
+
+        public async Task<List<DriverSchadule>> GetByDriverID(long id)
+        {
+            try
+            {
+                return await _context.DriverSchadules.Where(a => a.DriverId == id).ToListAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task DeleteScheduleByDriverID(List<DriverSchadule> selected)
+        {
+             _context.DriverSchadules.RemoveRange(selected);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

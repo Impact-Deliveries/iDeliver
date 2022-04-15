@@ -31,7 +31,8 @@ namespace iDeliverDataAccess.Repositories
 
         public async Task<DriverDetail?> GetByID(long id) =>
             await _context.DriverDetails.Where(w => w.Id == id ).FirstOrDefaultAsync();
-
+        public async Task<DriverDetail?> GetByDeiverID(long id) =>
+            await _context.DriverDetails.Where(w => w.DriverId == id).FirstOrDefaultAsync();
         public async Task<IEnumerable<DriverDetail>> Find(Expression<Func<DriverDetail, bool>> where) =>
             await _context.DriverDetails.Where(where).ToListAsync();
 

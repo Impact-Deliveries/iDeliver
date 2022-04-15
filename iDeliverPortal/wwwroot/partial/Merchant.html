@@ -1,0 +1,159 @@
+﻿<div ng-controller="Merchant">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link " ng-class="{'active':merchant.tabs==1 }" ng-click="changeTab(1)" href="javascript:void(0);">merchants</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" ng-class="{'active':merchant.tabs==2}" ng-click="changeTab(2)" href="javascript:void(0);">Add merchant</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" ng-class="{'active':merchant.tabs==3}" ng-click="changeTab(3)" ng-if="merchant.tabs==3" href="javascript:void(0);">Edit merchant</a>
+        </li>
+
+    </ul>
+
+
+    <div ng-if="merchant.tabs==2 || merchant.tabs==3">
+        <form name="merchantForm" ng-submit="submit()">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center my-2 mx-1">
+                        <h3>merchant Form</h3>
+                    </div>
+
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                        <label> organization Name</label>
+                        <select ng-model="organization.selected" class="form-control">
+                            <option value="0" selected="selected">Please Choice</option>
+                            <option ng-repeat="item in organization.data" value="{{item.id}}">  {{item.name}}</option>
+                        </select>
+                        <small class="text-danger" ng-if="merchant.isvalid && organization.selected=='0'">This field is Required </small>
+                    </div>
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                        <label> Merchant Name</label>
+                        <input type="text" ng-model="merchant.obj.MerchantName" class="form-control" required>
+                        <small class="text-danger" ng-if="merchant.isvalid && merchant.obj.MerchantName==''">This field is Required </small>
+                    </div>
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
+                        <label> Overview</label>
+                        <input type="text" ng-model="merchant.obj.Overview" class="form-control" required>
+                        <small class="text-danger" ng-if="merchant.isvalid && merchant.obj.Overview==''">This field is Required </small>
+                    </div>
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                        <label> Mobile</label>
+                        <input type="number" ng-model="merchant.obj.Mobile" class="form-control" required>
+                        <small class="text-danger" ng-if="merchant.isvalid && (merchant.obj.Mobile=='' ||merchant.obj.Mobile==null)">This field is Required </small>
+                    </div>
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                        <label> Phone</label>
+                        <input type="number" ng-model="merchant.obj.Phone" class="form-control" required>
+                        <small class="text-danger" ng-if="merchant.isvalid && (merchant.obj.Phone=='' ||merchant.obj.Phone==null)">This field is Required </small>
+                    </div>
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                        <label>Email</label>
+                        <input type="email" ng-model="merchant.obj.Email" class="form-control" required>
+                        <small class="text-danger" ng-if="merchant.isvalid && merchant.obj.Email==''">This field is Required </small>
+                    </div>
+
+
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-2">
+                        <button class="btn btn-success" type="submit">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+    <div ng-if="merchant.tabs==1">
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center my-2 mx-1">
+                    <h3>merchants</h3>
+                </div>
+                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                    <label> Active </label>
+                    <select ng-model="merchantTable.objects.IsActive" class="form-control">
+                        <option value="">please Choice</option>
+                        <option value="false">Not Active</option>
+                        <option value="true">Active</option>
+                    </select>
+                    <small class="text-danger" ng-if="merchantTable.isValid && merchantTable.objects.IsActive==''">This field is Required </small>
+
+                </div>
+                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                    <label> merchant Name</label>
+                    <input type="text" 
+                           name="MerchantName" 
+                           id="MerchantName"
+                           ng-model="merchantTable.objects.merchantName" class="form-control">
+                </div>
+                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
+                    <button class="btn btn-success" type="button" ng-click="getmerchantsTable()">Search</button>
+                </div>
+                <hr />
+                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1" ng-if="merchantTable.showResult">
+                    <table  show-filter="false" class="table table-hover custom-table">
+                        <thead>
+                            <tr>
+                                <td class=" text-center" >
+                                  #
+                                </td>
+                                <td class="primary text-center">
+                                    Name
+                                </td>
+                                <td class="primary text-center" >
+                                    Email
+                                </td>
+                                <td class="primary text-center">
+                                    phone
+                                </td>
+                                <td class="primary text-center">
+                                  Mobile
+                                </td>
+                                <td class="primary text-center">
+                                 Active
+                                </td>
+                                <td class="primary text-center">
+
+                                </td>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in merchantTable.data track by $index">
+                                <td class=" text-center" data-title="'Num'">
+                                    <span>{{$index+1}}</span>
+                                </td>
+                                <td class="primary text-center" data-title="'Name'">
+                                    {{row.merchantName}}
+                                </td>
+                                <td class="primary text-center" data-title="'Email'">
+                                    {{row.email}}
+                                </td>
+                                <td class="primary text-center" data-title="'Phone'">
+                                    {{row.phone}}
+                                </td>
+                                <td class="primary text-center" data-title="'mobile'">
+                                    {{row.mobile}}
+                                </td>
+                                <td class="primary text-center" data-title="'Active'">
+                                    <span class="badge bg-success" ng-if="row.isActive">Active</span>
+                                    <span class="badge bg-danger" ng-if="!row.isActive">Not Active</span>
+                                </td>
+                                <td class="primary text-center" data-title="''">
+                                    <a href="javascript:void(0);" ng-click="getmerchant(row.id)" class="fw-bold text text-primary"><i class="bi bi-pencil-square"></i></a>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                       
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    </div>

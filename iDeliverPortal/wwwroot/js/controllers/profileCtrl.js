@@ -3,7 +3,7 @@
 
     app.controller('profileCtrl', ['$scope', '$rootScope', '$log', 'httpService', 'commonService',
         function ($scope, $rootScope, $log, httpService, commonService) {
-          
+
             $scope.profile = null;
             $scope.SelectedModules = "0";
             $scope.loggedin = function () {
@@ -62,7 +62,23 @@
                 active: false,
                 icon: "fas fa-car me-2",
                 child: []
-            }];
+            }
+                ,
+            {
+                id: 4,
+                name: "Merchants",
+                active: false,
+                icon: "fas fa-car me-2",
+                child: []
+                },
+                {
+                    id: 5,
+                    name: "Merchant Branches",
+                    active: false,
+                    icon: "fas fa-car me-2",
+                    child: []
+                }
+            ];
 
             $scope.goto = function (id) {
                 if (!id) return;

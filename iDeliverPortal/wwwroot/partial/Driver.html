@@ -13,7 +13,7 @@
     </ul>
 
 
-    <div ng-if="driver.tabs==2">
+    <div ng-if="driver.tabs==2 || driver.tabs==3">
 
         <div class="col-md-12">
             <div class="row">
@@ -26,23 +26,23 @@
                 <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
                     <label> First name</label>
                     <input type="text" ng-model="driver.obj.firstname" class="form-control">
-                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.firstname==''">This field is </small>
+                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.firstname==''">This field is Required </small>
                 </div>
                 <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
                     <label> Middle name</label>
                     <input type="text" ng-model="driver.obj.middlename" class="form-control">
-                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.middlename==''">This field is </small>
+                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.middlename==''">This field is Required </small>
                 </div>
                 <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
                     <label> Last name</label>
                     <input type="text" ng-model="driver.obj.lastname" class="form-control">
-                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.lastname==''">This field is </small>
+                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.lastname==''">This field is Required </small>
                 </div>
 
                 <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
                     <label> Address</label>
                     <input type="text" ng-model="driver.obj.address" class="form-control">
-                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.address==''">This field is </small>
+                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.address==''">This field is Required </small>
                 </div>
 
                 <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
@@ -50,21 +50,21 @@
                     <datepicker date-year-title="selected title" date-format="dd-MM-yyyy">
                         <input ng-model="driver.obj.birthday" class="form-control">
                     </datepicker>
-                    <small class="text-danger" ng-if="driver.isvalid && !driver.obj.birthday">This field is </small>
+                    <small class="text-danger" ng-if="driver.isvalid && !driver.obj.birthday">This field is Required </small>
                 </div>
                 <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                     <label> Social Status</label>
-                    <select ng-model="driver.obj.SocialStatus" class="form-control">
+                    <select ng-model="driver.obj.socialStatus" class="form-control">
                         <option value="0" selected="selected">Please Choice</option>
-                        <option ng-repeat="item in SocialStatus" value="{{item.ID}}">  {{item.EnglishTitle}}</option>
+                        <option ng-repeat="item in socialStatus" value="{{item.ID}}">  {{item.EnglishTitle}}</option>
                     </select>
-                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.SocialStatus=='0'">This field is </small>
+                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.socialStatus=='0'">This field is Required </small>
                 </div>
 
                 <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                     <label> Mobile</label>
                     <input type="number" ng-model="driver.obj.mobile" class="form-control">
-                    <small class="text-danger" ng-if="driver.isvalid && (driver.obj.mobile=='' ||driver.obj.mobile==null)">This field is </small>
+                    <small class="text-danger" ng-if="driver.isvalid && (driver.obj.mobile=='' ||driver.obj.mobile==null)">This field is Required </small>
                 </div>
                 <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                     <label> Second Mobile</label>
@@ -88,21 +88,21 @@
                 <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1 mb-2" ng-if="driver.obj.isHaveProblem">
                     <label> Reason</label>
                     <input type="tel" ng-model=" driver.obj.reason" class="form-control">
-                    <small class="text-danger" ng-if="driver.isvalid  &&(driver.obj.reason==null || driver.obj.reason=='') && driver.obj.isHaveProblem">This field is </small>
+                    <small class="text-danger" ng-if="driver.isvalid  &&(driver.obj.reason==null || driver.obj.reason=='') && driver.obj.isHaveProblem">This field is Required </small>
                 </div>
                 <hr />
                 <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
                     <label> Work Time</label>
-                    <select ng-model="driver.obj.WorkTime" class="form-control">
+                    <select ng-model="driver.obj.workTime" class="form-control">
                         <option value="0" selected="selected">Please Choice</option>
                         <option ng-repeat="item in JobTime" value="{{item.ID}}">  {{item.EnglishTitle}}</option>
                     </select>
-                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.WorkTime=='0'">This field is </small>
+                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.workTime=='0'">This field is Required </small>
                 </div>
-                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1" ng-if="driver.obj.WorkTime=='2'">
+                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1" ng-if="driver.obj.workTime=='2'">
                     <div class="row">
                         <div class="form-check col-lg-1 col-md-2 col-sm-6 m-lg-3 m-md-1 m-sm-1" ng-repeat="item in Days track by $index">
-                            <input class="form-check-input" type="checkbox" ng-click="checkday($index)" value="{{item.ID}}" id="day_{{item.ID}}">
+                            <input class="form-check-input" type="checkbox" ng-click="checkday($index)" ng-checked="item.checked" value="{{item.ID}}" id="day_{{item.ID}}">
                             <label class="form-check-label" for="day_{{item.ID}}">
                                 {{item.EnglishTitle}}
                             </label>
@@ -112,17 +112,17 @@
                 </div>
                 <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                     <label> From Time</label>
-                    <input type="time" class="form-control" id="fromdate" name="fromdate" ng-model="driver.obj.fromTime"
+                    <input type="time" class="form-control" id="fromtime" name="fromtime" ng-model="driver.obj.fromTime"
                            placeholder="HH:mm" />
-                    <small class="text-danger" ng-if="driver.isvalid && !driver.obj.fromTime">This field is </small>
+                    <small class="text-danger" ng-if="driver.isvalid && !driver.obj.fromTime">This field is Required </small>
                     <small class="text-danger" ng-show="checktime()">From date must be smaller than to date</small>
 
                 </div>
                 <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                     <label> To Time</label>
-                    <input type="time" class="form-control" id="todate" name="todate" ng-model="driver.obj.toTime"
+                    <input type="time" class="form-control" id="totime" name="totime" ng-model="driver.obj.toTime"
                            placeholder="HH:mm" />
-                    <small class="text-danger" ng-if="driver.isvalid && !driver.obj.toTime">This field is </small>
+                    <small class="text-danger" ng-if="driver.isvalid && !driver.obj.toTime">This field is Required </small>
                 </div>
                 <hr />
                 <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
@@ -130,7 +130,7 @@
                     <datepicker date-year-title="selected title" date-format="dd-MM-yyyy">
                         <input ng-model="driver.obj.startJob" class="form-control">
                     </datepicker>
-                    <small class="text-danger" ng-if="driver.isvalid && !driver.obj.startJob">This field is </small>
+                    <small class="text-danger" ng-if="driver.isvalid && !driver.obj.startJob">This field is Required </small>
                 </div>
                 <div class="alert alert-secondary col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center p-1  my-2" role="alert">
                     Qualifications
@@ -182,10 +182,12 @@
                 <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                     <label> Active </label>
                     <select ng-model="driverTable.objects.IsActive" class="form-control">
-                        <option value="-1">All Drivers</option>
-                        <option value="0">Not Active</option>
-                        <option value="1" selected="selected">Active</option>
+                        <option value="">Please Choice</option>
+                        <option value="false">Not Active</option>
+                        <option value="true" selected="selected">Active</option>
                     </select>
+                    <small class="text-danger" ng-if="driverTable.isvalid&& merchantTable.objects.IsActive==''">This field is Required </small>
+
                 </div>
                 <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                     <label> Driver Name</label>
@@ -195,24 +197,47 @@
                     <button class="btn btn-success" ng-click="getDriversTable()">Search</button>
                 </div>
                 <hr />
-                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
-                    <table ng-table="dtDrivers" show-filter="false" class="table table-hover custom-table">
-                        <tr ng-repeat="row in $data track by row.ID">
-                            <td class="disabled text-center" title="Num">
-                                <span title="" ng-bind-html="tableRows($index)"></span>
-                            </td>
-                            <td class="primary text-start" title="Name">
-                                {{row.FirstName+" " +row.LastName}}
-                            </td>
-                            <td class="primary text-start" title="Mobile">
-                                {{row.Mobile}}
-                            </td>
-                            <!--<td class="primary text-start" title="">
-                               
-                            </td>-->
+                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1" ng-if="driverTable.showResult">
+                    <table  show-filter="false" class="table table-hover custom-table">
+                        <thead>
+                            <tr>
+                                <td class=" text-center" >
+                                    Num
+                                </td>
+                                <td class="primary text-center" >
+                                    Name
+                                </td>
+                                <td class="primary text-center" >
+                                    Mobile
+                                </td>
+                                <td class="primary text-center" >
+                                    Active
+                                </td>
+                                <td class="primary text-center" >
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in driverTable.data track by row.ID">
+                                <td class=" text-center">
+                                    {{$index+1}}
+                                </td>
+                                <td class="primary text-center" >
+                                    {{row.firstName+" " +row.lastName}}
+                                </td>
+                                <td class="primary text-center">
+                                    {{row.mobile}}
+                                </td>
+                                <td class="primary text-center" >
+                                    {{row.isActive}}
+                                </td>
+                                <td class="primary text-center">
+                                    <a href="javascript:void(0);" ng-click="getDriver(row.id)" class="fw-bold text text-primary"><i class="bi bi-pencil-square"></i></a>
+                                </td>
 
+                            </tr>
+                        </tbody>
 
-                        </tr>
                     </table>
                 </div>
             </div>

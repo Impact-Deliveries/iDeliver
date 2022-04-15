@@ -10,6 +10,7 @@ namespace iDeliverDataAccess.Repositories
         Task<DriverDetail?> GetFirstRow();
         Task<DriverDetail?> GetLastRow();
         Task<DriverDetail?> GetByID(long id);
+        Task<DriverDetail?> GetByDeiverID(long id);
         Task<IEnumerable<DriverDetail>> Find(Expression<Func<DriverDetail, bool>> where);
         Task<DriverDetail?> FindRow(Expression<Func<DriverDetail, bool>> where);
         bool IsExists(Expression<Func<DriverDetail, bool>> where);

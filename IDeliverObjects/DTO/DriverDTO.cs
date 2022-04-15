@@ -9,10 +9,12 @@ namespace IDeliverObjects.DTO
 {
     public class DriverDTO
     {
+        public int? DriverID { get; set; }
         public string? firstname { get; set; }
         public string? middlename { get; set; }
         public string? lastname { get; set; }
         public string? address { get; set; }
+        public bool? IsActive { get; set; }
         public Nullable<int> mobile2 { get; set; }
         public int mobile { get; set; }
         public DateTime birthday { get; set; }
@@ -30,6 +32,7 @@ namespace IDeliverObjects.DTO
         public string? estimate{ get; set; }
         public string? avancedstudies{ get; set; }
         public List<int>? selecteddays { get; set; }
+        public List<Attachment>? Attachments { get; set; }
     }
 
     public class DriverTableDTO {

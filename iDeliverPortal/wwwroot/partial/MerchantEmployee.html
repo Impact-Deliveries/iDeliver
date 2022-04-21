@@ -1,0 +1,166 @@
+﻿<div ng-controller="MerchantEmployee">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link " ng-class="{'active':employee.tabs==1 }" ng-click="changeTab(1)" href="javascript:void(0);">Employees</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" ng-class="{'active':employee.tabs==2}" ng-click="changeTab(2)" href="javascript:void(0);">Add Employee</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" ng-class="{'active':employee.tabs==3}" ng-click="changeTab(3)" ng-if="employee.tabs==3" href="javascript:void(0);">Edit Employee</a>
+        </li>
+
+    </ul>
+
+
+    <div ng-if="employee.tabs==2 || employee.tabs==3">
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center my-2 mx-1">
+                    <h3>Employee Form</h3>
+                </div>
+                <div class="alert alert-secondary col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center p-1  my-2" role="alert">
+                    Personal Information
+                </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                    <label> Merchant </label>
+                    <select ng-model="merchant.selected" class="form-control">
+                        <option value="0">Please Choice</option>
+                        <option ng-repeat="row in merchant.data" value="{{row.id}}">{{row.merchantName}}</option>
+                    </select>
+                    <small class="text-danger" ng-if="employeeTable.isvalid&& merchant.selected=='0'">This field is Required </small>
+
+                </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                    <label> Branch </label>
+                    <select ng-model="branch.selected" class="form-control">
+                        <option value="0">Please Choice</option>
+                        <option ng-repeat="row in branch.data" value="{{row.id}}">{{row.branchName}}</option>
+                    </select>
+                    <small class="text-danger" ng-if="employeeTable.isvalid&& branch.selected=='0'">This field is Required </small>
+
+                </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                    <label> First name</label>
+                    <input type="text" ng-model="employee.obj.FirstName" class="form-control">
+                    <small class="text-danger" ng-if="employee.isvalid && employee.obj.FirstName==''">This field is Required </small>
+                </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                    <label> Middle name</label>
+                    <input type="text" ng-model="employee.obj.MiddleName" class="form-control">
+                    <small class="text-danger" ng-if="employee.isvalid && employee.obj.MiddleName==''">This field is Required </small>
+                </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                    <label> Last name</label>
+                    <input type="text" ng-model="employee.obj.LastName" class="form-control">
+                    <small class="text-danger" ng-if="employee.isvalid && employee.obj.LastName==''">This field is Required </small>
+                </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                    <label> National Number</label>
+                    <input type="text" ng-model="employee.obj.NationalNumber" class="form-control">
+                    <small class="text-danger" ng-if="employee.isvalid && employee.obj.NationalNumber==''">This field is Required </small>
+                </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                    <label>Mobile</label>
+                    <input type="text" ng-model="employee.obj.Mobile" class="form-control">
+                    <small class="text-danger" ng-if="employee.isvalid && employee.obj.Mobile==''">This field is Required </small>
+                </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                    <label> Phone</label>
+                    <input type="text" ng-model="employee.obj.Phone" class="form-control">
+                    <small class="text-danger" ng-if="employee.isvalid && employee.obj.Phone==''">This field is Required </small>
+                </div>
+                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-2">
+                    <label>Attachments</label>
+                    <div class="input-group">
+                        <ng-dropzone class="dropzone w-100" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods"></ng-dropzone>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-2">
+                    <button class="btn btn-success" ng-click="Submit()" type="button">Save</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div ng-if="employee.tabs==1">
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center my-2 mx-1">
+                    <h3>Employees</h3>
+                </div>
+                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                    <label> Merchant </label>
+                    <select ng-model="merchant.selected" class="form-control">
+                        <option value="0">Please Choice</option>
+                        <option ng-repeat="row in merchant.data" value="{{row.id}}">{{row.merchantName}}</option>
+                    </select>
+                    <small class="text-danger" ng-if="employeeTable.isvalid&& merchant.selected=='0'">This field is Required </small>
+
+                </div>
+                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                    <label> Branch </label>
+                    <select ng-model="branch.selected" class="form-control">
+                        <option value="0">Please Choice</option>
+                        <option ng-repeat="row in branch.data" value="{{row.id}}">{{row.branchName}}</option>
+                    </select>
+                    <small class="text-danger" ng-if="employeeTable.isvalid&& branch.selected=='0'">This field is Required </small>
+
+                </div>
+                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
+                    <button class="btn btn-success" ng-click="getemployeesTable()">Search</button>
+                </div>
+                <hr />
+                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1" ng-if="employeeTable.showResult">
+                    <table show-filter="false" class="table table-hover custom-table">
+                        <thead>
+                            <tr>
+                                <td class=" text-center">
+                                    Num
+                                </td>
+                                <td class="primary text-center">
+                                    Name
+                                </td>
+                                <td class="primary text-center">
+                                    Mobile
+                                </td>
+                                <td class="primary text-center">
+                                    Phone
+                                </td>
+                                <td class="primary text-center">
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in employeeTable.data track by $index">
+                                <td class=" text-center">
+                                    {{$index+1}}
+                                </td>
+                                <td class="primary text-center">
+                                    {{row.firstName+" " +row.lastName}}
+                                </td>
+                                <td class="primary text-center">
+                                    {{row.mobile}}
+                                </td>
+                                <td class="primary text-center">
+                                    {{row.phone}}
+                                </td>
+                                <td class="primary text-center">
+                                    <a href="javascript:void(0);" ng-click="getemployee(row.id)" class="fw-bold text text-primary"><i class="bi bi-pencil-square"></i></a>
+                                </td>
+
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    </div>

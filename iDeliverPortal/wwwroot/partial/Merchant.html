@@ -34,10 +34,26 @@
                         <input type="text" ng-model="merchant.obj.MerchantName" class="form-control" required>
                         <small class="text-danger" ng-if="merchant.isvalid && merchant.obj.MerchantName==''">This field is Required </small>
                     </div>
-                    <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
-                        <label> Overview</label>
-                        <input type="text" ng-model="merchant.obj.Overview" class="form-control" required>
-                        <small class="text-danger" ng-if="merchant.isvalid && merchant.obj.Overview==''">This field is Required </small>
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                        <label>Contact Person </label>
+                        <input type="text" ng-model="merchant.obj.Owner" class="form-control" required>
+                        <small class="text-danger" ng-if="merchant.isvalid && merchant.obj.Owner==''">This field is Required </small>
+                    </div>
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                        <label>Position</label>
+                        <input type="text" ng-model="merchant.obj.Position" class="form-control" required>
+                        <small class="text-danger" ng-if="merchant.isvalid && merchant.obj.Position==''">This field is Required </small>
+                    </div>
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                        <label>Mobile Number</label>
+                        <input type="number" ng-model="merchant.obj.OwnerNumber" class="form-control" required>
+                        <small class="text-danger" ng-if="merchant.isvalid && merchant.obj.OwnerNumber==''">This field is Required </small>
+                    </div>
+
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                        <label>Qutation Number</label>
+                        <input type="text" ng-model="merchant.obj.QutationNumber" class="form-control" required>
+                        <small class="text-danger" ng-if="merchant.isvalid && merchant.obj.QutationNumber==''">This field is Required </small>
                     </div>
                     <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                         <label> Mobile</label>
@@ -54,7 +70,11 @@
                         <input type="email" ng-model="merchant.obj.Email" class="form-control" required>
                         <small class="text-danger" ng-if="merchant.isvalid && merchant.obj.Email==''">This field is Required </small>
                     </div>
-
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
+                        <label> Overview</label>
+                        <input type="text" ng-model="merchant.obj.Overview" class="form-control" required>
+                        <small class="text-danger" ng-if="merchant.isvalid && merchant.obj.Overview==''">This field is Required </small>
+                    </div>
 
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-2">
                         <button class="btn btn-success" type="submit">Save</button>

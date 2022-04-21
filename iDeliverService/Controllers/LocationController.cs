@@ -1,11 +1,13 @@
 ﻿using iDeliverDataAccess.Repositories;
 using IDeliverObjects.Objects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iDeliverService.Controllers
 {
     [Route("api/Location")]
     [ApiController]
+    [Authorize]
     public class LocationController : ControllerBase
     {
         private readonly ILocationRepository _repository;

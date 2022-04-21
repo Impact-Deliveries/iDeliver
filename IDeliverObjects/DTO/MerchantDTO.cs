@@ -19,6 +19,10 @@ namespace IDeliverObjects.DTO
         public bool? IsActive { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public DateTime? CreationDate { get; set; }
+        public string? Owner { get; set; }
+        public string? OwnerNumber { get; set; }
+        public string? Position { get; set; }
+        public string? QutationNumber { get; set; }
         public List<Attachment>? Attachments { get; set; }
     }
 

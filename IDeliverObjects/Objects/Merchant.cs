@@ -22,6 +22,10 @@ namespace IDeliverObjects.Objects
         public bool? IsActive { get; set; }
         public DateTime ModifiedDate { get; set; }
         public DateTime CreationDate { get; set; }
+        public string Owner { get; set; }
+        public string Position { get; set; }
+        public string QutationNumber { get; set; }
+        public string OwnerNumber { get; set; }
 
         public virtual Organization Organization { get; set; }
         public virtual ICollection<MerchantBranch> MerchantBranches { get; set; }

@@ -2,12 +2,14 @@
 using IDeliverObjects.DTO;
 using IDeliverObjects.Enum;
 using IDeliverObjects.Objects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iDeliverService.Controllers
 {
     [Route("api/Organization")]
     [ApiController]
+    [Authorize]
     public class OrganizationController : ControllerBase
     {
         private readonly IOrganizationRepository _repository;

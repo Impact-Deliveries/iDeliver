@@ -77,6 +77,13 @@
                     active: false,
                     icon: "fas fa-car me-2",
                     child: []
+                },
+                {
+                    id: 6,
+                    name: "Employees",
+                    active: false,
+                    icon: "fas fa-car me-2",
+                    child: []
                 }
             ];
 

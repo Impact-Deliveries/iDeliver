@@ -11,12 +11,16 @@
                     OrganizationId: 1,
                     MerchantName: '',
                     Overview: '',
-                    address: '',
+                    //address: '',
                     Phone: '',
                     Mobile: '',
                     Email: "",
                     ModifiedDate: null,
                     CreationDate: '',
+                    QutationNumber: '',
+                    Position: '',
+                    Owner: '',
+                    OwnerNumber: '',
                     Attachments: [],
                     IsActive: true
                 },
@@ -34,8 +38,8 @@
                 page: 1,
                 count: 10,
                 data: null,
-                showResult: false;
-                isValid:false,
+                showResult: false,
+                isValid: false,
                 objects: {
                     merchantID: "0",
                     IsActive: "true",
@@ -70,6 +74,13 @@
                 $scope.merchant.isvalid = true;
                 $scope.merchant.obj.Organization = $scope.organization.selected;
                 if ($scope.organization.selected == null || $scope.organization.selected == '0') {
+                    return;
+                }
+                if ($scope.merchant.obj.Position == '' || $scope.merchant.obj.QutationNumber == '' || $scope.merchant.obj.Owner == '') {
+                    return;
+                }
+                if ($scope.merchant.obj.MerchantName == '' || $scope.merchant.obj.Overview == '' || $scope.merchant.obj.Email == ''
+                    || $scope.merchant.obj.Phone == '' || $scope.merchant.obj.Mobile == '') {
                     return;
                 }
                 let promise = httpService.httpPost('merchant/Addmerchant',
@@ -151,9 +162,14 @@
                             $scope.merchant.obj.MerchantName = res.data.merchantName;
                             $scope.merchant.obj.Overview = res.data.overview;
                             $scope.merchant.obj.address = res.data.address;
-                            $scope.merchant.obj.Phone=Number( res.data.phone);
-                            $scope.merchant.obj.Mobile = Number( res.data.mobile);
+                            $scope.merchant.obj.Phone = Number(res.data.phone);
+                            $scope.merchant.obj.Mobile = Number(res.data.mobile);
                             $scope.merchant.obj.Email = res.data.email;
+                            $scope.merchant.obj.QutationNumber = res.data.QutationNumber;
+                            $scope.merchant.obj.Position = res.data.Position;
+                            $scope.merchant.obj.Owner = res.data.Owner;
+
+
                             $scope.organization.selected = res.data.organizationId.toString();
                             break;
                         default:

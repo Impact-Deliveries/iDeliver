@@ -2,12 +2,14 @@
 using IDeliverObjects.DTO;
 using IDeliverObjects.Enum;
 using IDeliverObjects.Objects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iDeliverService.Controllers
 {
     [Route("api/Driver")]
     [ApiController]
+    [Authorize]
     public class DriverController : ControllerBase
     {
         private readonly IDriverRepository _repository;
@@ -56,8 +58,8 @@ namespace iDeliverService.Controllers
             return Ok(Driver);
         }
         // Post: api/Driver/UploadDrivers
-        [HttpPost("AddOrEditDriver")]
-        public async Task<ActionResult<Driver>> AddOrEditDriver([FromBody] DriverDTO obj)
+        [HttpPost("AddDriver")]
+        public async Task<ActionResult<Driver>> AddDriver([FromBody] DriverDTO obj)
         {
             try
             {
@@ -124,6 +126,7 @@ namespace iDeliverService.Controllers
                     #region User
                     Common.HashKey.CreateMD5Hash("1234", out string hash);
                     var hashed_password = hash;
+                    var count = await _Urepository.GetuserCount();
                     User user = new User()
                     {
                         CreationDate = DateTime.UtcNow,
@@ -131,7 +134,7 @@ namespace iDeliverService.Controllers
                         IsActive = true,
                         Username = obj.mobile.ToString(),
                         Password = hashed_password,
-                        ReferenceNumber = ""
+                        ReferenceNumber = DateTime.UtcNow.Year.ToString() + DateTime.UtcNow.Month.ToString() + (count + 1).ToString()
                     };
                     await _Urepository.Add(user);
                     #endregion
@@ -142,7 +145,7 @@ namespace iDeliverService.Controllers
                         {
                             UserId = user.Id,
                             RoleId = (int)Roles.driver
-                        }; 
+                        };
                         await _Erepository.Add(enroll);
                         driver.EnrolmentId = enroll.Id;
                         if (enroll.Id != null && enroll.Id > 0)
@@ -238,12 +241,35 @@ namespace iDeliverService.Controllers
         //        return BadRequest(ex.Message);
         //    }
         //}
-        [HttpGet, Route("GetDrivers")]
-        public async Task<ActionResult<Driver>> GetDrivers([FromQuery] bool? IsActive ,string? DriverName)
+
+
+        [HttpPost("ChangeDriverStatus")]
+        public async Task<ActionResult<Driver>> ChangeDriverStatus([FromQuery] long DriverID)
         {
             try
-            { 
-                var drivers = await _repository.GetAllDrivers(IsActive,  DriverName);
+            {
+                var Driver = await _repository.GetByID(DriverID);
+
+                if (Driver == null)
+                {
+                    return NotFound();
+                }
+                Driver.IsActive = !Driver.IsActive;
+                await _repository.Update(Driver);
+                return Ok(Driver);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        [HttpGet, Route("GetDrivers")]
+        public async Task<ActionResult<Driver>> GetDrivers([FromQuery] bool? IsActive, string? DriverName)
+        {
+            try
+            {
+                var drivers = await _repository.GetAllDrivers(IsActive, DriverName);
                 return Ok(drivers);
             }
             catch (Exception ex)

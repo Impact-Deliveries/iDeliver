@@ -10,6 +10,10 @@
 	[IsActive] [bit] NOT NULL DEFAULT 1,
 	[ModifiedDate] [datetime] NOT NULL DEFAULT GETUTCDATE(),
 	[CreationDate] [datetime] NOT NULL DEFAULT GETUTCDATE(), 
+    [Owner] NVARCHAR(100) NULL, 
+    [Position] NVARCHAR(100) NULL, 
+    [QutationNumber] NVARCHAR(100) NULL, 
+    [OwnerNumber] NVARCHAR(50) NULL, 
     CONSTRAINT [PK_Merchant] PRIMARY KEY ([ID] ASC),
 	CONSTRAINT [FK_Merchant_Organization] FOREIGN KEY([OrganizationID]) REFERENCES [dbo].[Organization] ([ID])
 )

@@ -8,6 +8,7 @@ namespace iDeliverService.Controllers
 {
     [Route("api/Merchant")]
     [ApiController]
+    [Authorize]
     public class MerchantController : ControllerBase
     {
         private readonly IMerchantRepository _repository;
@@ -29,7 +30,7 @@ namespace iDeliverService.Controllers
         }
         [HttpGet("GetMerchants")]
         public async Task<ActionResult<IEnumerable<Merchant>>> GetMerchants([FromQuery] string? MerchantName,
-            [FromQuery]bool? IsActive )
+            [FromQuery] bool? IsActive)
         {
             var result = await _repository.GetMerchants(MerchantName, IsActive);
             return Ok(result);
@@ -53,7 +54,7 @@ namespace iDeliverService.Controllers
         {
             try
             {
-                if (modal.Id!=null  &&modal.Id > 0)
+                if (modal.Id != null && modal.Id > 0)
                 {
                     var Merchant = await _repository.GetByID(modal.Id.Value);
                     if (Merchant != null)
@@ -65,6 +66,10 @@ namespace iDeliverService.Controllers
                         Merchant.Email = modal.Email;
                         Merchant.Mobile = modal.Mobile;
                         Merchant.IsActive = modal.IsActive;
+                        Merchant.Owner = modal.Owner;
+                        Merchant.OwnerNumber = modal.OwnerNumber;
+                        Merchant.Position = modal.Position;
+                        Merchant.QutationNumber = modal.QutationNumber;
                         await _repository.Update(Merchant);
                     }
 
@@ -82,8 +87,12 @@ namespace iDeliverService.Controllers
                         Mobile = modal.Mobile,
                         IsActive = true,
                         CreationDate = DateTime.UtcNow,
-                        OrganizationId = modal.OrganizationId!=null? modal.OrganizationId.Value:1,
-                    };
+                        OrganizationId = modal.OrganizationId != null ? modal.OrganizationId.Value : 1,
+                        Owner = modal.Owner,
+                        Position = modal.Position,
+                        QutationNumber = modal.QutationNumber,
+                        OwnerNumber = modal.OwnerNumber
+                };
                     await _repository.Add(merchant);
                 }
                 return Ok();

@@ -1,6 +1,6 @@
 ﻿(function (app) {
     'use strict';
-    app.controller('Driver', ['$scope', '$rootScope', '$log', 'httpService', 'commonService', 'appsettings', 'NgTableParams', '$resource','$timeout',
+    app.controller('Driver', ['$scope', '$rootScope', '$log', 'httpService', 'commonService', 'appsettings', 'NgTableParams', '$resource', '$timeout',
         function ($scope, $rootScope, $log, httpService, commonService, appsettings, NgTableParams, $resource, $timeout) {
             $scope.socialStatus = [
                 { ID: 1, EnglishTitle: "Single" },
@@ -28,7 +28,7 @@
                 myDropzone: null,
                 driverid: 0,
                 obj: {
-                    DriverID:null,
+                    DriverID: null,
                     firstname: '',
                     middlename: '',
                     lastname: '',
@@ -51,7 +51,7 @@
                     avancedstudies: '',
                     selecteddays: [],
                     Attachments: null,
-                    IsActive:true
+                    IsActive: true
                 },
 
             };
@@ -69,10 +69,10 @@
                 count: 10,
                 data: null,
                 showResult: false,
-                isvalid:false,
+                isvalid: false,
                 objects: {
                     DriverID: "0",
-                    IsActive:"true",
+                    IsActive: "true",
                     DriverName: '',
                     Mobile: "0",
                 }
@@ -91,7 +91,39 @@
                 $scope.Days[i].checked = !$scope.Days[i].checked;
                 console.log($scope.Days[i])
             }
+            $scope.calculateSequence = function (num) {
+                switch (num.toString().length) {
+                    case 1:
+                        return '00' + num.toString();
+                        break;
+                    case 2:
+                        return '0' + num.toString();
+                        break;
+                    case 3:
+                        return num.toString();
+                        break;
+                    default:
+                }
+            };
+            $scope.changeVal = function (id) {
+                var selectedDriver = $scope.driverTable.data.findIndex(a => a.id == id)
+                if (selectedDriver >= 0) {
+                    let promise = httpService.httpPost('Driver/ChangeDriverStatus?DriverID=' + id,null,
+                        { 'Content-Type': 'application/json' });
+                    promise.then(function (res) {
+                        switch (res.status) {
+                            case 200:
+                                $scope.driverTable.data[selectedDriver].isActive = !$scope.driverTable.data[selectedDriver].isActive;
+                                break;
+                            default:
+                                break;
+                        }
+                    }, function (res) {
+                        commonService.redirect();
+                    });
 
+                }
+            };
             $scope.Submit = function () {
                 let totaldays = $scope.Days.filter(a => a.checked == true);
                 $scope.driver.isvalid = true;
@@ -113,7 +145,7 @@
                 $scope.driver.obj.selecteddays = $scope.Days.filter(a => a.checked == true).map(t => t.ID);
                 $scope.driver.obj.birthday = moment($scope.driver.obj.birthday).format("DD-MM-yyyy")
                 $scope.driver.obj.startJob = moment($scope.driver.obj.startJob).format("DD-MM-yyyy")
-                let promise = httpService.httpPost('Driver/AddOrEditDriver',
+                let promise = httpService.httpPost('Driver/AddDriver',
                     $scope.driver.obj,
                     { 'Content-Type': 'application/json' });
 
@@ -141,12 +173,12 @@
             });
             $scope.getDriversTable = function () {
                 $scope.driverTable.isvalid = true;
-                if ($scope.driverTable.objects.IsActive=='') {
+                if ($scope.driverTable.objects.IsActive == '') {
                     return;
                 }
                 let promise = httpService.httpGet('Driver/GetDrivers', {
-                    IsActive:$scope.driverTable.objects.IsActive ,
-                    DriverName :$scope.driverTable.objects.DriverName
+                    IsActive: $scope.driverTable.objects.IsActive,
+                    DriverName: $scope.driverTable.objects.DriverName
                 }, { 'Content-Type': 'application/json' });
 
                 promise.then(function (res) {
@@ -163,23 +195,23 @@
 
                 });
 
-            //$scope.getDriversTable = function () {
-            //    var resource = $resource(appsettings.apiBaseUrl + "Driver/GetDrivers");
-            //    $scope.dtDrivers = new NgTableParams($scope.driverTable, {
-            //        filterDelay: 300,
-            //        total: 1,
-            //        getData: function ($defer) {
-            //            // $scope.result.processing = true;
-            //            // request to api
-            //            return resource.get(JSON.stringify($defer.url())).$promise.then(function (response) {
-            //                // $scope.result.processing = false;
-            //                $defer.total(response.total);
-            //                return response.results;
-            //            }).catch(function (response) {
-            //                //$scope.result.processing = false;
-            //            });
-            //        }
-            //    });
+                //$scope.getDriversTable = function () {
+                //    var resource = $resource(appsettings.apiBaseUrl + "Driver/GetDrivers");
+                //    $scope.dtDrivers = new NgTableParams($scope.driverTable, {
+                //        filterDelay: 300,
+                //        total: 1,
+                //        getData: function ($defer) {
+                //            // $scope.result.processing = true;
+                //            // request to api
+                //            return resource.get(JSON.stringify($defer.url())).$promise.then(function (response) {
+                //                // $scope.result.processing = false;
+                //                $defer.total(response.total);
+                //                return response.results;
+                //            }).catch(function (response) {
+                //                //$scope.result.processing = false;
+                //            });
+                //        }
+                //    });
                 //$scope.tableRows = function (index) {
                 //    if (index === null) return;
                 //    var result = (($scope.dtDrivers.page() - 1) * $scope.dtDrivers.count()) + (index + 1);
@@ -189,7 +221,7 @@
 
             $scope.getDriver = function (id) {
                 //$rootScope.page.loaded = false;
-                let promise = httpService.httpGet('Driver/'+id, null, { 'Content-Type': 'application/json' });
+                let promise = httpService.httpGet('Driver/' + id, null, { 'Content-Type': 'application/json' });
 
                 promise.then(function (res) {
                     switch (res.status) {
@@ -197,10 +229,10 @@
                             //(res.data)
                             $scope.driver.obj = res.data;
 
-                            $scope.driver.obj.birthday= moment($scope.driver.obj.birthday).format("DD-MM-yyyy")
+                            $scope.driver.obj.birthday = moment($scope.driver.obj.birthday).format("DD-MM-yyyy")
                             $scope.driver.obj.startJob = moment($scope.driver.obj.startJob).format("DD-MM-yyyy")
                             debugger
-                           // $scope.driver.obj.fromTime = moment($scope.driver.obj.fromTime).format("HH:mm")
+                            // $scope.driver.obj.fromTime = moment($scope.driver.obj.fromTime).format("HH:mm")
                             //  $scope.driver.obj.toTime = moment($scope.driver.obj.toTime).format("HH:mm")
                             var from = moment($scope.driver.obj.fromTime).format("HH:mm");
                             var to = moment($scope.driver.obj.toTime).format("HH:mm");
@@ -209,7 +241,7 @@
                                 $("#fromtime").val(from);
                                 $("#totime").val(to);
                             }, 100)
-                            if ($scope.driver.obj.workTime.toString() == "2" && $scope.driver.obj.selecteddays != null && $scope.driver.obj.selecteddays.length>0) {
+                            if ($scope.driver.obj.workTime.toString() == "2" && $scope.driver.obj.selecteddays != null && $scope.driver.obj.selecteddays.length > 0) {
                                 for (var i = 0; i < $scope.driver.obj.selecteddays.length; i++) {
                                     $scope.Days.filter(a => a.ID == $scope.driver.obj.selecteddays[i])[0].checked = true;
                                 }
@@ -217,13 +249,13 @@
                             }
                             $scope.driver.obj.socialStatus = $scope.driver.obj.socialStatus.toString();
                             $scope.driver.obj.workTime = $scope.driver.obj.workTime.toString();
-                         
+
                             break;
                         default:
                             break;
                     }
                     $scope.changeTab(3);
-                   // $rootScope.page.loaded = true;
+                    // $rootScope.page.loaded = true;
                 }, function (res) {
 
                 });
@@ -251,7 +283,6 @@
             $scope.dzCallbacks = {
 
                 'addedfile': function (file) {
-                    //    $scope.homework.model.attachments.push(file.upload);
 
                 },
                 'sendingmultiple': function (file, xhr, formData) {
@@ -281,23 +312,10 @@
             $scope.dzMethods = {};
 
             //$scope.removeAllAttachmentItems = function () {
-            //    if ($scope.homework.myDropzone && $scope.homework.model.attachments.length > 0) {
-            //        $scope.homework.model.attachments = [];
-            //        $scope.dzMethods.removeAllFiles();
-            //    }
+
             //};
 
             //$scope.reomveAttachmentItem = function (file) {
-            //    var index = -1;
-            //    for (var i = 0; i < $scope.homework.model.attachments.length; i++) {
-            //        if ($scope.homework.model.attachments[i].uuid === file.upload.uuid) {
-            //            index = i;
-            //            break;
-            //        }
-            //    }
-
-            //    if (index != -1)
-            //        $scope.homework.model.attachments.splice(index, 1);
             //}
             //#endregion
             $scope.changeTab(1);

@@ -9,11 +9,13 @@ using Microsoft.EntityFrameworkCore;
 using IDeliverObjects.Objects;
 using iDeliverDataAccess;
 using iDeliverDataAccess.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace iDeliverService.Controllers
 {
     [Route("api/users")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _repository;

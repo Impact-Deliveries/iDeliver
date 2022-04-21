@@ -10,7 +10,8 @@ namespace IDeliverObjects.Enum
     {
         administrator = 1,
         marchent = 2,
-        driver = 3
+        driver = 3,
+        MerchantEmployee=4
     }
     public enum SocialStatus
     {
@@ -39,6 +40,7 @@ namespace IDeliverObjects.Enum
         administrator = 1,
         marchent = 2,
         driver = 3,
-        MerchantBranch=4
+        MerchantBranch=4,
+        MerchantEmployee=5,
     }
 }

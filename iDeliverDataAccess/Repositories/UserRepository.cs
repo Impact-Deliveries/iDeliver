@@ -81,5 +81,16 @@ namespace iDeliverDataAccess.Repositories
                 throw;
             }
         }
+        public async Task<int> GetuserCount() {
+            try
+            {
+                return _context.Users.Count();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+        }
+
     }
 }

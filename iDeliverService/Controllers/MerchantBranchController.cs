@@ -8,6 +8,7 @@ namespace iDeliverService.Controllers
 {
     [Route("api/MerchantBranch")]
     [ApiController]
+    [Authorize]
     public class MerchantBranchController : ControllerBase
     {
         private readonly IMerchantBranchRepository _repository;
@@ -21,9 +22,9 @@ namespace iDeliverService.Controllers
 
         // GET: api/MerchantBranch
         [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<MerchantBranch>>> GetAllMerchantBranchs()
+        public async Task<ActionResult<IEnumerable<MerchantBranch>>> GetAllMerchantBranchs(bool IsActive=true)
         {
-            var result = await _repository.GetAll();
+            var result = await _repository.Find(a=>a.IsActive==IsActive);
             return Ok(result);
         }
 
@@ -108,46 +109,6 @@ namespace iDeliverService.Controllers
             }
 
         }
-
-
-        // GET: api/MerchantBranch/GetMerchantBranchs
-        //[HttpGet, Route("GetMerchantBranchs")]
-        //public async Task<ActionResult<MerchantBranch>> GetMerchantBranchs([FromQuery] NgTableParam<NgMerchantBranchTableFilter> request)
-        //{
-        //    try
-        //    {
-
-        //        #region Varaibles
-        //        NgTableResult<MerchantBranch> results = new NgTableResult<MerchantBranch>();
-        //        int total = 0;
-        //        var page_index = request.page == 0 ? request.page : request.page - 1;
-        //        var page_skips = page_index * request.count;
-        //        NgMerchantBranchTableFilter objects = request.objects;
-        //        objects = new NgMerchantBranchTableFilter()
-        //        {
-        //            MerchantBranchID = 0,
-        //            IsActive = 1,
-        //            MerchantBranchName = "",
-        //            Mobile = 0,
-        //        };
-        //        bool isactive = request.objects != null ? (objects.IsActive == 0 ? false : true) : false;
-        //        #endregion
-
-        //        #region return results
-        //        var MerchantBranchs = await _repository.GetMerchantBranchs(objects, page_skips, request.count);
-        //        results = new NgTableResult<MerchantBranch>()
-        //        {
-        //            results = MerchantBranchs.MerchantBranchs,
-        //            total = MerchantBranchs.Total
-        //        };
-        //        return Ok(results);
-        //        #endregion
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
 
         private bool MerchantBranchExists(long id)
         {

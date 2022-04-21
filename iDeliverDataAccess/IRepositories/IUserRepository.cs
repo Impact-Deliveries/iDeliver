@@ -15,5 +15,6 @@ namespace iDeliverDataAccess.Repositories
         Task Add(User user);
         Task Update(User user);
         Task Delete(User user);
+        Task <int> GetuserCount();
     }
 }

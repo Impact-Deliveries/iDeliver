@@ -15,7 +15,8 @@
     [IsActive] BIT NULL, 
     [IsHaveProblem] BIT NULL, 
     [Reason] NVARCHAR(500) NULL,
-   CONSTRAINT [PK_Driver] PRIMARY KEY ([ID] ASC), 
+   [IsOnline] BIT NULL DEFAULT 0, 
+    CONSTRAINT [PK_Driver] PRIMARY KEY ([ID] ASC), 
    CONSTRAINT [FK_Driver_Enrolment] FOREIGN KEY([EnrolmentID]) REFERENCES [dbo].[Enrolment] ([ID]),
 
 )

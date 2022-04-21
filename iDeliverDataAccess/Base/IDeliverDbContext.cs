@@ -105,6 +105,8 @@ namespace iDeliverDataAccess.Base
 
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
+                entity.Property(e => e.EnrolmentId).HasColumnName("EnrolmentID");
+
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
                 entity.Property(e => e.LastName).HasMaxLength(50);
@@ -112,6 +114,12 @@ namespace iDeliverDataAccess.Base
                 entity.Property(e => e.Reason).HasMaxLength(500);
 
                 entity.Property(e => e.SecondName).HasMaxLength(50);
+
+                entity.HasOne(d => d.Enrolment)
+                    .WithMany(p => p.Drivers)
+                    .HasForeignKey(d => d.EnrolmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Driver_Enrolment");
             });
 
             modelBuilder.Entity<DriverDetail>(entity =>
@@ -243,7 +251,15 @@ namespace iDeliverDataAccess.Base
                     .IsRequired()
                     .HasColumnType("text");
 
+                entity.Property(e => e.Owner).HasMaxLength(100);
+
+                entity.Property(e => e.OwnerNumber).HasMaxLength(50);
+
                 entity.Property(e => e.Phone).HasMaxLength(50);
+
+                entity.Property(e => e.Position).HasMaxLength(100);
+
+                entity.Property(e => e.QutationNumber).HasMaxLength(100);
 
                 entity.HasOne(d => d.Organization)
                     .WithMany(p => p.Merchants)

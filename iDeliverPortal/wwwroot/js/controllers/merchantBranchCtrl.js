@@ -251,7 +251,6 @@
             $scope.dzCallbacks = {
 
                 'addedfile': function (file) {
-                    //    $scope.homework.model.attachments.push(file.upload);
 
                 },
                 'sendingmultiple': function (file, xhr, formData) {
@@ -282,23 +281,10 @@
             $scope.dzMethods = {};
 
           //$scope.removeAllAttachmentItems = function () {
-          //    if ($scope.branch.myDropzone && $scope.homework.model.attachments.length > 0) {
-          //        $scope.branch.model.attachments = [];
-          //        $scope.dzMethods.removeAllFiles();
-          //    }
+
           //};
 
             //$scope.reomveAttachmentItem = function (file) {
-            //    var index = -1;
-            //    for (var i = 0; i < $scope.homework.model.attachments.length; i++) {
-            //        if ($scope.homework.model.attachments[i].uuid === file.upload.uuid) {
-            //            index = i;
-            //            break;
-            //        }
-            //    }
-
-            //    if (index != -1)
-            //        $scope.homework.model.attachments.splice(index, 1);
             //}
             //#endregion
 

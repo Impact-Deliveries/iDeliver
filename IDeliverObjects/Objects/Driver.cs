@@ -28,6 +28,7 @@ namespace IDeliverObjects.Objects
         public bool? IsActive { get; set; }
         public bool? IsHaveProblem { get; set; }
         public string Reason { get; set; }
+        public bool? IsOnline { get; set; }
 
         public virtual Enrolment Enrolment { get; set; }
         public virtual ICollection<DriverDetail> DriverDetails { get; set; }

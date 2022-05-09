@@ -9,6 +9,7 @@ namespace IDeliverObjects.Objects
     {
         public Organization()
         {
+            Drivers = new HashSet<Driver>();
             Merchants = new HashSet<Merchant>();
             OrganizationEmployees = new HashSet<OrganizationEmployee>();
         }
@@ -24,6 +25,7 @@ namespace IDeliverObjects.Objects
         public DateTime ModifiedDate { get; set; }
 
         public virtual Country Country { get; set; }
+        public virtual ICollection<Driver> Drivers { get; set; }
         public virtual ICollection<Merchant> Merchants { get; set; }
         public virtual ICollection<OrganizationEmployee> OrganizationEmployees { get; set; }
     }

@@ -4,17 +4,21 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:26235",
+      "applicationUrl": "http://localhost:5117",
+      "sslPort": 0
+    },
+    "iis": {
+      "applicationUrl": "http://localhost/iDeliverService",
       "sslPort": 0
     }
   },
   "profiles": {
-    "iDeliverService": {
-      "commandName": "Project",
+    "IIS": {
+      "commandName": "IIS",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5117",
+      "applicationUrl": "http://localhost/iDeliverService",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

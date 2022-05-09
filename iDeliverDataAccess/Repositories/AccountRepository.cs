@@ -20,11 +20,13 @@ namespace iDeliverDataAccess.Repositories
             _context = context;
         }
 
-        public async Task<UserDTO?> Login(string username)
+        public async Task<UserDTO?> Login(string username, int? roleID)
         {
 
             var query = await (from user in _context.Users
-                               where user.Username == username && user.IsActive == true
+                               join enrolment in _context.Enrolments on user.Id equals enrolment.UserId
+                               where user.Username == username && user.IsActive == true &&
+                               (roleID.HasValue ? enrolment.RoleId == roleID : 1 == 1)
                                select new UserDTO
                                {
                                    UserID = user.Id,
@@ -86,14 +88,29 @@ namespace iDeliverDataAccess.Repositories
 
                         if (account is not null)
                             accounts.Add(account);
-                        
-
                         break;
                     case 2:
-                        // driver
-                        break;
+                    // marchent employee
                     case 3:
-                        // marchent employee
+                        // driver
+                        account = await (from driver in _context.Drivers
+                                         where driver.EnrolmentId == item.Id && driver.IsActive == true
+                                         select new Account()
+                                         {
+                                             EnrolmentID = driver.EnrolmentId,
+                                             FirstName = driver.FirstName,
+                                             LastName = driver.LastName,
+                                             MiddleName = driver.SecondName,
+                                             Role = ((IDeliverObjects.Enum.Roles)driver.Enrolment.RoleId).ToString(),
+                                             Organization = new OrganizationDTO()
+                                             {
+                                                 Id = driver.Organization.Id,
+                                                 Name = driver.Organization.Name,
+                                                 Timezone = driver.Organization.Timezone
+                                             },
+                                         }).FirstOrDefaultAsync();
+                        if (account is not null)
+                            accounts.Add(account);
                         break;
                 }
             }

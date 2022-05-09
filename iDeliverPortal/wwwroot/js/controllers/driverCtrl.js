@@ -8,10 +8,12 @@
                 { ID: 3, EnglishTitle: "Married" },
                 { ID: 4, EnglishTitle: "Divorced" }
             ];
+
             $scope.JobTime = [
                 { ID: 1, EnglishTitle: "Full Time" },
                 { ID: 2, EnglishTitle: "Part Time" },
             ];
+
             $scope.Days = [
                 { ID: 1, EnglishTitle: "Saturday", checked: false },
                 { ID: 2, EnglishTitle: "Sunday", checked: false },
@@ -21,6 +23,7 @@
                 { ID: 6, EnglishTitle: "Thursday", checked: false },
                 { ID: 7, EnglishTitle: "Friday", checked: false }
             ];
+
             $scope.driver = {
                 isvalid: false,
                 currentdate: moment(new Date()).format("dd-MM-yyyy"),
@@ -29,32 +32,36 @@
                 driverid: 0,
                 obj: {
                     DriverID: null,
+                    username: '',
                     firstname: '',
                     middlename: '',
                     lastname: '',
                     address: '',
-                    mobile2: null,
+                    phone: null,
                     mobile: null,
-                    birthday: moment(new Date()).format("DD-MM-yyyy"),
+                    birthday: moment().utc().format("DD-MM-yyyy").toString(),
                     socialStatus: "0",
                     isHaveProblem: false,
                     reason: null,
                     workTime: "0",
                     fromTime: null,
                     toTime: null,
-                    startJob: moment(new Date()).format("DD-MM-yyyy"),
+                    startJob: moment().utc().format("DD-MM-yyyy").toString(),
                     college: '',
                     university: '',
                     major: '',
                     graduationyear: '',
                     estimate: '',
-                    avancedstudies: '',
+                    advancedStudies: '',
                     selecteddays: [],
                     Attachments: null,
-                    IsActive: true
+                    IsActive: true,
+                    nationalNumber: '',
+                    OrganizationID: 1
                 },
 
             };
+
             $scope.changeTab = function (i) {
                 $scope.driver.tabs = i;
                 switch (i) {
@@ -64,6 +71,7 @@
                     default:
                 }
             };
+
             $scope.driverTable = {
                 page: 1,
                 count: 10,
@@ -77,6 +85,7 @@
                     Mobile: "0",
                 }
             };
+
             $scope.checktime = function () {
                 if ($scope.driver.obj.fromTime == null || $scope.driver.obj.toTime == null) {
                     return false;
@@ -87,10 +96,12 @@
                     return false;
                 }
             };
+
             $scope.checkday = function (i) {
                 $scope.Days[i].checked = !$scope.Days[i].checked;
                 console.log($scope.Days[i])
-            }
+            };
+
             $scope.calculateSequence = function (num) {
                 switch (num.toString().length) {
                     case 1:
@@ -105,10 +116,11 @@
                     default:
                 }
             };
+
             $scope.changeVal = function (id) {
                 var selectedDriver = $scope.driverTable.data.findIndex(a => a.id == id)
                 if (selectedDriver >= 0) {
-                    let promise = httpService.httpPost('Driver/ChangeDriverStatus?DriverID=' + id,null,
+                    let promise = httpService.httpPost('Driver/ChangeDriverStatus?DriverID=' + id, null,
                         { 'Content-Type': 'application/json' });
                     promise.then(function (res) {
                         switch (res.status) {
@@ -124,7 +136,9 @@
 
                 }
             };
+
             $scope.Submit = function () {
+                debugger;
                 let totaldays = $scope.Days.filter(a => a.checked == true);
                 $scope.driver.isvalid = true;
                 if ($scope.driver.obj.firstname == '' || $scope.driver.obj.middlename == '' ||
@@ -143,8 +157,8 @@
                     return;
                 }
                 $scope.driver.obj.selecteddays = $scope.Days.filter(a => a.checked == true).map(t => t.ID);
-                $scope.driver.obj.birthday = moment($scope.driver.obj.birthday).format("DD-MM-yyyy")
-                $scope.driver.obj.startJob = moment($scope.driver.obj.startJob).format("DD-MM-yyyy")
+                //$scope.driver.obj.birthday = moment($scope.driver.obj.birthday).utc().format("DD-MM-yyyy")
+                //$scope.driver.obj.startJob = moment($scope.driver.obj.startJob).utc().format("DD-MM-yyyy")
                 let promise = httpService.httpPost('Driver/AddDriver',
                     $scope.driver.obj,
                     { 'Content-Type': 'application/json' });
@@ -226,14 +240,7 @@
                 promise.then(function (res) {
                     switch (res.status) {
                         case 200:
-                            //(res.data)
                             $scope.driver.obj = res.data;
-
-                            $scope.driver.obj.birthday = moment($scope.driver.obj.birthday).format("DD-MM-yyyy")
-                            $scope.driver.obj.startJob = moment($scope.driver.obj.startJob).format("DD-MM-yyyy")
-                            debugger
-                            // $scope.driver.obj.fromTime = moment($scope.driver.obj.fromTime).format("HH:mm")
-                            //  $scope.driver.obj.toTime = moment($scope.driver.obj.toTime).format("HH:mm")
                             var from = moment($scope.driver.obj.fromTime).format("HH:mm");
                             var to = moment($scope.driver.obj.toTime).format("HH:mm");
                             console.log(from)
@@ -318,8 +325,8 @@
             //$scope.reomveAttachmentItem = function (file) {
             //}
             //#endregion
-            $scope.changeTab(1);
 
+            $scope.changeTab(1);
         }]);
 })
     (angular.module("iDeliver"));

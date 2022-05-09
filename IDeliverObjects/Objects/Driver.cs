@@ -13,24 +13,28 @@ namespace IDeliverObjects.Objects
             DriverSchadules = new HashSet<DriverSchadule>();
         }
 
-        public int Id { get; set; }
+        public long Id { get; set; }
         public long EnrolmentId { get; set; }
+        public long OrganizationId { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
         public string LastName { get; set; }
+        public string NationalNumber { get; set; }
         public string Address { get; set; }
-        public int? Mobile { get; set; }
-        public int? Mobile2 { get; set; }
+        public string Mobile { get; set; }
+        public string Phone { get; set; }
         public DateTime? Birthday { get; set; }
-        public int? SocialStatus { get; set; }
-        public DateTime? CreationDate { get; set; }
-        public bool? IsDeleted { get; set; }
+        public short? SocialStatus { get; set; }
         public bool? IsActive { get; set; }
-        public bool? IsHaveProblem { get; set; }
+        public bool IsHaveProblem { get; set; }
         public string Reason { get; set; }
-        public bool? IsOnline { get; set; }
+        public bool IsOnline { get; set; }
+        public DateTime ModifiedDate { get; set; }
+        public DateTime CreationDate { get; set; }
+        public bool IsDeleted { get; set; }
 
         public virtual Enrolment Enrolment { get; set; }
+        public virtual Organization Organization { get; set; }
         public virtual ICollection<DriverDetail> DriverDetails { get; set; }
         public virtual ICollection<DriverSchadule> DriverSchadules { get; set; }
     }

@@ -32,7 +32,7 @@ namespace iDeliverService.Controllers
         [HttpPost("login"), AllowAnonymous]
         public async Task<ActionResult<string>> Login(UserLogin request)
         {
-            UserDTO? user = await _repository.Login(request.Username);
+            UserDTO? user = await _repository.Login(request.Username, request.Role);
 
             if (user is null)
                 return NotFound("User not found.");

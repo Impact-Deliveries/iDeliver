@@ -7,8 +7,8 @@ namespace IDeliverObjects.Objects
 {
     public partial class DriverSchadule
     {
-        public int Id { get; set; }
-        public int DriverId { get; set; }
+        public long Id { get; set; }
+        public long DriverId { get; set; }
         public int DayId { get; set; }
         public DateTime? CreationDate { get; set; }
         public bool? IsDeleted { get; set; }

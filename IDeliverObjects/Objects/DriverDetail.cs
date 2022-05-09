@@ -7,8 +7,8 @@ namespace IDeliverObjects.Objects
 {
     public partial class DriverDetail
     {
-        public int Id { get; set; }
-        public int DriverId { get; set; }
+        public long Id { get; set; }
+        public long DriverId { get; set; }
         public int? JobTime { get; set; }
         public DateTime? FromTime { get; set; }
         public DateTime? ToTime { get; set; }
@@ -19,8 +19,9 @@ namespace IDeliverObjects.Objects
         public string GraduationYear { get; set; }
         public string Estimate { get; set; }
         public string AvancedStudies { get; set; }
-        public DateTime? CreationDate { get; set; }
-        public bool? IsDeleted { get; set; }
+        public DateTime ModifiedDate { get; set; }
+        public DateTime CreationDate { get; set; }
+        public bool IsDeleted { get; set; }
 
         public virtual Driver Driver { get; set; }
     }

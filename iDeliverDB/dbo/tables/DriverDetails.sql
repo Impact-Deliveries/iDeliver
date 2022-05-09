@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[DriverDetails]
 (
-	[ID] [int] IDENTITY(1,1) NOT NULL,
-   [DriverID] INT NOT NULL, 
+	[ID] BIGINT IDENTITY(1,1) NOT NULL,
+    [DriverID] BIGINT NOT NULL, 
     [JobTime] INT NULL, 
     [FromTime] DATETIME NULL, 
     [ToTime] DATETIME NULL, 
@@ -12,8 +12,9 @@
     [GraduationYear] NVARCHAR(50) NULL, 
     [Estimate] NVARCHAR(50) NULL, 
     [AvancedStudies] NVARCHAR(50) NULL, 
-    [CreationDate] DATETIME NULL, 
-    [IsDeleted] BIT NULL, 
+    [ModifiedDate] DATETIME NOT NULL DEFAULT GETUTCDATE(), 
+    [CreationDate] DATETIME NOT NULL DEFAULT GETUTCDATE(), 
+    [IsDeleted] BIT NOT NULL DEFAULT 0, 
     CONSTRAINT [PK_DriverDetails] PRIMARY KEY ([ID] ASC), 
-   CONSTRAINT [FK_DriverDetails_Driver] FOREIGN KEY([DriverID]) REFERENCES [dbo].[Driver] ([ID])
+    CONSTRAINT [FK_DriverDetails_Driver] FOREIGN KEY([DriverID]) REFERENCES [dbo].[Driver] ([ID])
 )

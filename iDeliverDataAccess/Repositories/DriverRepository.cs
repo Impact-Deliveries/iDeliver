@@ -32,7 +32,7 @@ namespace iDeliverDataAccess.Repositories
             await _context.Drivers.OrderByDescending(o => o.Id).FirstOrDefaultAsync();
 
         public async Task<Driver?> GetByID(long id) =>
-            await _context.Drivers.Where(w => w.Id == id ).FirstOrDefaultAsync();
+            await _context.Drivers.Where(w => w.Id == id).FirstOrDefaultAsync();
 
         public async Task<IEnumerable<Driver>> Find(Expression<Func<Driver, bool>> where) =>
             await _context.Drivers.Where(where).ToListAsync();
@@ -110,16 +110,17 @@ namespace iDeliverDataAccess.Repositories
             }
 
         }
-        public async Task<List<Driver>> GetAllDrivers(bool? IsActive, string? DriverName) {
+        public async Task<List<Driver>> GetAllDrivers(bool? IsActive, string? DriverName)
+        {
             try
             {
-                List<Driver> drivers = await(from a in _context.Drivers
-                                             where (String.IsNullOrEmpty(DriverName) ? 1 == 1 :
-                      (a.FirstName.Contains(DriverName)
-                       || a.SecondName.Contains(DriverName)
-                       || a.LastName.Contains(DriverName)))
-                       && (IsActive !=null ? a.IsActive == IsActive : 1 == 1)
-                                             select a)
+                List<Driver> drivers = await (from a in _context.Drivers
+                                              where (String.IsNullOrEmpty(DriverName) ? 1 == 1 :
+                       (a.FirstName.Contains(DriverName)
+                        || a.SecondName.Contains(DriverName)
+                        || a.LastName.Contains(DriverName)))
+                        && (IsActive != null ? a.IsActive == IsActive : 1 == 1)
+                                              select a)
                         .OrderBy(p => p.FirstName).ThenBy(a => a.SecondName).ThenBy(a => a.LastName)
                         .ToListAsync();
 
@@ -136,34 +137,34 @@ namespace iDeliverDataAccess.Repositories
             try
             {
                 int role = (int)Module.driver;
-                var data =  (from c in _context.Drivers
+                var data = (from c in _context.Drivers
                             join b in _context.DriverDetails on c.Id equals b.DriverId
                             where b.DriverId == id
                             select new DriverDTO
                             {
-                                DriverID=b.DriverId,
+                                DriverID = b.DriverId,
                                 firstname = c.FirstName,
                                 middlename = c.SecondName,
                                 lastname = c.LastName,
                                 address = c.Address,
-                                mobile2 = c.Mobile2,
-                                mobile = c.Mobile != null ? c.Mobile.Value:0,
-                                birthday = c.Birthday!=null? c.Birthday.Value:DateTime.UtcNow,
-                                SocialStatus = c.SocialStatus != null ? c.SocialStatus.Value:1,
-                                isHaveProblem = c.IsHaveProblem != null ? c.IsHaveProblem.Value:false,
+                                phone = c.Phone,
+                                mobile = c.Mobile,
+                                birthday = c.Birthday != null ? c.Birthday.Value : DateTime.UtcNow,
+                                SocialStatus = c.SocialStatus,
+                                isHaveProblem = c.IsHaveProblem,
                                 reason = c.Reason,
-                                WorkTime =b.JobTime!=null?b.JobTime.Value:0,
-                                fromTime = b.FromTime!=null? b.FromTime.Value: DateTime.UtcNow,
-                                toTime =  b.ToTime != null ? b.ToTime.Value : DateTime.UtcNow,
-                                startJob =  b.StartJob != null ? b.StartJob.Value : DateTime.UtcNow,
+                                WorkTime = b.JobTime != null ? b.JobTime.Value : 0,
+                                fromTime = b.FromTime != null ? b.FromTime.Value : DateTime.UtcNow,
+                                toTime = b.ToTime != null ? b.ToTime.Value : DateTime.UtcNow,
+                                startJob = b.StartJob != null ? b.StartJob.Value : DateTime.UtcNow,
                                 college = b.College,
                                 university = b.University,
                                 major = b.Major,
                                 graduationyear = b.GraduationYear,
                                 estimate = b.Estimate,
-                                avancedstudies = b.AvancedStudies,
-                                selecteddays = (from d in _context.DriverSchadules where id == d.DriverId select d.DayId).ToList() ,
-                                Attachments  = (from d in _context.Attachments where id == d.ModuleId && d.ModuleType == role select d ).ToList(),
+                                advancedStudies = b.AvancedStudies,
+                                selecteddays = (from d in _context.DriverSchadules where id == d.DriverId select d.DayId).ToList(),
+                                Attachments = (from d in _context.Attachments where id == d.ModuleId && d.ModuleType == role select d).ToList(),
                             }).FirstOrDefaultAsync();
                 return await data;
             }

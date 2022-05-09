@@ -13,7 +13,7 @@ namespace iDeliverDataAccess.Repositories
 {
     public interface IAccountRepository
     {
-        Task<UserDTO?> Login(string username);
+        Task<UserDTO?> Login(string username, int? roleID);
         Task<List<Account>> Accounts(long UserID);
     }
 }

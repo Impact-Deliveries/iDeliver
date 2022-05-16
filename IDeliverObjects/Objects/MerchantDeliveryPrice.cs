@@ -10,7 +10,8 @@ namespace IDeliverObjects.Objects
         public long Id { get; set; }
         public long MerchantBranchId { get; set; }
         public long? LocationId { get; set; }
-        public double? Distance { get; set; }
+        public double? FromDistance { get; set; }
+        public double? ToDistance { get; set; }
         public decimal Amount { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime ModifiedDate { get; set; }

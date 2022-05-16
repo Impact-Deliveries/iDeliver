@@ -27,6 +27,8 @@ namespace IDeliverObjects.Objects
         public bool? IsActive { get; set; }
         public DateTime ModifiedDate { get; set; }
         public DateTime CreationDate { get; set; }
+        public decimal DeliveryPriceOffer { get; set; }
+        public short DeliveryStatus { get; set; }
 
         public virtual Location Location { get; set; }
         public virtual Merchant Merchant { get; set; }

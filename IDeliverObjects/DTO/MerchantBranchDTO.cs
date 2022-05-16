@@ -25,6 +25,9 @@ namespace IDeliverObjects.DTO
         public bool? IsActive { get; set; }
         public DateTime ModifiedDate { get; set; }
         public DateTime CreationDate { get; set; }
+        public decimal? DeliveryPriceOffer { get; set; }
+        public short? DeliveryStatus { get; set; }
+        public List<MerchantDeliveryPrice>? DeliveryPrice { get; set; }
         public List<Attachment>? Attachments { get; set; }
     }
 

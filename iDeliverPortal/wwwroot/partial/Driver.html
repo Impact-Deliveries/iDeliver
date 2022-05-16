@@ -149,7 +149,7 @@
                 <hr />
                 <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                     <label> Date to start the job</label>
-                    <datepicker date-year-title="selected title" date-format="DD-MM-yyyy">
+                    <datepicker date-year-title="selected title" date-format="dd-MM-yyyy">
                         <input ng-model="driver.obj.startJob" class="form-control">
                     </datepicker>
                     <small class="text-danger" ng-if="driver.isvalid && !driver.obj.startJob">This field is Required </small>
@@ -259,6 +259,12 @@
                                 </td>
                                 <td class="primary text-center">
                                     <a href="javascript:void(0);" ng-click="getDriver(row.id)" class="fw-bold text text-primary"><i class="bi bi-pencil-square"></i></a>
+                                    <a href="javascript:void(0);" ng-click="deleteDriver(row.id)" class="fw-bold text text-primary"><i class="text text-danger bi bi-trash"></i></a>
+                                    <a href="javascript:void(0);" ng-click="activeDriver(row.id)" class="fw-bold text text-primary">
+                                    <i ng-if="!row.isActive" class="text text-danger bi bi-dash-circle-fill"></i>
+                                    <i  ng-if="row.isActive" class="text text-success bi bi-file-check"></i>
+                                    </a>
+
                                 </td>
 
                             </tr>

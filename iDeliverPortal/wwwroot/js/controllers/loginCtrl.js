@@ -21,8 +21,7 @@
 
                 let promise = httpService.httpPost('Authentication/login', {
                     username: $scope.form.fields.username,
-                    password: $scope.form.fields.password,
-                    Role:1
+                    password: $scope.form.fields.password
                 }, { 'Content-Type': 'application/json' });
 
                 promise.then(function (res) {

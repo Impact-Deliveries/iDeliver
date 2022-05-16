@@ -23,7 +23,7 @@ namespace iDeliverDataAccess.Repositories
         }
 
         public async Task<IEnumerable<Location>> GetAll() =>
-            await _context.Locations.ToListAsync();
+            await _context.Locations.Where(a=>a.IsDeleted==false).ToListAsync();
 
         public async Task<Location?> GetFirstRow() =>
             await _context.Locations.OrderBy(o => o.Id).FirstOrDefaultAsync();

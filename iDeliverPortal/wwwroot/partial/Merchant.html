@@ -164,8 +164,12 @@
                                 </td>
                                 <td class="primary text-center" data-title="''">
                                     <a href="javascript:void(0);" ng-click="getmerchant(row.id)" class="fw-bold text text-primary"><i class="bi bi-pencil-square"></i></a>
+                                    <a href="javascript:void(0);" ng-click="activeMerchant(row.id)" class="fw-bold text text-primary">
+                                        <i ng-if="!row.isActive" class="text text-danger bi bi-dash-circle-fill"></i>
+                                        <i ng-if="row.isActive" class="text text-success bi bi-file-check"></i>
+                                    </a>
                                 </td>
-
+                                
                             </tr>
                         </tbody>
                        

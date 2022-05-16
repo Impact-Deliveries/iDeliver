@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="navbar-nav w-100">
-                <a href="#{{module.name}}" class="nav-item nav-link" ng-class="{'active' : module.active}" ng-repeat="module in modules" ng-click="goto(module.id);">
+                <a href="javascript:void(0);" class="nav-item nav-link" ng-class="{'active' : module.active}" ng-repeat="module in modules" ng-click="goto(module.id);">
                     <i class="{{module.icon}}"></i> {{module.name}}
                 </a>
             </div>
@@ -157,6 +157,9 @@
             <div ng-if="SelectedModules=='6'">
                 <div ng-include="'../partial/MerchantEmployee.html'"></div>
             </div>
+            <div ng-if="SelectedModules=='7'">
+              <div ng-include="'../partial/Location.html'"></div>
+            </div>
         </div>
 
         <!-- Blank End -->
@@ -184,4 +187,5 @@
 <script type="text/javascript" src="~/js/controllers/merchantCtrl.js"></script>
 <script type="text/javascript" src="~/js/controllers/merchantBranchCtrl.js"></script>
 <script type="text/javascript" src="~/js/controllers/MerchantEmployeeCtrl.js"></script>
+<script type="text/javascript" src="~/js/controllers/LocationCtrl.js"></script>
 }

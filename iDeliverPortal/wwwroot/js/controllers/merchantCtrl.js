@@ -69,6 +69,25 @@
 
             });
 
+
+            $scope.activeMerchant = function (id) {
+                //$rootScope.page.loaded = false;
+                let promise = httpService.httpPost('Merchant/ActiveMerchant', id, { 'Content-Type': 'application/json' });
+
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.getmerchantsTable();
+                            break;
+                        default:
+                            break;
+                    }
+                    // $rootScope.page.loaded = true;
+                }, function (res) {
+
+                });
+            };
+
             //#endregion
             $scope.submit = function () {
                 $scope.merchant.isvalid = true;

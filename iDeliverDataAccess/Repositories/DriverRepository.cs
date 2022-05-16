@@ -133,13 +133,14 @@ namespace iDeliverDataAccess.Repositories
         }
         public async Task<DriverDTO> GetDriverById(long id)
         {
-
             try
             {
                 int role = (int)Module.driver;
                 var data = (from c in _context.Drivers
                             join b in _context.DriverDetails on c.Id equals b.DriverId
-                            where b.DriverId == id
+                            join d in _context.Enrolments on c.EnrolmentId equals d.Id
+                            join e in _context.Users on d.UserId equals e.Id
+                            where b.DriverId == id && role==d.RoleId
                             select new DriverDTO
                             {
                                 DriverID = b.DriverId,
@@ -163,6 +164,8 @@ namespace iDeliverDataAccess.Repositories
                                 graduationyear = b.GraduationYear,
                                 estimate = b.Estimate,
                                 advancedStudies = b.AvancedStudies,
+                                nationalNumber=c.NationalNumber,
+                                username=e.Username,
                                 selecteddays = (from d in _context.DriverSchadules where id == d.DriverId select d.DayId).ToList(),
                                 Attachments = (from d in _context.Attachments where id == d.ModuleId && d.ModuleType == role select d).ToList(),
                             }).FirstOrDefaultAsync();

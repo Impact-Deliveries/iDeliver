@@ -105,6 +105,25 @@ namespace iDeliverService.Controllers
 
         }
 
+        [HttpPost, Route("ActiveMerchant")]
+        public async Task<ActionResult> ActiveMerchant([FromBody] long id)
+        {
+
+            try
+            {
+                Merchant merchant = await _repository.GetByID(id);
+                if (merchant == null) return BadRequest("Merchant Not Found");
+
+                merchant.IsActive = !merchant.IsActive;
+                await _repository.Update(merchant);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
 
         private bool MerchantExists(long id)
         {

@@ -19,7 +19,7 @@
                     Phone : '',
                     MerchantBranchId :'',
                     Attachments: null,
-                    IsActive: true
+                    IsActive: 'true'
                 },
 
             };
@@ -77,7 +77,23 @@
                     commonService.redirect();
                 });
             };
+            $scope.activeemployee = function (id) {
+                //$rootScope.page.loaded = false;
+                let promise = httpService.httpPost('MerchantEmployee/ActiveEmployee', id, { 'Content-Type': 'application/json' });
 
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.getemployeesTable();
+                            break;
+                        default:
+                            break;
+                    }
+                    // $rootScope.page.loaded = true;
+                }, function (res) {
+
+                });
+            };
             //#region merchant
             $scope.merchant = {
                 data: null,
@@ -147,7 +163,8 @@
                     return;
                 }
                 let promise = httpService.httpGet('MerchantEmployee/GetBranchEmployees', {
-                    MerchantBranchID: Number($scope.branch.selected)
+                    MerchantBranchID: Number($scope.branch.selected),
+                    IsActive: $scope.employee.obj.IsActive
                 }, { 'Content-Type': 'application/json' });
 
                 promise.then(function (res) {

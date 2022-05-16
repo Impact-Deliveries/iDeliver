@@ -54,7 +54,7 @@ namespace iDeliverDataAccess.Repositories
         public async Task<List<Account>> Accounts(long UserID)
         {
             List<Enrolment> enrolments = await (from enrolment in _context.Enrolments
-                                                where enrolment.Id == UserID
+                                                where enrolment.UserId == UserID
                                                 select enrolment).ToListAsync();
 
             List<Account> accounts = new List<Account>();

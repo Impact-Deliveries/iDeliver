@@ -8,7 +8,7 @@
                 branchid: 0,
                 showResult: false,
                 myDropzone: null,
-                showDropzone:true,
+                showDropzone: true,
                 obj: {
                     Id: null,
                     MerchantId: '',
@@ -22,6 +22,8 @@
                     Latitude: '',
                     Longitude: '',
                     IsActive: true,
+                    deliveryStatus: '1',
+                    deliveryPriceOffer: 0,
                     Attachments: [],
                 },
             };
@@ -35,7 +37,7 @@
                 let promise = httpService.httpGet('MerchantBranch/GetBranchesByMerchantID', {
                     LocationID: Number($scope.location.selected),
                     MerchantID: Number($scope.merchant.selected),
-                    IsActive: Boolean($scope.branchTable.objects.IsActive)
+                    IsActive: $scope.branchTable.objects.IsActive
                 });
                 promise.then(function (res) {
                     switch (res.status) {
@@ -68,11 +70,16 @@
                             $scope.branch.obj.Latitude = res.data.latitude;
                             $scope.location.selected = res.data.locationId.toString();
                             $scope.merchant.selected = res.data.merchantId.toString();
-                            $scope.branch.obj.attachments=res.data.attachments;
-                            if ($scope.branch.obj.attachments != null && $scope.branch.obj.attachments.length>0) {
+                            $scope.branch.obj.attachments = res.data.attachments;
+                            $scope.deliveryPrice.selected = $scope.branch.obj.deliveryStatus.toString();
+                            $scope.deliveryPrice.data = res.data.deliveryPrice;
+                            $scope.CalculatePrices($scope.deliveryPrice.selected);
+                            $scope.deliveryPrice.isvalid = false;
+                            $scope.branch.obj.deliveryPriceOffer = res.data.deliveryPriceOffer;
+                            if ($scope.branch.obj.attachments != null && $scope.branch.obj.attachments.length > 0) {
                                 $scope.branch.showDropzone = false;
                             }
-                           
+
                             $scope.initMap(Number($scope.branch.obj.Latitude), Number($scope.branch.obj.Longitude));
                             $timeout(function () {
                                 var myLatlng = new google.maps.LatLng(Number($scope.branch.obj.Latitude), Number($scope.branch.obj.Longitude));
@@ -106,7 +113,7 @@
                         $scope.merchant.selected = "0";
                         break;
                     case 2:
-                        $scope.branch.obj.Id= null,
+                        $scope.branch.obj.Id = null,
                             $scope.branch.obj.MerchantId = '',
                             $scope.branch.obj.BranchName = '',
                             $scope.branch.obj.Overview = '',
@@ -124,7 +131,7 @@
                         $scope.initMap(31.972907, 35.9092202);
 
                         break
-                    case 3:
+                    case 4:
                         break;
                     default:
                 }
@@ -157,7 +164,7 @@
                 if ($scope.branch.obj.Latitude == '' || $scope.branch.obj.Longitude == '') {
                     return;
                 }
-
+                $scope.branch.obj.deliveryStatus = $scope.deliveryPrice.selected
                 $scope.branch.obj.LocationId = $scope.location.selected;
                 $scope.branch.obj.MerchantId = $scope.merchant.selected;
                 let promise = httpService.httpPost('MerchantBranch/AddMerchantBranch',
@@ -177,6 +184,23 @@
                     }
                 }, function (res) {
                     commonService.redirect();
+                });
+            };
+            $scope.activebranch = function (id) {
+                //$rootScope.page.loaded = false;
+                let promise = httpService.httpPost('MerchantBranch/ActiveMerchantBranch', id, { 'Content-Type': 'application/json' });
+
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.getbranchsTable();
+                            break;
+                        default:
+                            break;
+                    }
+                    // $rootScope.page.loaded = true;
+                }, function (res) {
+
                 });
             };
             //#endregion
@@ -204,6 +228,220 @@
 
             //#endregion
 
+            //#region Price
+            $scope.deliveryPrice = {
+                selected: '1',
+                deliveryPriceOffer: 0.0,
+                data: null,
+                locations: [],
+                distance: [],
+                isvalid: false
+            };
+            $scope.CalculatePrices = function (value) {
+                switch (value) {
+                    case '1':
+                        let objs = [];
+
+                        if (!$scope.location.data) {
+                            $scope.deliveryPrice.locations = [];
+                            return;
+                        }
+                        for (var i = 0; i < $scope.location.data.length; i++) {
+                            var amount = '', id = 0, location = null, valid = false;
+                            if ($scope.deliveryPrice.data) {
+                                location = $scope.deliveryPrice.data.filter(a => a.locationId == $scope.location.data[i].id)[0];
+                                if (location) {
+                                    amount = location.amount;
+                                    valid = true;
+                                    id = location.id
+                                }
+                            }
+
+                            let obj = {
+                                amount: amount,
+                                locationId: $scope.location.data[i].id,
+                                merchantBranchId: $scope.branch.obj.Id,
+                                address: $scope.location.data[i].address,
+                                valid: valid,
+                                toDistance: null,
+                                fromDistance: null,
+                                id: id
+                            };
+                            objs.push(obj);
+                        }
+                        $scope.deliveryPrice.locations = objs;
+                        break;
+                    case '2':
+                        if ($scope.deliveryPrice.data) {
+                            let Dobjs = [];
+                            let distance = $scope.deliveryPrice.data.filter(a => a.toDistance != null && a.fromDistance != null);
+                            if (distance && distance.length > 0) {
+                                for (var j = 0; j < distance.length; j++) {
+
+                                    let obj = {
+                                        amount: distance[j].amount,
+                                        toDistance: distance[j].toDistance,
+                                        fromDistance: distance[j].fromDistance,
+                                        merchantBranchId: $scope.branch.obj.Id,
+                                        valid: true,
+                                        address: null,
+                                        locationId: null,
+                                        fromValid: true,
+                                        toValid: true,
+                                        id: distance[j].id
+                                    };
+                                    Dobjs.push(obj);
+                                }
+                                $scope.deliveryPrice.distance = Dobjs;
+                            } else {
+                                $scope.deliveryPrice.distance = [];
+                            }
+                        }
+                        break;
+                    default:
+                }
+            };
+
+
+            $scope.$watch('deliveryPrice.selected', function (newvalue, oldvalue) {
+                $scope.CalculatePrices(newvalue);
+
+            });
+
+            $scope.setDeliveryPrice = function (index, i) {
+                switch (i) {
+                    case 1://amount
+                        if ($scope.deliveryPrice.locations[index].amount != null && $scope.deliveryPrice.locations[index].amount != '') {
+                            $scope.deliveryPrice.locations[index].valid = true;
+                        } else {
+                            $scope.deliveryPrice.locations[index].valid = false;
+                        }
+                        break;
+                    case 2://from distance
+                        if ($scope.deliveryPrice.distance[index].fromDistance != null && $scope.deliveryPrice.distance[index].fromDistance != '') {
+                            $scope.deliveryPrice.distance[index].fromValid = true;
+                        } else {
+                            $scope.deliveryPrice.distance[index].fromValid = false;
+                        }
+                        break;
+                    case 3://to distance
+                        if ($scope.deliveryPrice.distance[index].toDistance != null && $scope.deliveryPrice.distance[index].toDistance != '') {
+                            $scope.deliveryPrice.distance[index].toValid = true;
+                        } else {
+                            $scope.deliveryPrice.distance[index].toValid = false;
+                        }
+                        break;
+                    case 4://amount distance
+                        if ($scope.deliveryPrice.distance[index].amount != null && $scope.deliveryPrice.distance[index].amount != '') {
+                            $scope.deliveryPrice.distance[index].valid = true;
+                        } else {
+                            $scope.deliveryPrice.distance[index].valid = false;
+                        }
+                        break;
+                    default:
+                }
+                // $scope.deliveryPrice.data.filter(a => a.locationId == locationID)[0].valid = true;
+
+
+            };
+
+            $scope.SaveDeliveryPrices = function () {
+                $scope.deliveryPrice.isvalid = true;
+                debugger;
+                let object = {
+                    MerchantBranchID: $scope.branch.obj.Id,
+                    Amount: 0,
+                    DeliveryStatus: $scope.deliveryPrice.selected,
+                    DeliveryPrice: []
+
+                }
+
+                switch ($scope.deliveryPrice.selected) {
+                    case '1'://location
+                        var loc = $scope.deliveryPrice.locations.filter(a => a.valid == false)
+                        if (loc == null || loc.length > 0) return;
+                        for (var i = 0; i < $scope.deliveryPrice.locations.length; i++) {
+                            let obj = {
+                                Id: null,
+                                MerchantBranchId: null,
+                                LocationId: $scope.deliveryPrice.locations[i].locationId,
+                                FromDistance: null,
+                                ToDistance: null,
+                                Amount: $scope.deliveryPrice.locations[i].amount,
+                            };
+                            object.DeliveryPrice.push(obj);
+                        }
+
+                        break;
+                    case '2'://distance
+                        var dis = $scope.deliveryPrice.distance.filter(a => a.fromValid == false || a.toValid == false || a.valid == false );
+                        if (dis == null || dis.length > 0) return;
+                        for (var i = 0; i < $scope.deliveryPrice.distance.length; i++) {
+                            let obj = {
+                                Id: null,
+                                MerchantBranchId: null,
+                                LocationId: null,
+                                FromDistance: $scope.deliveryPrice.distance[i].fromDistance,
+                                ToDistance: $scope.deliveryPrice.distance[i].toDistance,
+                                Amount: $scope.deliveryPrice.distance[i].amount,
+                            };
+                            object.DeliveryPrice.push(obj);
+                        }
+
+                        break;
+                    case '3'://offer
+                        if (!$scope.deliveryPrice.deliveryPriceOffer || $scope.deliveryPrice.deliveryPriceOffer == '') return;
+                        object.Amount = $scope.deliveryPrice.deliveryPriceOffer;
+                        break;
+                    default:
+                        break;
+                }
+
+                let promise = httpService.httpPost('MerchantDeliveryPrice/SaveDeliveryPrices',
+                    object,
+                    { 'Content-Type': 'application/json' });
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+
+                            $scope.changeTab(3);
+                            break;
+                        default:
+                            break;
+                    }
+                }, function (res) {
+                    commonService.redirect();
+                });
+            };
+            $scope.distanceActions = function (action, index) {
+                switch (action) {
+                    case 1://add
+                        $scope.deliveryPrice.distance.push({
+                            amount: '',
+                            toDistance:'',
+                            fromDistance:'',
+                            merchantBranchId: $scope.branch.obj.Id,
+                            valid: false,
+                            address: null,
+                            locationId: null,
+                            fromValid: false,
+                            toValid: false,
+                            id: 0
+                        });
+                        break;
+                    case 2://delete
+                        let obj = [];
+                        for (var i = 0; i < $scope.deliveryPrice.distance.length; i++) {
+                            if (i != index ) {
+                                obj.push($scope.deliveryPrice.distance[i]);
+                            }
+                        }
+                        $scope.deliveryPrice.distance = obj;
+                        break;
+                    default:
+                }
+            }
+            //#endregion
             //#region merchant
             $scope.merchant = {
                 data: null,
@@ -274,15 +512,15 @@
                 'maxfilesexceeded': function (file) {
                 },
                 'error': function (file, xhr) {
-                     $scope.dzMethods.removeFile(file);
+                    $scope.dzMethods.removeFile(file);
                 }
             };
 
             $scope.dzMethods = {};
 
-          //$scope.removeAllAttachmentItems = function () {
+            //$scope.removeAllAttachmentItems = function () {
 
-          //};
+            //};
 
             //$scope.reomveAttachmentItem = function (file) {
             //}

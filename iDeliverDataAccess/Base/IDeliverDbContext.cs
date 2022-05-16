@@ -97,21 +97,44 @@ namespace iDeliverDataAccess.Base
             {
                 entity.ToTable("Driver");
 
-                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.HasIndex(e => e.NationalNumber, "UK_DriverNationalNumber")
+                    .IsUnique();
 
-                entity.Property(e => e.Address).HasMaxLength(200);
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Birthday).HasColumnType("datetime");
 
-                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+                entity.Property(e => e.CreationDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("getutcdate()");
 
                 entity.Property(e => e.EnrolmentId).HasColumnName("EnrolmentID");
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("1");
+
                 entity.Property(e => e.LastName).HasMaxLength(50);
 
-                entity.Property(e => e.Reason).HasMaxLength(500);
+                entity.Property(e => e.Mobile)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("getutcdate()");
+
+                entity.Property(e => e.NationalNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.OrganizationId)
+                    .HasColumnName("OrganizationID")
+                    .HasDefaultValueSql("1");
+
+                entity.Property(e => e.Phone).HasMaxLength(50);
 
                 entity.Property(e => e.SecondName).HasMaxLength(50);
 
@@ -120,6 +143,12 @@ namespace iDeliverDataAccess.Base
                     .HasForeignKey(d => d.EnrolmentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Driver_Enrolment");
+
+                entity.HasOne(d => d.Organization)
+                    .WithMany(p => p.Drivers)
+                    .HasForeignKey(d => d.OrganizationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Driver_Organization");
             });
 
             modelBuilder.Entity<DriverDetail>(entity =>
@@ -130,7 +159,9 @@ namespace iDeliverDataAccess.Base
 
                 entity.Property(e => e.College).HasMaxLength(50);
 
-                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+                entity.Property(e => e.CreationDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("getutcdate()");
 
                 entity.Property(e => e.DriverId).HasColumnName("DriverID");
 
@@ -141,6 +172,10 @@ namespace iDeliverDataAccess.Base
                 entity.Property(e => e.GraduationYear).HasMaxLength(50);
 
                 entity.Property(e => e.Major).HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("getutcdate()");
 
                 entity.Property(e => e.StartJob).HasColumnType("datetime");
 
@@ -283,6 +318,10 @@ namespace iDeliverDataAccess.Base
                 entity.Property(e => e.CreationDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("getutcdate()");
+
+                entity.Property(e => e.DeliveryPriceOffer).HasColumnType("money");
+
+                entity.Property(e => e.DeliveryStatus).HasDefaultValueSql("1");
 
                 entity.Property(e => e.IsActive)
                     .IsRequired()

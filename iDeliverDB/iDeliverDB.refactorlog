@@ -84,4 +84,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Extension" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="dc3105fd-2674-48ea-b252-ad9d63fc5ceb" ChangeDateTime="05/12/2022 20:21:26">
+    <Property Name="ElementName" Value="[dbo].[MerchantBranch].[DependOnDistance]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[MerchantBranch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DependOnLocation" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="95ae566b-e56f-497f-848d-6f232048aea3" ChangeDateTime="05/12/2022 20:40:50">
+    <Property Name="ElementName" Value="[dbo].[MerchantBranch].[DependOnLocation]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[MerchantBranch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DeliveryStatus" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8df4bf4b-d00a-4d00-b233-8d27d875e29d" ChangeDateTime="05/12/2022 20:50:59">
+    <Property Name="ElementName" Value="[dbo].[MerchantDeliveryPrice].[Distance]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[MerchantDeliveryPrice]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FromDistance" />
+  </Operation>
 </Operations>

@@ -146,10 +146,33 @@ namespace iDeliverService.Controllers
             }
 
         }
+
+        [HttpPost, Route("ActiveEmployee")]
+        public async Task<ActionResult> ActiveEmployee([FromBody] long ID)
+        {
+
+            try
+            {
+                MerchantEmployee merchantEmployee = await _repository.GetByID(ID);
+                if (merchantEmployee == null) return BadRequest("Driver Not Found");
+
+                merchantEmployee.IsActive = !merchantEmployee.IsActive;
+                await _repository.Update(merchantEmployee);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+
+        }
+
         private bool MerchantEmployeeExists(long id)
         {
             return _repository.IsExists(w => w.Id == id);
         }
+
 
     }
 }

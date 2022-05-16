@@ -14,6 +14,8 @@
 	[IsActive] [bit] NOT NULL DEFAULT 1,
 	[ModifiedDate] [datetime] NOT NULL DEFAULT GETUTCDATE(),
 	[CreationDate] [datetime] NOT NULL DEFAULT GETUTCDATE(), 
+    [DeliveryPriceOffer] MONEY NOT NULL DEFAULT 0, 
+    [DeliveryStatus] SMALLINT NOT NULL DEFAULT 1, 
     CONSTRAINT [PK_MerchantBranch] PRIMARY KEY ([ID] ASC),
 	CONSTRAINT [FK_MerchantBranch_Merchant] FOREIGN KEY([MerchantID]) REFERENCES [dbo].[Merchant] ([ID]),
 	CONSTRAINT [FK_MerchantBranch_Location] FOREIGN KEY([LocationID]) REFERENCES [dbo].[Location] ([ID])

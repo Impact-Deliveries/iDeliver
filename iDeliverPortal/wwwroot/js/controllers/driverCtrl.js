@@ -267,6 +267,41 @@
 
                 });
             };
+
+            $scope.deleteDriver = function (id) {
+                //$rootScope.page.loaded = false;
+                let promise = httpService.httpPost('Driver/DeleteDriver', id, { 'Content-Type': 'application/json' });
+
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.getDriversTable();
+                            break;
+                        default:
+                            break;
+                    }
+                    // $rootScope.page.loaded = true;
+                }, function (res) {
+
+                });
+            };
+            $scope.activeDriver = function (id) {
+                //$rootScope.page.loaded = false;
+                let promise = httpService.httpPost('Driver/ActiveDriver', id, { 'Content-Type': 'application/json' });
+
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.getDriversTable();
+                            break;
+                        default:
+                            break;
+                    }
+                    // $rootScope.page.loaded = true;
+                }, function (res) {
+
+                });
+            };
             //#endregion
 
             //#region dropzone

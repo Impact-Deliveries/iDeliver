@@ -7,7 +7,10 @@
             <a class="nav-link" ng-class="{'active':branch.tabs==2}" ng-click="changeTab(2)" href="javascript:void(0);">Add Branch</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" ng-class="{'active':branch.tabs==3}" ng-click="changeTab(3)" ng-if="branch.tabs==3" href="javascript:void(0);">Edit Branch</a>
+            <a class="nav-link" ng-class="{'active':branch.tabs==3}" ng-click="changeTab(3)" ng-if="branch.tabs==3||branch.tabs==4" href="javascript:void(0);">Edit Branch</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" ng-class="{'active':branch.tabs==4}" ng-click="changeTab(4)" ng-if="branch.tabs==4" href="javascript:void(0);">Location And Distance</a>
         </li>
 
     </ul>
@@ -20,7 +23,9 @@
                     <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center my-2 mx-1">
                         <h3>merchant Branch Form</h3>
                     </div>
-
+                    <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-end my-2 mx-1">
+                        <button class="btn-sm btn-primary" ng-click="changeTab(4)">Location And Distance</button>
+                    </div>
                     <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                         <label> Merchant Name</label>
                         <select ng-model="merchant.selected" class="form-control">
@@ -39,28 +44,40 @@
                     </div>
                     <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                         <label> Branch Name</label>
-                        <input type="text" ng-model="branch.obj.BranchName" class="form-control" >
+                        <input type="text" ng-model="branch.obj.BranchName" class="form-control">
                         <small class="text-danger" ng-if="branch.isvalid && branch.obj.BranchName==''">This field is Required </small>
                     </div>
 
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                        <label> Delivery Status</label>
+                        <select ng-model="deliveryPrice.selected" class="form-control">
+                            <option value="1">Location</option>
+                            <option value="2">Distance</option>
+                            <option value="3">Offer</option>
+                        </select>
+                        <small class="text-danger" ng-if="false">This field is Required </small>
+                    </div>
+
+                 
+
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
                         <label> Overview</label>
-                        <input type="text" ng-model="branch.obj.Overview" class="form-control" >
+                        <input type="text" ng-model="branch.obj.Overview" class="form-control">
                         <small class="text-danger" ng-if="branch.isvalid && branch.obj.Overview==''">This field is Required </small>
                     </div>
                     <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                         <label> Mobile</label>
-                        <input type="number" ng-model="branch.obj.Mobile" class="form-control" >
+                        <input type="number" ng-model="branch.obj.Mobile" class="form-control">
                         <small class="text-danger" ng-if="branch.isvalid && (branch.obj.Mobile=='' ||branch.obj.Mobile==null)">This field is Required </small>
                     </div>
                     <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                         <label> Phone</label>
-                        <input type="number" ng-model="branch.obj.Phone" class="form-control" >
+                        <input type="number" ng-model="branch.obj.Phone" class="form-control">
                         <small class="text-danger" ng-if="branch.isvalid && (branch.obj.Phone=='' ||branch.obj.Phone==null)">This field is Required </small>
                     </div>
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
                         <label> Address</label>
-                        <input type="text" ng-model="branch.obj.Address" class="form-control" >
+                        <input type="text" ng-model="branch.obj.Address" class="form-control">
                         <small class="text-danger" ng-if="branch.isvalid && (branch.obj.Address=='' ||branch.obj.Address==null)">This field is Required </small>
                     </div>
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
@@ -74,17 +91,17 @@
                     </div>
                     <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                         <label> Longitude</label>
-                        <input type="text" ng-model="branch.obj.Longitude" class="form-control"  disabled>
+                        <input type="text" ng-model="branch.obj.Longitude" class="form-control" disabled>
                     </div>
                     <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-2">
                         <label>Attachments</label>
-                        <div class="input-group" >
+                        <div class="input-group">
                             <ng-dropzone ng-show="branch.showDropzone" class="dropzone w-100" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods"></ng-dropzone>
-                        <div ng-show="!branch.showDropzone" >
-                            <div ng-repeat="item in branch.obj.attachments">
-                                <img  src="{{item.path+item.fileName}}"/>
+                            <div ng-show="!branch.showDropzone">
+                                <div ng-repeat="item in branch.obj.attachments">
+                                    <img src="{{item.path+item.fileName}}" />
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </div>
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-2">
@@ -194,6 +211,10 @@
                                 </td>
                                 <td class="primary text-center" data-title="''">
                                     <a href="javascript:void(0);" ng-click="getbranch(row.id)" class="fw-bold text text-primary"><i class="bi bi-pencil-square"></i></a>
+                                    <a href="javascript:void(0);" ng-click="activebranch(row.id)" class="fw-bold text text-primary">
+                                        <i ng-if="!row.isActive" class="text text-danger bi bi-dash-circle-fill"></i>
+                                        <i ng-if="row.isActive" class="text text-success bi bi-file-check"></i>
+                                    </a>
                                 </td>
 
                             </tr>
@@ -204,6 +225,99 @@
             </div>
 
         </div>
+    </div>
+    <div ng-if="branch.tabs==4">
+        <div class=" col-md-12 col-lg-12 col-sm-12 p-1 my-1">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center my-2 mx-1">
+                    <h4>{{branch.obj.BranchName}}</h4>
+                </div>
+                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-3">
+                    <label> Delivery Status</label>
+                    <select ng-model="deliveryPrice.selected" class="form-control">
+                        <option value="1">Location</option>
+                        <option value="2">Distance</option>
+                        <option value="3">Offer</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
+                    <div ng-if="deliveryPrice.selected=='1'">
+                        <!--location-->
+                        <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <td>#</td>
+                                        <td>Location Name</td>
+                                        <td>Amount</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in deliveryPrice.locations track by $index">
+                                        <td>{{$index + 1}}</td>
+                                        <td>{{item.address}}</td>
+                                        <td>
+                                            <input type="number" ng-change="setDeliveryPrice($index,1)" ng-model="item.amount" class="form-control" />
+                                            <small class="text-danger" ng-if="deliveryPrice.isvalid && !item.valid">This field is Required </small>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div ng-if="deliveryPrice.selected=='2'"> <!--distance-->
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1 d-flex justify-content-end">
+                        <button type="button" class="btn btn-success fw-bold" ng-click="distanceActions(1)">+</button>
+                    </div>
+                        <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <td>#</td>
+                                        <td>From Distance </td>
+                                        <td>To Distance</td>
+                                        <td>Amount</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in deliveryPrice.distance track by $index">
+                                        <td>{{$index + 1}}</td>
+                                        <td>
+                                            <input type="number" ng-change="setDeliveryPrice($index,2)" ng-model="item.fromDistance" class="form-control" />
+                                            <small class="text-danger" ng-if="deliveryPrice.isvalid && !item.fromValid">This field is Required </small>
+                                        </td>
+                                        <td>
+                                            <input type="number" ng-change="setDeliveryPrice($index,3)" ng-model="item.toDistance" class="form-control" />
+                                            <small class="text-danger" ng-if="deliveryPrice.isvalid && !item.toValid">This field is Required </small>
+                                        </td>
+                                        <td>
+                                            <input type="number" ng-change="setDeliveryPrice($index,4)" ng-model="item.amount" class="form-control" />
+                                            <small class="text-danger" ng-if="deliveryPrice.isvalid && !item.valid">This field is Required </small>
+                                        </td>
+                                        <td>
+                                           
+                                            <a href="javascript:void(0);" ng-click="distanceActions(2,$index)"><i class="text text-danger fa fa-trash" aria-hidden="true"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div ng-if="deliveryPrice.selected=='3'">
+                        <!--offer-->
+                        <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                            <label> Delivery Status</label>
+                            <input type="text" ng-model="deliveryPrice.deliveryPriceOffer" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12 col-sm-12 p-1 my-1">
+                        <button class="btn btn-success" ng-click="SaveDeliveryPrices()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </div>

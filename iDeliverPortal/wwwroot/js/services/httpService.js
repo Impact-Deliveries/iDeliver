@@ -22,10 +22,20 @@
 
             return response;
         };
+        this.httpDelete = function (url, params, headers) {
+            let response = $http({
+                url: appsettings.apiBaseUrl + url,
+                method: 'DELETE',
+                params: params,
+                headers: headers
+            });
 
+            return response;
+        };
         return {
             httpPost: this.httpPost,
-            httpGet: this.httpGet
+            httpGet: this.httpGet,
+            httpDelete: this.httpDelete
         };
     }]);
 })(angular.module("iDeliver"));

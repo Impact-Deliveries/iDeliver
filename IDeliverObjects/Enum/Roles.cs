@@ -43,4 +43,10 @@ namespace IDeliverObjects.Enum
         MerchantBranch=4,
         MerchantEmployee=5,
     }
+    public enum DeliveryStatus
+    {
+        Location = 1,
+        Distance = 2,
+        Offer = 3,
+    }
 }

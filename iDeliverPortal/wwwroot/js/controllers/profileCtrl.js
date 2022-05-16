@@ -84,6 +84,13 @@
                     active: false,
                     icon: "fas fa-car me-2",
                     child: []
+                },
+                {
+                    id: 7,
+                    name: "Location",
+                    active: false,
+                    icon: "fas fa-car me-2",
+                    child: []
                 }
             ];
 

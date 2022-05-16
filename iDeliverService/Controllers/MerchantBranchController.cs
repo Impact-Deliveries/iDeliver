@@ -22,10 +22,19 @@ namespace iDeliverService.Controllers
 
         // GET: api/MerchantBranch
         [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<MerchantBranch>>> GetAllMerchantBranchs(bool IsActive=true)
+        public async Task<ActionResult<IEnumerable<MerchantBranch>>> GetAllMerchantBranchs(bool IsActive = true)
         {
-            var result = await _repository.Find(a=>a.IsActive==IsActive);
-            return Ok(result);
+         
+            try
+            {
+                var result = await _repository.Find(a => a.IsActive == IsActive);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
         }
 
 
@@ -33,24 +42,41 @@ namespace iDeliverService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<MerchantBranch>> GetMerchantBranch(long id)
         {
-            var MerchantBranch = await _repository.GetBrancheID(id);
+            try {
+                var MerchantBranch = await _repository.GetBrancheID(id);
 
-            if (MerchantBranch == null)
-            {
-                return NotFound();
+                if (MerchantBranch == null)
+                {
+                    return NotFound();
+                }
+                return Ok(MerchantBranch);
             }
-            return Ok(MerchantBranch);
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
+           
         }
         // GET: api/GetBranchesByMerchantID/5
         [HttpGet("GetBranchesByMerchantID")]
-        public async Task<ActionResult<MerchantBranch>> GetBranchesByMerchantID(long? MerchantID,long? LocationID,bool? IsActive)
+        public async Task<ActionResult<MerchantBranch>> GetBranchesByMerchantID(long? MerchantID, long? LocationID, bool? IsActive)
         {
-            var MerchantBranch = await _repository.GetBranchesByMerchantID(MerchantID ,  IsActive, LocationID);
-            if (MerchantBranch == null)
+            try
             {
-                return NotFound();
+                var MerchantBranch = await _repository.GetBranchesByMerchantID(MerchantID, IsActive, LocationID);
+                if (MerchantBranch == null)
+                {
+                    return NotFound();
+                }
+                return Ok(MerchantBranch);
             }
-            return Ok(MerchantBranch);
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
+           
         }
 
         [HttpPost("AddMerchantBranch")]
@@ -61,7 +87,7 @@ namespace iDeliverService.Controllers
                 MerchantBranch MerchantBranch = new MerchantBranch();
                 if (modal.Id != null && modal.Id > 0)
                 {
-                     MerchantBranch = await _repository.GetByID(modal.Id.Value);
+                    MerchantBranch = await _repository.GetByID(modal.Id.Value);
                     if (MerchantBranch != null)
                     {
                         MerchantBranch.ModifiedDate = DateTime.UtcNow;
@@ -75,6 +101,8 @@ namespace iDeliverService.Controllers
                         MerchantBranch.MerchantId = modal.MerchantId.Value;
                         MerchantBranch.BranchPicture = modal.BranchPicture;
                         MerchantBranch.LocationId = modal.LocationId.Value;
+                        MerchantBranch.DeliveryStatus = modal.DeliveryStatus.Value;
+
                         await _repository.Update(MerchantBranch);
                     }
 
@@ -82,7 +110,7 @@ namespace iDeliverService.Controllers
                 }
                 else
                 {
-                     MerchantBranch = new MerchantBranch()
+                    MerchantBranch = new MerchantBranch()
                     {
                         ModifiedDate = DateTime.UtcNow,
                         Phone = modal.Phone,
@@ -90,13 +118,14 @@ namespace iDeliverService.Controllers
                         Mobile = modal.Mobile,
                         IsActive = true,
                         CreationDate = DateTime.UtcNow,
-                        Address= modal.Address,
-                        BranchName = modal.BranchName,  
-                        Latitude= modal.Latitude,
-                        Longitude= modal.Longitude, 
+                        Address = modal.Address,
+                        BranchName = modal.BranchName,
+                        Latitude = modal.Latitude,
+                        Longitude = modal.Longitude,
                         MerchantId = modal.MerchantId.Value,
-                        BranchPicture= modal.BranchPicture,
-                        LocationId = modal.LocationId.Value, 
+                        BranchPicture = modal.BranchPicture,
+                        LocationId = modal.LocationId.Value,
+                        DeliveryStatus = modal.DeliveryStatus.Value,
                     };
                     await _repository.Add(MerchantBranch);
                 }
@@ -110,6 +139,26 @@ namespace iDeliverService.Controllers
 
         }
 
+        [HttpPost, Route("ActiveMerchantBranch")]
+        public async Task<ActionResult> ActiveMerchantBranch([FromBody] long ID)
+        {
+
+            try
+            {
+                MerchantBranch merchantBranch = await _repository.GetByID(ID);
+                if (merchantBranch == null) return BadRequest("Driver Not Found");
+
+                merchantBranch.IsActive = !merchantBranch.IsActive;
+                await _repository.Update(merchantBranch);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+
+        }
         private bool MerchantBranchExists(long id)
         {
             return _repository.IsExists(w => w.Id == id);

@@ -141,6 +141,9 @@ namespace iDeliverDataAccess.Repositories
                             IsActive = branch.IsActive,
                             ModifiedDate = branch.ModifiedDate,
                             CreationDate = branch.CreationDate,
+                            DeliveryPriceOffer= branch.DeliveryPriceOffer,
+                            DeliveryStatus=branch.DeliveryStatus,
+                            DeliveryPrice=(from c in _context.MerchantDeliveryPrices where c.MerchantBranchId== branch.Id select c).ToList(),
                             Attachments = (from d in _context.Attachments where Id == d.ModuleId && d.ModuleType == moduleType select d).ToList(),
                         }).FirstOrDefaultAsync();
 

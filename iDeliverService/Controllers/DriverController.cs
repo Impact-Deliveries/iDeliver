@@ -60,7 +60,6 @@ namespace iDeliverService.Controllers
             return Ok(Driver);
         }
 
-        // Post: api/Driver/UploadDrivers
         [HttpPost("AddDriver")]
         public async Task<ActionResult<Driver>> AddDriver([FromBody] DriverDTO obj)
         {
@@ -137,7 +136,7 @@ namespace iDeliverService.Controllers
                     CreationDate = DateTime.UtcNow,
                     ModifiedDate = DateTime.UtcNow,
                     IsDeleted = false,
-                };                
+                };
                 await _Drepository.Add(Detail);
 
                 // Add driver work schedule
@@ -155,7 +154,7 @@ namespace iDeliverService.Controllers
                         await _Srepository.Add(schadule);
                     }
                 }
-                
+
                 return Ok();
             }
             catch (Exception ex)
@@ -163,40 +162,6 @@ namespace iDeliverService.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        // GET: api/Driver/GetDrivers
-        //[HttpGet, Route("GetDrivers")]
-        //public async Task<ActionResult<Driver>> GetDrivers([FromQuery] NgTableParam<NgDriverTableFilter> request)
-        //{
-        //    try
-        //    {
-
-        //        #region Varaibles
-        //        NgTableResult<Driver> results = new NgTableResult<Driver>();
-        //        int total = 0;
-        //        var page_index = request.page == 0 ? request.page : request.page - 1;
-        //        var page_skips = page_index * request.count;
-        //        NgDriverTableFilter objects = request.objects;
-        //        bool isactive = request.objects != null ? (objects.IsActive == 0 ? false : true) : false;
-        //        #endregion
-
-        //        #region return results
-        //        var drivers = await _repository.GetDrivers(objects, page_skips, request.count);
-        //        results = new NgTableResult<Driver>()
-        //        {
-        //            results = drivers.Drivers,
-        //            total = drivers.Total
-        //        };
-        //        return Ok(results);
-        //        #endregion
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-
-
         [HttpPost("ChangeDriverStatus")]
         public async Task<ActionResult<Driver>> ChangeDriverStatus([FromQuery] long DriverID)
         {
@@ -237,5 +202,46 @@ namespace iDeliverService.Controllers
             return _repository.IsExists(w => w.Id == id);
         }
 
+
+        [HttpPost, Route("DeleteDriver")]
+        public async Task<ActionResult> DeleteDriver([FromBody]long DriverID ) {
+
+            try
+            {
+               Driver driver=await _repository.GetByID( DriverID);
+                if (driver== null) return BadRequest("Driver Not Found");
+
+                driver.IsDeleted = true;
+                await _repository.Update(driver);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        
+        }
+
+        [HttpPost, Route("ActiveDriver")]
+        public async Task<ActionResult> ActiveDriver([FromBody] long DriverID)
+        {
+
+            try
+            {
+                Driver driver = await _repository.GetByID(DriverID);
+                if (driver == null) return BadRequest("Driver Not Found");
+
+                driver.IsActive = !driver.IsActive;
+                await _repository.Update(driver);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+
+        }
     }
 }

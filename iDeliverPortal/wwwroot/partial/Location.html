@@ -1,0 +1,92 @@
+﻿<div ng-controller="Location">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link " ng-class="{'active':location.tabs==1 }" ng-click="changeTab(1)" href="javascript:void(0);">Locations</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" ng-class="{'active':location.tabs==2}" ng-click="changeTab(2)" href="javascript:void(0);">Add Location</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" ng-class="{'active':location.tabs==3}" ng-click="changeTab(3)" ng-if="location.tabs==3" href="javascript:void(0);">Edit Location</a>
+        </li>
+
+    </ul>
+
+
+    <div ng-if="location.tabs==2 || location.tabs==3">
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center my-2 mx-1">
+                    <h3>Location Form</h3>
+                </div>
+
+                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                    <label>Address</label>
+                    <input type="text" ng-model="location.obj.Address" class="form-control">
+                    <small class="text-danger" ng-if="location.isvalid && location.obj.Address==''">This field is Required </small>
+                </div>
+                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                    <label> City</label>
+                    <input type="text" ng-model="location.obj.City" class="form-control">
+                    <small class="text-danger" ng-if="location.isvalid && location.obj.City==''">This field is Required </small>
+                </div>
+                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-2">
+                    <button class="btn btn-success" ng-click="Submit()" type="button">Save</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div ng-if="location.tabs==1">
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center my-2 mx-1">
+                    <h3>Locations</h3>
+                </div>
+
+                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1" ng-if="locationTable.showResult">
+                    <table show-filter="false" class="table table-hover custom-table">
+                        <thead>
+                            <tr>
+                                <td class=" text-center">
+                                    Num
+                                </td>
+                                <td class="primary text-center">
+                                    Address
+                                </td>
+                                <td class="primary text-center">
+                                 City
+                                </td>
+                                <td class="primary text-center">
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in locationTable.data track by $index">
+                                <td class=" text-center">
+                                    {{$index+1}}
+                                </td>
+                                <td class="primary text-center">
+                                    {{row.address}}
+                                </td>
+                                <td class="primary text-center">
+                                    {{row.city}}
+                                </td>
+                                <td class="primary text-center">
+                                    <a href="javascript:void(0);" ng-click="getSelectedlocation(row.id)" class="fw-bold text text-primary"><i class="bi bi-pencil-square"></i></a>
+                                    <a href="javascript:void(0);" ng-click="deleteLocation(row.id)" class="fw-bold text text-primary"><i class="text text-danger bi bi-trash"></i></a>
+                                </td>
+
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    </div>

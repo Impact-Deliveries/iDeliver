@@ -11,7 +11,7 @@ namespace iDeliverService.Controllers
 {
     [Route("api/attachment")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class AttachmentController : ControllerBase
     {
         private readonly IAttachmentRepository _repository;

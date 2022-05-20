@@ -159,6 +159,7 @@
                 $scope.driver.obj.selecteddays = $scope.Days.filter(a => a.checked == true).map(t => t.ID);
                 //$scope.driver.obj.birthday = moment($scope.driver.obj.birthday).utc().format("DD-MM-yyyy")
                 //$scope.driver.obj.startJob = moment($scope.driver.obj.startJob).utc().format("DD-MM-yyyy")
+                $scope.driver.obj.isActive = true;
                 let promise = httpService.httpPost('Driver/AddDriver',
                     $scope.driver.obj,
                     { 'Content-Type': 'application/json' });
@@ -256,7 +257,6 @@
                             }
                             $scope.driver.obj.socialStatus = $scope.driver.obj.socialStatus.toString();
                             $scope.driver.obj.workTime = $scope.driver.obj.workTime.toString();
-
                             break;
                         default:
                             break;

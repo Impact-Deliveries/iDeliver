@@ -105,4 +105,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="FromDistance" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="51650e8c-1e8b-4e19-9fc8-482b88f4777c" ChangeDateTime="05/20/2022 16:17:44">
+    <Property Name="ElementName" Value="[dbo].[DriverCase].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DriverCase]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6bf0e4a4-6cec-46d3-8b8f-ab001388aa9f" ChangeDateTime="05/20/2022 16:18:17">
+    <Property Name="ElementName" Value="[dbo].[DriverCase].[Driver]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DriverCase]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DriverID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="651f08e9-1147-48c7-88d6-a7b8ad01e3ee" ChangeDateTime="05/20/2022 16:22:26">
+    <Property Name="ElementName" Value="[dbo].[DriverCase].[Is]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DriverCase]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsDeleted" />
+  </Operation>
 </Operations>

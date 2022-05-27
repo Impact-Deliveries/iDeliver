@@ -116,6 +116,26 @@ namespace iDeliverDataAccess.Repositories
             return await data.OrderByDescending(a => a.CreationDate).ToListAsync();
         }
 
+        public async Task<List<MerchantBranchDTO>> GetActiveBranches() 
+        {
+
+            var data = (from branch in _context.MerchantBranches
+                        join merchant in _context.Merchants on branch.MerchantId equals merchant.Id
+                        where branch.IsActive== true && merchant.IsActive==true 
+                        select new MerchantBranchDTO
+                        {
+                            Id = branch.Id,
+                            MerchantId = branch.MerchantId,
+                            MerchantName = merchant.MerchantName,
+                            BranchName = branch.BranchName,                           
+                            Latitude = branch.Latitude,
+                            Longitude = branch.Longitude,
+                            Mobile = branch.Mobile,
+                            Phone = branch.Phone,
+                        });
+
+            return await data.ToListAsync();
+        }
         public async Task<MerchantBranchDTO> GetBrancheID(long? Id)
         {
             var moduleType = (int)Module.MerchantBranch;

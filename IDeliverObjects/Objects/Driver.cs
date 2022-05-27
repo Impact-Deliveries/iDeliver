@@ -9,6 +9,7 @@ namespace IDeliverObjects.Objects
     {
         public Driver()
         {
+            DriverCases = new HashSet<DriverCase>();
             DriverDetails = new HashSet<DriverDetail>();
             DriverSchadules = new HashSet<DriverSchadule>();
         }
@@ -35,6 +36,7 @@ namespace IDeliverObjects.Objects
 
         public virtual Enrolment Enrolment { get; set; }
         public virtual Organization Organization { get; set; }
+        public virtual ICollection<DriverCase> DriverCases { get; set; }
         public virtual ICollection<DriverDetail> DriverDetails { get; set; }
         public virtual ICollection<DriverSchadule> DriverSchadules { get; set; }
     }

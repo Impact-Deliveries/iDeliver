@@ -19,5 +19,7 @@ namespace iDeliverDataAccess.Repositories
         Task Delete(MerchantBranch MerchantBranch);
         Task<List<MerchantBranchDTO>> GetBranchesByMerchantID(long? MerchantID, bool? IsActive, long? LocationID);
         Task<MerchantBranchDTO> GetBrancheID(long? Id);
+        Task<List<MerchantBranchDTO>> GetActiveBranches();
+
     }
 }

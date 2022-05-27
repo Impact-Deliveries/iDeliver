@@ -15,7 +15,8 @@
     app.run(function ($http, $log, appsettings, $rootScope) {
         $rootScope.page = {
             loaded: false,
-            baseUrl: appsettings.baseUrl
+            baseUrl: appsettings.baseUrl,
+            PageID:0
         };
     });
 })();

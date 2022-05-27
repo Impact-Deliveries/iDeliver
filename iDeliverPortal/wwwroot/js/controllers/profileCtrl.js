@@ -102,6 +102,7 @@
                     $scope.modules.filter(f => f.id === id)[0].active = true;
                 }
                 $scope.SelectedModules = id.toString();
+                $rootScope.page.PageID = id.toString();
             };
 
             $scope.init = function () {

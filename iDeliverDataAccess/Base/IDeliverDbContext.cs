@@ -23,6 +23,7 @@ namespace iDeliverDataAccess.Base
         public virtual DbSet<Attachment> Attachments { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<Driver> Drivers { get; set; }
+        public virtual DbSet<DriverCase> DriverCases { get; set; }
         public virtual DbSet<DriverDetail> DriverDetails { get; set; }
         public virtual DbSet<DriverSchadule> DriverSchadules { get; set; }
         public virtual DbSet<Enrolment> Enrolments { get; set; }
@@ -149,6 +150,35 @@ namespace iDeliverDataAccess.Base
                     .HasForeignKey(d => d.OrganizationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Driver_Organization");
+            });
+
+            modelBuilder.Entity<DriverCase>(entity =>
+            {
+                entity.ToTable("DriverCase");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.CreationDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("getutcdate()");
+
+                entity.Property(e => e.DriverId).HasColumnName("DriverID");
+
+                entity.Property(e => e.Latitude).HasMaxLength(50);
+
+                entity.Property(e => e.Longitude).HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("getutcdate()");
+
+                entity.HasOne(d => d.Driver)
+                    .WithMany(p => p.DriverCases)
+                    .HasForeignKey(d => d.DriverId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_DriverCase_Driver");
             });
 
             modelBuilder.Entity<DriverDetail>(entity =>

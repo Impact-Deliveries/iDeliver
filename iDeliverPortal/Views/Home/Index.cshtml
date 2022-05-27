@@ -144,7 +144,9 @@
                 </div>*@
             @*
             *@
-
+             <div ng-if="SelectedModules=='1'">
+                <div ng-include="'../partial/Dashboard.html'"></div>
+            </div>
             <div ng-if="SelectedModules=='3'">
                 <div ng-include="'../partial/Driver.html'"></div>
             </div>
@@ -183,6 +185,7 @@
 </div>
 @section Scripts {
 <script type="text/javascript" src="~/js/controllers/profileCtrl.js"></script>
+<script type="text/javascript" src="~/js/controllers/dashboardCtrl.js"></script>
 <script type="text/javascript" src="~/js/controllers/driverCtrl.js"></script>
 <script type="text/javascript" src="~/js/controllers/merchantCtrl.js"></script>
 <script type="text/javascript" src="~/js/controllers/merchantBranchCtrl.js"></script>

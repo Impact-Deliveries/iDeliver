@@ -74,9 +74,28 @@ namespace iDeliverService.Controllers
             catch (Exception ex)
             {
                 return BadRequest();
+            } 
+        }
+
+
+        [HttpGet("GetActiveBranches")]
+        public async Task<ActionResult<MerchantBranch>> GetActiveBranches()
+        {
+            try
+            {
+                var MerchantBranch = await _repository.GetActiveBranches();
+                if (MerchantBranch == null)
+                {
+                    return NotFound();
+                }
+                return Ok(MerchantBranch);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
             }
 
-           
+
         }
 
         [HttpPost("AddMerchantBranch")]

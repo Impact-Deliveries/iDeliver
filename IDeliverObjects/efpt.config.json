@@ -26,6 +26,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[DriverCase]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[DriverDetails]",
          "ObjectType": 0
       },

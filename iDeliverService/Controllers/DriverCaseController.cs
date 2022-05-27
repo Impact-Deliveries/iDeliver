@@ -71,10 +71,23 @@ namespace iDeliverService.Controllers
             }
         }
 
+        [HttpPost, Route("SetDriverCase")]
+        public async Task<ActionResult<DriverCase>> SetDriverCase([FromBody] DriverCaseDTO _request)
+        {
+            try
+            {
+                var driverCase = await _repository.SetDriverCase(_request);
+                return Ok(driverCase);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         private bool DriverCaseExists(long id)
         {
             return _repository.IsExists(w => w.Id == id);
         }
-
     }
 }

@@ -74,7 +74,7 @@
          "ObjectType": 0
       }
    ],
-   "UiHint": "..\\iDeliverDB\\iDeliverDB.sqlproj",
+   "UiHint": "DESKTOP-T7UIV44.iDeliverDB",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDbContextSplitting": false,

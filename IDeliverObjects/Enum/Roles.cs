@@ -49,4 +49,12 @@ namespace IDeliverObjects.Enum
         Distance = 2,
         Offer = 3,
     }
+
+    public enum DriverCaseStatus
+    {
+        available = 1,
+        hold = 2,
+        unavailable = 3,
+        block = 4
+    }
 }

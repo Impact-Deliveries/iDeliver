@@ -40,6 +40,68 @@ namespace iDeliverDataAccess.Repositories
         public async Task<DriverCase?> FindRow(Expression<Func<DriverCase, bool>> where) =>
             await _context.DriverCases.Where(where).FirstOrDefaultAsync();
 
+        public async Task<DriverCase> SetDriverCase(DriverCaseDTO request)
+        {
+            try
+            {
+                Driver? driver = await _context.Drivers.Where(w => w.EnrolmentId == request.EnrolmentID)
+                    .FirstOrDefaultAsync();
+
+                long driverID = driver.Id;
+
+                DriverCase? driverCase = await _context.DriverCases.Where(w => w.DriverId == driverID).FirstOrDefaultAsync();
+
+                if (driverCase is not null)
+                {
+                    //Update
+                    driverCase.ModifiedDate = DateTime.UtcNow;
+                    if (!string.IsNullOrEmpty(request.Longitude) && !string.IsNullOrEmpty(request.Latitude))
+                    {
+                        driverCase.Longitude = request.Longitude;
+                        driverCase.Latitude = request.Latitude;
+                    }
+
+                    if (request.Status != 0)
+                    {
+                        driverCase.Status = request.Status;
+                    }
+
+                    if (request.IsOnline is not null)
+                    {
+                        driverCase.IsOnline = request.IsOnline.Value;
+                    }
+
+                    _context.Entry(driverCase).State = EntityState.Modified;
+                }
+                else
+                {
+
+                    //Insert
+                    driverCase = new DriverCase();
+                    driverCase = new DriverCase()
+                    {
+                        Longitude = request.Longitude,
+                        Latitude = request.Latitude,
+                        DriverId = driverID,
+                        IsDeleted = false,
+                        IsOnline = false,
+                        Status = (int)DriverCaseStatus.unavailable,
+                        CreationDate = DateTime.UtcNow,
+                        ModifiedDate = DateTime.UtcNow,
+                    };
+                    _context.DriverCases.Add(driverCase);
+
+
+                }
+                await _context.SaveChangesAsync();
+                return driverCase;
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+        }
+
         public bool IsExists(Expression<Func<DriverCase, bool>> where) =>
              _context.DriverCases.Any(where);
 

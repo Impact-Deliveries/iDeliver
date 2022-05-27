@@ -1,5 +1,4 @@
-﻿
-using IDeliverObjects.DTO;
+﻿using IDeliverObjects.DTO;
 using IDeliverObjects.Objects;
 using System.Linq.Expressions;
 
@@ -13,6 +12,7 @@ namespace iDeliverDataAccess.Repositories
         Task<DriverCase?> GetByID(long id);
         Task<IEnumerable<DriverCase>> Find(Expression<Func<DriverCase, bool>> where);
         Task<DriverCase?> FindRow(Expression<Func<DriverCase, bool>> where);
+        Task<DriverCase> SetDriverCase(DriverCaseDTO request);
         bool IsExists(Expression<Func<DriverCase, bool>> where);
         Task Add(DriverCase DriverCase);
         Task Update(DriverCase DriverCase);

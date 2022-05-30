@@ -58,7 +58,7 @@
                         <small class="text-danger" ng-if="false">This field is Required </small>
                     </div>
 
-                 
+
 
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
                         <label> Overview</label>
@@ -97,12 +97,15 @@
                         <label>Attachments</label>
                         <div class="input-group">
                             <ng-dropzone ng-show="branch.showDropzone" class="dropzone w-100" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods"></ng-dropzone>
-                            <div ng-show="!branch.showDropzone">
+                            <!--<div ng-show="!branch.showDropzone">
                                 <div ng-repeat="item in branch.obj.attachments">
                                     <img src="{{item.path+item.fileName}}" />
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
+                    </div>
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-2" ng-show="!branch.showDropzone" >
+                        <div ng-include="'../partial/Media.html'"></div>
                     </div>
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-2">
                         <button class="btn btn-success" type="submit">Save</button>

@@ -14,6 +14,7 @@
                         case 200:
                             $scope.profile = res.data;
                             $rootScope.page.loaded = true;
+                            $scope.goto(1);
                             break;
                         default:
                             commonService.redirect();

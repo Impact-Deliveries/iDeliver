@@ -1,0 +1,41 @@
+﻿<div class="col-12">
+    <div class="row">
+        <div class="col-md-4 col-lg-3 col-sm-12 p-2" ng-repeat="item in attachment.data">
+            <div ng-switch="item.attachmentType">
+                <div ng-switch-when="1">
+                    <div class="col-12 p-2">
+                        <div class="row justify-content-center">
+                            <div class="col-12"><img style="width: 240px; height: 210px; border-radius: 10px;" ng-src="{{item.path.replace('~/','../')+item.fileName}}" /></div>
+                            <div class="col-12 d-flex justify-content-center"> <button class="btn btn-danger m-1" ng-click="deleteAttachment(item.id)">Delete</button></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-switch-when="2">
+                    <div class="col-12 p-2">
+                        <div class="row justify-content-center">
+                            <div class="col-12">  <a href="{{item.path.replace('~/','../')+item.fileName}}" target="_blank"><img  style="width: 240px; height: 210px; border-radius: 10px;" src="../userfiles/video-icon.png" /></a></div>
+                            <div class="col-12 d-flex justify-content-center"> <button class="btn btn-danger m-1" ng-click="deleteAttachment(item.id)">Delete</button></div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-switch-when="3">
+                    <div class="col-12 p-2">
+                        <div class="row justify-content-center">
+                            <div class="col-12"><a href="{{item.path.replace('~/','../')+item.fileName}}" target="_blank"><img  style="width: 240px; height: 210px; border-radius: 10px;" src="../userfiles/Audio_icon.png" /></a></div>
+                            <div class="col-12 d-flex justify-content-center"> <button class="btn btn-danger m-1" ng-click="deleteAttachment(item.id)">Delete</button></div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-switch-when="4">
+                    <div class="col-12 p-2">
+                        <div class="row justify-content-center">
+                            <div class="col-12"><a href="{{item.path.replace('~/','../')+item.fileName}}" target="_blank"><img  style="width: 240px; height: 210px; border-radius: 10px;"  src="../userfiles/attachment-icon.png" /></a></div>
+                            <div class="col-12 d-flex justify-content-center"> <button class="btn btn-danger m-1" ng-click="deleteAttachment(item.id)">Delete</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

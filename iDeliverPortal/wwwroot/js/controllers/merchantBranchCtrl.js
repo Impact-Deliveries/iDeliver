@@ -78,8 +78,11 @@
                             $scope.branch.obj.deliveryPriceOffer = res.data.deliveryPriceOffer;
                             if ($scope.branch.obj.attachments != null && $scope.branch.obj.attachments.length > 0) {
                                 $scope.branch.showDropzone = false;
-                            }
+                            } else {
+                                $scope.branch.showDropzone = true;
 
+                            }
+                            $scope.attachment.data = $scope.branch.obj.attachments;
                             $scope.initMap(Number($scope.branch.obj.Latitude), Number($scope.branch.obj.Longitude));
                             $timeout(function () {
                                 var myLatlng = new google.maps.LatLng(Number($scope.branch.obj.Latitude), Number($scope.branch.obj.Longitude));
@@ -173,7 +176,8 @@
                 promise.then(function (res) {
                     switch (res.status) {
                         case 200:
-                            $scope.branch.branchid = res.data.Id;
+                            $scope.branch.branchid = res.data.id;
+                            $scope.branch.obj.Id = res.data.id;
                             if ($scope.branch.myDropzone != null && $scope.branch.myDropzone.files.length > 0) {
                                 $scope.branch.myDropzone.processQueue();
                             }
@@ -468,6 +472,45 @@
 
             //#endregion
 
+            //#region attachment
+            $scope.attachment = {
+                data: null,
+            };
+            $scope.deleteAttachment = function (id) {
+                if (!id) return;
+                let promise = httpService.httpPost('attachment/DeleteAttachment',
+                    id
+                    ,
+                    { 'Content-Type': 'application/json' });
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.getAttachment();
+                            break;
+                        default:
+                            break;
+                    }
+                }, function (res) {
+                    commonService.redirect();
+                });
+            };
+
+            $scope.getAttachment = function () {
+                let promise = httpService.httpGet('attachment/GetAttachmentByModule?ModuleID=' + $scope.branch.obj.Id + '&ModuleType=4', null, { 'Content-Type': 'application/json' });
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.attachment.data = res.data;
+                            break;
+                        default:
+                            break;
+                    }
+                    // $rootScope.page.loaded = true;
+                }, function (res) {
+
+                });
+            };
+            //#endregion
             //#region dropzone
             $scope.dzOptions = {
                 url: appsettings.apiBaseUrl + "Attachment/UploadAttachments",

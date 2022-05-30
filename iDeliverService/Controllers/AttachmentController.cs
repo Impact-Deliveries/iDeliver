@@ -1,4 +1,5 @@
 ﻿using iDeliverDataAccess.Repositories;
+using IDeliverObjects.Common;
 using IDeliverObjects.DTO;
 using IDeliverObjects.Objects;
 using Microsoft.AspNetCore.Authorization;
@@ -71,7 +72,7 @@ namespace iDeliverService.Controllers
                 if (files == null || files.ToList().Count < 0)
                     return BadRequest();
                 AttachmentDTO data = JsonConvert.DeserializeObject<AttachmentDTO>(HttpContext.Request.Form["data"]);
-
+                MediaType media = new MediaType();
                 if (string.IsNullOrEmpty(data.Path) || data == null)
                     return NotFound();
                 if (files.Count > 0)
@@ -80,20 +81,20 @@ namespace iDeliverService.Controllers
                     {
                         string filename = file.FileName.Replace("#", "").Replace("+", "");
                         string file_extension = Path.GetExtension(filename);
-
+                        var type = media.GetMediaType(file_extension);
                         filename = Regex.Replace(filename.Trim(), "[^A-Za-z0-9_. ]+", "");
 
                         string replace_filename = filename.Replace("~/", "").Split(file_extension)[0] + "_" + creation_date + file_extension;
 
-                        var path = _env.ContentRootPath + data.Path.Replace("~/", "\\").Replace("/", "\\"); 
+                        var path = _env.ContentRootPath + data.Path.Replace("~/", "\\").Replace("/", "\\");
                         //Path.Combine(_env.ContentRootPath, data.Path.Replace("~/", "\\").Replace("/", "\\")); //Server.MapPath(data.Path);
                         if (!Directory.Exists(path))
                         {
                             Directory.CreateDirectory(path);
                         }
 
-                       // string physical_path = data.Path; //+ replace_filename;
-                       string file_path = Path.Combine(path + replace_filename);
+                        // string physical_path = data.Path; //+ replace_filename;
+                        string file_path = Path.Combine(path + replace_filename);
                         // files.SaveAs(file_path);
 
                         using (var stream = System.IO.File.Create(file_path))
@@ -111,7 +112,7 @@ namespace iDeliverService.Controllers
                             ModuleType = data.ModuleTypeID,
                             Extension = file_extension.Trim(),
                             GroupId = data.GroupID.ToString(),
-                            AttachmentType = data.AttachmentType
+                            AttachmentType = type
                         };
                         _repository.Add(atta);
                         attachments.Add(atta);
@@ -132,6 +133,29 @@ namespace iDeliverService.Controllers
 
         }
 
+        // Post: api/Attachments/UploadAttachments
+        [HttpPost("DeleteAttachment")]
+        public async Task<ActionResult<Attachment>> DeleteAttachment([FromBody] long id)
+        {
+
+            try
+            {
+                var attachment = await _repository.GetByID(id);
+
+                if (attachment == null)
+                    return BadRequest(HttpStatusCode.BadRequest);
+
+                await _repository.Delete(attachment);
+                return Ok();
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
         private bool AttachmentExists(long id)
         {
             return _repository.IsExists(w => w.Id == id);

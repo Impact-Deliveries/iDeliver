@@ -57,4 +57,12 @@ namespace IDeliverObjects.Enum
         unavailable = 3,
         block = 4
     }
+    public enum MediaType
+    {
+        Image = 1,
+        Video = 2,
+        Audio=3,
+        File = 4,
+          
+    }
 }

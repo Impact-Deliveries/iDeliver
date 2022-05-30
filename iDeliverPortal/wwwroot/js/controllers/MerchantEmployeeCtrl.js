@@ -200,12 +200,53 @@
                             $scope.employee.obj.Mobile = res.data.mobile;
                             $scope.employee.obj.Phone = res.data.phone;
                             $scope.employee.obj.MerchantBranchId = res.data.merchantBranchId.toString();
+                            $scope.attachment.data = $scope.employee.obj.attachments;
                             $scope.changeTab(3);
                             break;
                         default:
                             break;
                     }
                     //$scope.changeTab(3);
+                    // $rootScope.page.loaded = true;
+                }, function (res) {
+
+                });
+            };
+            //#endregion
+
+            //#region attachment
+            $scope.attachment = {
+                data: null,
+            };
+            $scope.deleteAttachment = function (id) {
+                if (!id) return;
+                let promise = httpService.httpPost('attachment/DeleteAttachment',
+                    id
+                    ,
+                    { 'Content-Type': 'application/json' });
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.getAttachment();
+                            break;
+                        default:
+                            break;
+                    }
+                }, function (res) {
+                    commonService.redirect();
+                });
+            };
+
+            $scope.getAttachment = function () {
+                let promise = httpService.httpGet('attachment/GetAttachmentByModule?ModuleID=' + $scope.employee.Id + '&ModuleType=5', null, { 'Content-Type': 'application/json' });
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.attachment.data = res.data;
+                            break;
+                        default:
+                            break;
+                    }
                     // $rootScope.page.loaded = true;
                 }, function (res) {
 

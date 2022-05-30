@@ -31,6 +31,7 @@
                             $scope.form.authenticated = true;
                             sessionStorage.setItem('token', res.data.token);
                             commonService.redirect('home/index');
+
                             break;
                         default:
                             $scope.form.authenticated = false;

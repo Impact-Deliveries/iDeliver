@@ -244,7 +244,6 @@
                             $scope.driver.obj = res.data;
                             var from = moment($scope.driver.obj.fromTime).format("HH:mm");
                             var to = moment($scope.driver.obj.toTime).format("HH:mm");
-                            console.log(from)
                             $timeout(function () {
                                 $("#fromtime").val(from);
                                 $("#totime").val(to);
@@ -253,10 +252,10 @@
                                 for (var i = 0; i < $scope.driver.obj.selecteddays.length; i++) {
                                     $scope.Days.filter(a => a.ID == $scope.driver.obj.selecteddays[i])[0].checked = true;
                                 }
-                                console.log($scope.Days)
                             }
                             $scope.driver.obj.socialStatus = $scope.driver.obj.socialStatus.toString();
                             $scope.driver.obj.workTime = $scope.driver.obj.workTime.toString();
+                            $scope.attachment.data = $scope.driver.obj.attachments ;
                             break;
                         default:
                             break;
@@ -303,6 +302,46 @@
                 });
             };
             //#endregion
+            //#region attachment
+            $scope.attachment = {
+                data: null,
+            };
+            $scope.deleteAttachment = function (id) {
+                if (!id) return;
+                let promise = httpService.httpPost('attachment/DeleteAttachment',
+                  id
+                ,
+                    { 'Content-Type': 'application/json' });
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.getAttachment();
+                            break;
+                        default:
+                            break;
+                    }
+                }, function (res) {
+                    commonService.redirect();
+                });
+            };
+
+            $scope.getAttachment = function () {
+                let promise = httpService.httpGet('attachment/GetAttachmentByModule?ModuleID=' + $scope.driver.obj.driverID+'&ModuleType=3', null, { 'Content-Type': 'application/json' });
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.attachment.data  = res.data;
+                            break;
+                        default:
+                            break;
+                    }
+                    // $rootScope.page.loaded = true;
+                }, function (res) {
+
+                });
+            };
+            //#endregion
+
 
             //#region dropzone
             $scope.dzOptions = {

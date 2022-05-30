@@ -33,16 +33,16 @@
                         case 200:
                             $scope.braches.data = res.data;
                             $scope.braches.length = res.data.length;
-                            const svgMarker = {
-
-                                path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-                                fillColor: "yellow",
-                                fillOpacity: 1,
-                                strokeWeight: 0,
-                                rotation: 0,
-                                scale: 2,
-                                anchor: new google.maps.Point(15, 30),
-                            };
+                           const svgMarker = {
+                           
+                              // path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+                               fillColor: "yellow",
+                               fillOpacity: 1,
+                               strokeWeight: 0,
+                               rotation: 0,
+                               scale: 2,
+                               anchor: new google.maps.Point(15, 30),
+                           };
                             // var icon = appsettings.baseUrl + 'userfiles/icon-restaurant.jpg';
                             $timeout(function () {
                                 for (var i = 0; i < res.data.length > 0; i++) {
@@ -52,7 +52,7 @@
                                         map: map,
                                         icon: svgMarker,
                                         title: res.data[i].merchantName + ' ' + res.data[i].branchName + ' (' + res.data[i].phone + ')',
-                                        optimized: true
+                                        //optimized: true
                                     });
 
                                     $scope.google.markers.push(marker);
@@ -70,7 +70,7 @@
                 });
             };
             $scope.getDriverLocations = function () {
-                if (!$rootScope.page.PageID == "1" || !$rootScope.page.PageID) return;
+                if ($rootScope.page.PageID != "1" || !$rootScope.page.PageID) return;
                 let promise = httpService.httpGet('DriverCase/GetOnlineDrivers', null, { 'Content-Type': 'application/json' });
                 promise.then(function (res) {
                     switch (res.status) {

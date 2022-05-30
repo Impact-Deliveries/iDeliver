@@ -5,9 +5,23 @@
     "iisExpress": {
       "applicationUrl": "http://localhost:5050",
       "sslPort": 0
+    },
+    "iis": {
+      "applicationUrl": "http://localhost/iDeliverPortal",
+      "sslPort": 0
     }
+
   },
   "profiles": {
+    "IIS": {
+      "commandName": "IIS",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost/iDeliverPortal",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
     "iDeliverPortal": {
       "commandName": "Project",
       "dotnetRunMessages": true,

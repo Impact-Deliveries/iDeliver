@@ -7,10 +7,12 @@
                 data: null,
                 length: 0
             }
-
+            $scope.drivers = {
+                data: null,
+                length: 0
+            }
 
             //#region map
-
             $scope.google = {
                 map: null,
                 markers: [],
@@ -75,6 +77,7 @@
                 promise.then(function (res) {
                     switch (res.status) {
                         case 200:
+                            $scope.drivers.data = res.data;
                             $scope.deleteMarkers();
                             for (var i = 0; i < res.data.length > 0; i++) {
                                 var myLatlng = new google.maps.LatLng(Number(res.data[i].latitude), Number(res.data[i].longitude));

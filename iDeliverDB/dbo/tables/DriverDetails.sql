@@ -15,6 +15,7 @@
     [ModifiedDate] DATETIME NOT NULL DEFAULT GETUTCDATE(), 
     [CreationDate] DATETIME NOT NULL DEFAULT GETUTCDATE(), 
     [IsDeleted] BIT NOT NULL DEFAULT 0, 
+    [DeliveryPercent] MONEY NULL, 
     CONSTRAINT [PK_DriverDetails] PRIMARY KEY ([ID] ASC), 
     CONSTRAINT [FK_DriverDetails_Driver] FOREIGN KEY([DriverID]) REFERENCES [dbo].[Driver] ([ID])
 )

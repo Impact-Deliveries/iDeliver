@@ -88,5 +88,7 @@
     <Build Include="dbo\tables\DriverSchadule.sql" />
     <Build Include="dbo\tables\Attachment.sql" />
     <Build Include="dbo\tables\DriverCase.sql" />
+    <Build Include="dbo\tables\Order.sql" />
+    <Build Include="dbo\tables\DriverOrders.sql" />
   </ItemGroup>
 </Project>

@@ -34,6 +34,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[DriverOrders]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[DriverSchadule]",
          "ObjectType": 0
       },
@@ -62,6 +66,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Order]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Organization]",
          "ObjectType": 0
       },
@@ -74,7 +82,7 @@
          "ObjectType": 0
       }
    ],
-   "UiHint": "DESKTOP-T7UIV44.iDeliverDB",
+   "UiHint": "D:\\iDeliver\\iDeliverDB\\bin\\Debug\\iDeliverDB.dacpac",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDbContextSplitting": false,

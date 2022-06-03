@@ -22,6 +22,7 @@ namespace IDeliverObjects.Objects
         public DateTime ModifiedDate { get; set; }
         public DateTime CreationDate { get; set; }
         public bool IsDeleted { get; set; }
+        public decimal? DeliveryPercent { get; set; }
 
         public virtual Driver Driver { get; set; }
     }

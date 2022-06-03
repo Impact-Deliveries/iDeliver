@@ -11,6 +11,7 @@ namespace IDeliverObjects.Objects
         {
             MerchantDeliveryPrices = new HashSet<MerchantDeliveryPrice>();
             MerchantEmployees = new HashSet<MerchantEmployee>();
+            Orders = new HashSet<Order>();
         }
 
         public long Id { get; set; }
@@ -34,5 +35,6 @@ namespace IDeliverObjects.Objects
         public virtual Merchant Merchant { get; set; }
         public virtual ICollection<MerchantDeliveryPrice> MerchantDeliveryPrices { get; set; }
         public virtual ICollection<MerchantEmployee> MerchantEmployees { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

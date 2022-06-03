@@ -26,6 +26,8 @@ namespace iDeliverDataAccess.Base
             services.AddScoped<IMerchantEmployeeRepository, MerchantEmployeeRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<IMerchantDeliveryPriceRepository, MerchantDeliveryPriceRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IDriverOrderRepository, DriverOrderRepository>();
         }
     }
 }

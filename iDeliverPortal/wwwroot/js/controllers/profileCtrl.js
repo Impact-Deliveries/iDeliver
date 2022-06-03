@@ -37,26 +37,26 @@
                 icon: "fa fa-tachometer-alt",
                 child: []
             },
-            {
-                id: 2,
-                name: "roles",
-                active: false,
-                icon: "fas fa-user-tag",
-                child: [
-                    {
-                        id: 3,
-                        name: "merchants",
-                        active: false,
-                        icon: "fas fa-store me-2"
-                    },
-                    {
-                        id: 4,
-                        name: "drivers",
-                        active: false,
-                        icon: "fas fa-car me-2"
-                    }
-                ]
-            },
+            //{
+            //    id: 2,
+            //    name: "roles",
+            //    active: false,
+            //    icon: "fas fa-user-tag",
+            //    child: [
+            //        {
+            //            id: 3,
+            //            name: "merchants",
+            //            active: false,
+            //            icon: "fas fa-store me-2"
+            //        },
+            //        {
+            //            id: 4,
+            //            name: "drivers",
+            //            active: false,
+            //            icon: "fas fa-car me-2"
+            //        }
+            //    ]
+            //},
             {
                 id: 3,
                 name: "Driver",
@@ -69,28 +69,36 @@
                 id: 4,
                 name: "Merchants",
                 active: false,
-                icon: "fas fa-car me-2",
+                icon: "fas fa-solid fa-store",
                 child: []
                 },
                 {
                     id: 5,
                     name: "Merchant Branches",
                     active: false,
-                    icon: "fas fa-car me-2",
+                    icon: "fas fa-solid fa-store",
                     child: []
                 },
                 {
                     id: 6,
                     name: "Employees",
                     active: false,
-                    icon: "fas fa-car me-2",
+                    icon: "fas fa-solid fa-user",
                     child: []
                 },
                 {
                     id: 7,
                     name: "Location",
                     active: false,
-                    icon: "fas fa-car me-2",
+                    icon: "fas fa-solid fa-map-marker-alt",
+                    child: []
+                }
+                ,
+                {
+                    id: 8,
+                    name: "Order",
+                    active: false,
+                    icon: "fas fa-solid fa-shopping-basket",
                     child: []
                 }
             ];

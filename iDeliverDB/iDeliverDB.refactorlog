@@ -126,4 +126,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IsDeleted" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="329255f5-d263-4243-ba26-9e4d11921db3" ChangeDateTime="06/03/2022 08:25:03">
+    <Property Name="ElementName" Value="[dbo].[DriverDetails].[DeliveryPercant]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DriverDetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DeliveryPercent" />
+  </Operation>
 </Operations>

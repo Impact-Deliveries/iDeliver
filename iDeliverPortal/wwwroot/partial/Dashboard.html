@@ -4,7 +4,30 @@
             <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
                 <div id="map" ng-model="google.map" style="height: 600px !important;"></div>
             </div>
+            <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Driver Name</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in drivers.data track by $index">
+                            <td>{{$index}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.phone}}</td>
+                            <td>
+                                <span ng-show="item.status==2" class="badge bg-danger">Not Available</span>
+                                <span ng-show="item.status==1" class="badge bg-success"> Available</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
- 
+
 </div>

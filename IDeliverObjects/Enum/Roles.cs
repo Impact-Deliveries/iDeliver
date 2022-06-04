@@ -71,10 +71,9 @@ namespace IDeliverObjects.Enum
         AssignToDriver = 2,
         DriverRejected = 3,
         DriverAccepted = 4,
-        DriverArrived= 5,
+        MerchantArrived= 5,
         OrderPicked = 6,
         OrderArrived = 7,
-        PreOrder=8,
     }
     public enum DriverOrderEnum
     {

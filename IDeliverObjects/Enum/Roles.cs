@@ -11,7 +11,7 @@ namespace IDeliverObjects.Enum
         administrator = 1,
         marchent = 2,
         driver = 3,
-        MerchantEmployee=4
+        MerchantEmployee = 4
     }
     public enum SocialStatus
     {
@@ -40,8 +40,8 @@ namespace IDeliverObjects.Enum
         administrator = 1,
         marchent = 2,
         driver = 3,
-        MerchantBranch=4,
-        MerchantEmployee=5,
+        MerchantBranch = 4,
+        MerchantEmployee = 5,
     }
     public enum DeliveryStatus
     {
@@ -61,8 +61,25 @@ namespace IDeliverObjects.Enum
     {
         Image = 1,
         Video = 2,
-        Audio=3,
+        Audio = 3,
         File = 4,
-          
+
+    }
+    public enum OrderStatus
+    {
+        PendingOrder = 1,
+        AssignToDriver = 2,
+        DriverRejected = 3,
+        DriverAccepted = 4,
+        DriverArrived= 5,
+        OrderPicked = 6,
+        OrderArrived = 7,
+        PreOrder=8,
+    }
+    public enum DriverOrderEnum
+    {
+        PenddingOrder = 1,
+        AcceptedOrder = 2,
+        RejectedOrder = 3,
     }
 }

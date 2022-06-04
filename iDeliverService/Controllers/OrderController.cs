@@ -74,7 +74,32 @@ namespace iDeliverService.Controllers
 
         }
 
+        [HttpGet("GetCurrentOrders")]
+        public async Task<ActionResult<OrderDTO>> GetCurrentOrders() {
+            try
+            {
+                var CurrentOrders=await _repository.GetCurrentOrders();
+                return Ok(CurrentOrders);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
+        [HttpGet("GetNewOrders")]
+        public async Task<ActionResult<OrderDTO>> GetNewOrders()
+        {
+            try
+            {
+                var NewOrders =await _repository.GetNewOrders();
+                return Ok(NewOrders);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         //[HttpPost("ChangeOrderStatus")]
         //public async Task<ActionResult<Order>> ChangeOrderStatus([FromQuery] long OrderID)

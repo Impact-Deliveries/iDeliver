@@ -16,7 +16,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="item in drivers.data track by $index">
-                            <td>{{$index}}</td>
+                            <td>{{$index+1}}</td>
                             <td>{{item.name}}</td>
                             <td>{{item.phone}}</td>
                             <td>
@@ -27,7 +27,113 @@
                     </tbody>
                 </table>
             </div>
+
+
+            <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
+                New Orders
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Merchant </th>
+                            <th>Merchant Phone</th>
+                            <th>Total Amount</th>
+                            <th>Delivery Amount</th>
+                            <th>Order time</th>
+                            <th>Count Down</th>
+                            <th>Status</th>
+                            <th>Drivers</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in newOrders.data  track by $index">
+                            <td>{{$index+1}}</td>
+                            <td>{{item.merchantName}}</td>
+                            <td>{{item.merchantPhone}}</td>
+                            <td>{{item.totalAmount}}</td>
+                            <td>{{item.deliveryAmount}}</td>
+
+                            <td>{{item.orderDate }}</td>
+                            <td>{{getCountDown(item.orderDate)}}</td>
+
+                            <td>
+                                <span ng-if="item.status==1" class="badge bg-warning">New Order</span>
+                                <span ng-if="item.status==2" class="badge bg-primary">Assign To Driver</span>
+                                <span ng-if="item.Status==3" class="badge bg-danger">Rejected Order</span>
+                            </td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-9">
+                                        <select class="form-control my-1">
+                                            <option value="0">Please Selected</option>
+                                            <option ng-repeat="driver in newOrders.drivers ">{{driver.name}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <button class="btn btn-success p-1 form-control my-1" ng-click="AssignOrder(driver.id,item.Id)"> > </button>
+
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-2">
+                Current Orders
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Merchant </th>
+                            <th>Merchant Phone</th>
+                            <th>Total Amount</th>
+                            <th>Delivery Amount</th>
+                            <th>Order time</th>
+                            <th>Driver Name</th>
+                            <th>Driver Phone</th>
+                            <th>Order time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in currentOrders.data  track by $index">
+                            <td>{{$index+1}}</td>
+                            <td>{{item.merchantName}}</td>
+                            <td>{{item.merchantPhone}}</td>
+                            <td>{{item.totalAmount}}</td>
+                            <td>{{item.deliveryAmount}}</td>
+
+                            <td>{{item.orderDate}}</td>
+                            <td>{{item.driverName}}</td>
+                            <td>{{item.driverPhone}}</td>
+                            <td>
+                                <span ng-if="item.status==4" class="badge bg-warning">Driver Accepted</span>
+                                <span ng-if="item.status==5" class="badge bg-primary">Driver Arrived</span>
+                                <span ng-if="item.status==6" class="badge bg-danger">Order Picked</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
-
+    <button type="button" ng-show="false" class="btn btn-primary" id="showMessage" data-bs-toggle="modal" data-bs-target="#orderMessage">
+        orders
+    </button>
+    <div class="modal " tabindex="-1" ng-show="newOrders.showMessage" id="orderMessage">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body d-flex justify-content-center">
+                    <h3>You Have New Order</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

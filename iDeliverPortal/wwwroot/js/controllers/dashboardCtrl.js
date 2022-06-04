@@ -11,22 +11,89 @@
                 data: null,
                 length: 0
             }
-
-            //#region map
-            $scope.google = {
-                map: null,
-                markers: [],
-
+            $scope.newOrders = {
+                data: null,
+                drivers: null,
+                numberOfOrders: 0,
+                oldNumberOfOrders: 0,
+                showMessage:false
             };
-            $scope.initMap = function (lat, lng) {
+            $scope.currentOrders = {
+                data: null,
+            };
+            //#region current Order
+            $scope.GetCurrentOrders = function () {
+             
+                let promise = httpService.httpGet('Order/GetCurrentOrders', null, { 'Content-Type': 'application/json' });
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.currentOrders.data = res.data;
+                          
+                            $timeout(function () {
+                                $scope.GetCurrentOrders();
+                            },60000);
+                            break;
+                        default:
+
+                            break;
+                    }
+                }, function (res) {
+
+                });
+            };
+            //#endregion
+
+            //#region new Order
+            $scope.GetNewOrders = function (isshow) {
+                $scope.newOrders.oldNumberOfOrders = $scope.newOrders.numberOfOrders;
+                let promise = httpService.httpGet('Order/GetNewOrders', null, { 'Content-Type': 'application/json' });
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.newOrders.data = res.data;
+                            if (res.data && res.data.length > 0) {
+                                $scope.newOrders.numberOfOrders = res.data.length;
+                            } else {
+                                $scope.newOrders.numberOfOrders = 0;
+                            }
+                            if ($scope.newOrders.numberOfOrders > 0
+                                && $scope.newOrders.oldNumberOfOrders != $scope.newOrders.numberOfOrders
+                                && isshow) {
+                                $scope.newOrders.showMessage = true;
+                                $timeout(function () {
+                                    $("#showMessage").click();
+                                }, 10);
+                             
+                                $timeout(function () {
+                                    $("#closeModal").click();
+                                    $scope.newOrders.showMessage = false;
+                                }, 5000);
+                            }
+                            $timeout(function () {
+                                $scope.GetNewOrders(true);
+                            }, 10000);
+                            break;
+                        default:
+
+                            break;
+                    }
+                }, function (res) {
+
+                });
+            };
+
+            $scope.AssignOrder = function (driverid, orderid) {
+                console.log({ driverid, orderid})
+            };
+            $scope.getCountDown = function (date) {
+                if (!date) return;
+                return 0;
                 $timeout(function () {
-                    $scope.google.map = new google.maps.Map(document.getElementById("map"), {
-                        center: { lat: lat, lng: lng },
-                        zoom: 12,
-                    });
 
-                }, 10);
+                },60000);
             };
+            //#endregion
             $scope.GetActiveBranches = function () {
                 if (!$rootScope.page.PageID == "1" || !$rootScope.page.PageID) return;
                 let promise = httpService.httpGet('MerchantBranch/GetActiveBranches', null, { 'Content-Type': 'application/json' });
@@ -35,16 +102,16 @@
                         case 200:
                             $scope.braches.data = res.data;
                             $scope.braches.length = res.data.length;
-                           const svgMarker = {
-                           
-                              // path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-                               fillColor: "yellow",
-                               fillOpacity: 1,
-                               strokeWeight: 0,
-                               rotation: 0,
-                               scale: 2,
-                               anchor: new google.maps.Point(15, 30),
-                           };
+                            const svgMarker = {
+
+                                // path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+                                fillColor: "yellow",
+                                fillOpacity: 1,
+                                strokeWeight: 0,
+                                rotation: 0,
+                                scale: 2,
+                                anchor: new google.maps.Point(15, 30),
+                            };
                             // var icon = appsettings.baseUrl + 'userfiles/icon-restaurant.jpg';
                             $timeout(function () {
                                 for (var i = 0; i < res.data.length > 0; i++) {
@@ -78,6 +145,8 @@
                     switch (res.status) {
                         case 200:
                             $scope.drivers.data = res.data;
+                            $scope.newOrders.drivers = res.data.filter(a => a.status == 1);
+
                             $scope.deleteMarkers();
                             for (var i = 0; i < res.data.length > 0; i++) {
                                 var myLatlng = new google.maps.LatLng(Number(res.data[i].latitude), Number(res.data[i].longitude));
@@ -100,9 +169,25 @@
 
                 });
             };
+            //#region map
+            $scope.google = {
+                map: null,
+                markers: [],
+
+            };
+            $scope.initMap = function (lat, lng) {
+                $timeout(function () {
+                    $scope.google.map = new google.maps.Map(document.getElementById("map"), {
+                        center: { lat: lat, lng: lng },
+                        zoom: 12,
+                    });
+
+                }, 10);
+            };
+
             $scope.placeMarker = function (map, location, obj) {
                 var color = "green";
-                if (obj.status==2) {
+                if (obj.status == 2) {
                     color = "red";
                 }
                 const svgMarker = {
@@ -119,7 +204,7 @@
                 const marker = new google.maps.Marker({
                     position: location,
                     map: map,
-                    title: obj.name+ ' (' + obj.phone + ')',
+                    title: obj.name + ' (' + obj.phone + ')',
                     icon: svgMarker,
                 });
                 // if ($scope.google.markers != null && $scope.google.markers.length > 0) {
@@ -160,6 +245,8 @@
             $scope.initMap(31.972907, 35.9092202);
             $scope.GetActiveBranches();
 
+            $scope.GetCurrentOrders();
+            $scope.GetNewOrders(false);
             //#endregion
 
 

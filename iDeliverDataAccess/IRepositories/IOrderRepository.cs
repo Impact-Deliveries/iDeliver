@@ -17,6 +17,7 @@ namespace iDeliverDataAccess.Repositories
         Task Add(Order Order);
         Task Update(Order Order);
         Task Delete(Order Order);
-
+        Task<List<OrderDTO?>> GetCurrentOrders();
+        Task<List<OrderDTO?>> GetNewOrders();
     }
 }

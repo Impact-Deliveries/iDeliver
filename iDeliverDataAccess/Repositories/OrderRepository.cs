@@ -84,7 +84,71 @@ namespace iDeliverDataAccess.Repositories
             }
         }
 
+        public async Task<List<OrderDTO?>> GetCurrentOrders()
+        {
+            try
+            {
+                var data = await (from order in _context.Orders
+                                  join branch in _context.MerchantBranches on order.MerchantBranchId equals branch.Id
+                                  join merchant in _context.Merchants on branch.MerchantId equals merchant.Id
+                                  join DriverOrders in _context.DriverOrders on order.Id equals DriverOrders.DriverId
+                                  join driver in _context.Drivers on DriverOrders.DriverId equals driver.Id
+                                  where order.IsDeleted==false && branch.IsActive==true && merchant.IsActive==true 
+                                   &&( order.Status==1 || order.Status==2 || order.Status == 3) 
+                                  select new OrderDTO
+                                  {
+                                      Id = order.Id,
+                                      MerchantBranchId = order.MerchantBranchId,
+                                      TotalAmount = order.TotalAmount,
+                                      DeliveryAmount = order.DeliveryAmount,
+                                      MerchantName = merchant.MerchantName + "-" + branch.BranchName,
+                                      MerchantPhone = branch.Phone,
+                                      Status = order.Status,
+                                      Note = order.Note,
+                                      OrderDate = order.CreationDate,
+                                      DriverName= driver.FirstName+" "+ driver.LastName,
+                                      DriverPhone= driver.Phone,
+                                  }).Distinct().OrderBy(a => a.OrderDate).ToListAsync();
+                return data;
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
+
+        }
+        public async Task<List<OrderDTO?>> GetNewOrders()
+        {
+            try
+            {
+                var data = await (from order in _context.Orders
+                                  join branch in _context.MerchantBranches on order.MerchantBranchId equals branch.Id
+                                  join merchant in _context.Merchants on branch.MerchantId equals merchant.Id
+                                  where order.IsDeleted == false && branch.IsActive == true && merchant.IsActive == true
+                                  && (order.Status == 1 || order.Status == 2 || order.Status == 3)
+                                  select new OrderDTO
+                                  {
+                                      Id = order.Id,
+                                      MerchantBranchId = order.MerchantBranchId,
+                                      TotalAmount = order.TotalAmount,
+                                      DeliveryAmount = order.DeliveryAmount,
+                                      MerchantName = merchant.MerchantName + "-" + branch.BranchName,
+                                      MerchantPhone = branch.Phone,
+                                      Status = order.Status,
+                                      Note = order.Note,
+                                      OrderDate = order.CreationDate,
+
+                                  }).Distinct().OrderBy(a => a.OrderDate).ToListAsync();
+                return data;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
     }
 }

@@ -75,10 +75,11 @@ namespace iDeliverService.Controllers
         }
 
         [HttpGet("GetCurrentOrders")]
-        public async Task<ActionResult<OrderDTO>> GetCurrentOrders() {
+        public async Task<ActionResult<OrderDTO>> GetCurrentOrders()
+        {
             try
             {
-                var CurrentOrders=await _repository.GetCurrentOrders();
+                var CurrentOrders = await _repository.GetCurrentOrders();
                 return Ok(CurrentOrders);
             }
             catch (Exception ex)
@@ -92,7 +93,7 @@ namespace iDeliverService.Controllers
         {
             try
             {
-                var NewOrders =await _repository.GetNewOrders();
+                var NewOrders = await _repository.GetNewOrders();
                 return Ok(NewOrders);
             }
             catch (Exception ex)
@@ -101,27 +102,43 @@ namespace iDeliverService.Controllers
             }
         }
 
-        //[HttpPost("ChangeOrderStatus")]
-        //public async Task<ActionResult<Order>> ChangeOrderStatus([FromQuery] long OrderID)
-        //{
-        //    try
-        //    {
-        //        var Order = await _repository.GetByID(OrderID);
+        [HttpPost("AssignOrderToDriver")]
+        public async Task<ActionResult<Order>> AssignOrderToDriver([FromBody] OrderDTO model)
+        {
+            try
+            {
+                if (model == null || model.Id==null || model.DriverID == null)
+                    return NotFound();
 
-        //        if (Order == null)
-        //        {
-        //            return NotFound();
-        //        }
-        //        Order.IsActive = !Order.IsActive;
-        //        await _repository.Update(Order);
-        //        return Ok(Order);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
+                var order = await _repository.GetByID(model.Id.Value);
+                if (order == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    DriverOrder driver = new DriverOrder()
+                    {
+                        Status = (int)DriverOrderEnum.PenddingOrder,
+                        CreationDate = DateTime.UtcNow,
+                        ModifiedDate = DateTime.UtcNow,
+                        DriverId = model.DriverID.Value,
+                        OrderId = model.Id.Value,
+                        IsDeleted = false,
+                        Note = "",
+                    };
+                    await _Dorepository.Add(driver);
+                    order.Status = (int)OrderStatus.AssignToDriver;
+                    await _repository.Update(order);
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-        //}
+        }
 
         private bool OrderExists(long id)
         {

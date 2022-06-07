@@ -14,25 +14,27 @@
             $scope.newOrders = {
                 data: null,
                 drivers: null,
+                activeDrivers: null,
                 numberOfOrders: 0,
                 oldNumberOfOrders: 0,
-                showMessage:false
+                showMessage: false,
+                selected: 0
             };
             $scope.currentOrders = {
                 data: null,
             };
             //#region current Order
             $scope.GetCurrentOrders = function () {
-             
+
                 let promise = httpService.httpGet('Order/GetCurrentOrders', null, { 'Content-Type': 'application/json' });
                 promise.then(function (res) {
                     switch (res.status) {
                         case 200:
                             $scope.currentOrders.data = res.data;
-                          
+
                             $timeout(function () {
                                 $scope.GetCurrentOrders();
-                            },60000);
+                            }, 60000);
                             break;
                         default:
 
@@ -64,7 +66,7 @@
                                 $timeout(function () {
                                     $("#showMessage").click();
                                 }, 10);
-                             
+
                                 $timeout(function () {
                                     $("#closeModal").click();
                                     $scope.newOrders.showMessage = false;
@@ -84,14 +86,70 @@
             };
 
             $scope.AssignOrder = function (driverid, orderid) {
-                console.log({ driverid, orderid})
-            };
-            $scope.getCountDown = function (date) {
-                if (!date) return;
-                return 0;
-                $timeout(function () {
+                console.log({ driverid, orderid })
+                if (driverid == 0 || orderid == undefined) {
+                    return;
+                }
+                var model = {
+                    Id: orderid,
+                    DriverID: driverid
+                };
+                let promise = httpService.httpPost('Order/AssignOrderToDriver', model,
+                    { 'Content-Type': 'application/json' });
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                              $scope.GetNewOrders(false);
+                            break;
+                        default:
+                            break;
+                    }
+                }, function (res) {
+                    commonService.redirect();
+                });
 
-                },60000);
+
+            };
+            //#endregion
+
+            //#region drivers
+            $scope.getDriversTable = function () {
+
+                let promise = httpService.httpGet('Driver/GetDrivers', {
+                    IsActive: true,
+                }, { 'Content-Type': 'application/json' });
+
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.newOrders.drivers = res.data;
+                            var objs = [];
+                            var obj1 = {
+                                id: 0,
+                                isActive: true,
+                                name: "Please Select",
+                            };
+                            objs.push(obj1);
+                            if (res.data != null && res.data.length > 0) {
+                                for (var i = 0; i < res.data.length; i++) {
+                                    var obj = {
+                                        id: res.data[i].id,
+                                        isActive: false,
+                                        name: res.data[i].firstName + ' ' + res.data[i].lastName,
+                                    };
+                                    objs.push(obj);
+                                }
+                                $scope.newOrders.drivers = objs;
+                            }
+
+                            break;
+                        default:
+                            break;
+                    }
+                    // $rootScope.page.loaded = true;
+                }, function (res) {
+
+                });
             };
             //#endregion
             $scope.GetActiveBranches = function () {
@@ -145,7 +203,20 @@
                     switch (res.status) {
                         case 200:
                             $scope.drivers.data = res.data;
-                            $scope.newOrders.drivers = res.data.filter(a => a.status == 1);
+
+                            if ($scope.drivers.data != null && $scope.drivers.data.length > 0) {
+                                for (var i = 0; i < res.data.length; i++) {
+                                    var _driver = $scope.newOrders.drivers.filter(a => a.id == res.data[i].driverID)[0];
+                                    if (_driver != null) {
+                                        if (res.data[i].status == 1) {
+                                            $scope.newOrders.drivers.filter(a => a.id == res.data[i].driverID)[0].isActive = true;
+                                        } else {
+                                            $scope.newOrders.drivers.filter(a => a.id == res.data[i].driverID)[0].isActive = false;
+                                        }
+                                    }
+                                }
+                                $scope.newOrders.activeDrivers = $scope.newOrders.drivers.filter(a => a.isActive == true);
+                            }
 
                             $scope.deleteMarkers();
                             for (var i = 0; i < res.data.length > 0; i++) {
@@ -247,6 +318,7 @@
 
             $scope.GetCurrentOrders();
             $scope.GetNewOrders(false);
+            $scope.getDriversTable();
             //#endregion
 
 

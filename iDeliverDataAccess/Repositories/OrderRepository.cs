@@ -31,7 +31,7 @@ namespace iDeliverDataAccess.Repositories
         public async Task<Order?> GetLastRow() =>
             await _context.Orders.OrderByDescending(o => o.Id).FirstOrDefaultAsync();
 
-        public async Task<Order?> GetByID(long id) =>
+        public async Task<Order> GetByID(long id) =>
             await _context.Orders.Where(w => w.Id == id).FirstOrDefaultAsync();
 
         public async Task<IEnumerable<Order>> Find(Expression<Func<Order, bool>> where) =>
@@ -94,7 +94,7 @@ namespace iDeliverDataAccess.Repositories
                                   join DriverOrders in _context.DriverOrders on order.Id equals DriverOrders.DriverId
                                   join driver in _context.Drivers on DriverOrders.DriverId equals driver.Id
                                   where order.IsDeleted==false && branch.IsActive==true && merchant.IsActive==true 
-                                   &&( order.Status==1 || order.Status==2 || order.Status == 3) 
+                                   &&( order.Status!=1 && order.Status!=2 && order.Status!= 3) 
                                   select new OrderDTO
                                   {
                                       Id = order.Id,
@@ -125,6 +125,7 @@ namespace iDeliverDataAccess.Repositories
                 var data = await (from order in _context.Orders
                                   join branch in _context.MerchantBranches on order.MerchantBranchId equals branch.Id
                                   join merchant in _context.Merchants on branch.MerchantId equals merchant.Id
+                                  join merchantDeliveryPrices in _context.MerchantDeliveryPrices on order.MerchantDeliveryPriceId equals merchantDeliveryPrices.Id
                                   where order.IsDeleted == false && branch.IsActive == true && merchant.IsActive == true
                                   && (order.Status == 1 || order.Status == 2 || order.Status == 3)
                                   select new OrderDTO
@@ -138,7 +139,8 @@ namespace iDeliverDataAccess.Repositories
                                       Status = order.Status,
                                       Note = order.Note,
                                       OrderDate = order.CreationDate,
-
+                                      LocationID= merchantDeliveryPrices.LocationId,
+                                      LocationName = merchantDeliveryPrices.LocationId != null?(from c in _context.Locations where c.Id == merchantDeliveryPrices.LocationId select c.Address).FirstOrDefault():"",
                                   }).Distinct().OrderBy(a => a.OrderDate).ToListAsync();
                 return data;
 

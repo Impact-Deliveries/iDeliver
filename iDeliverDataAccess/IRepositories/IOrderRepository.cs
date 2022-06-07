@@ -10,7 +10,7 @@ namespace iDeliverDataAccess.Repositories
         Task<IEnumerable<Order>> GetAll();
         Task<Order?> GetFirstRow();
         Task<Order?> GetLastRow();
-        Task<Order?> GetByID(long id);
+        Task<Order> GetByID(long id);
         Task<IEnumerable<Order>> Find(Expression<Func<Order, bool>> where);
         Task<Order?> FindRow(Expression<Func<Order, bool>> where);
         bool IsExists(Expression<Func<Order, bool>> where);

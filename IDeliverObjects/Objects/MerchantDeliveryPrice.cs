@@ -7,6 +7,11 @@ namespace IDeliverObjects.Objects
 {
     public partial class MerchantDeliveryPrice
     {
+        public MerchantDeliveryPrice()
+        {
+            Orders = new HashSet<Order>();
+        }
+
         public long Id { get; set; }
         public long MerchantBranchId { get; set; }
         public long? LocationId { get; set; }
@@ -19,5 +24,6 @@ namespace IDeliverObjects.Objects
 
         public virtual Location Location { get; set; }
         public virtual MerchantBranch MerchantBranch { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

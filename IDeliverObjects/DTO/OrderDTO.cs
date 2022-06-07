@@ -22,6 +22,9 @@ namespace IDeliverObjects.DTO
         public string? MerchantPhone { get; set; }
         public short? Status { get; set; }
         public string? Note { get; set; }
+        public string? LocationName { get; set; }
+        public long? LocationID { get; set; }
+        public long? DriverID { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public DateTime? OrderDate { get; set; }
         public bool? IsDeleted { get; set; }

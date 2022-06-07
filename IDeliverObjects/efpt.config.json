@@ -82,7 +82,7 @@
          "ObjectType": 0
       }
    ],
-   "UiHint": "D:\\iDeliver\\iDeliverDB\\bin\\Debug\\iDeliverDB.dacpac",
+   "UiHint": "..\\iDeliverDB\\iDeliverDB.sqlproj",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDbContextSplitting": false,

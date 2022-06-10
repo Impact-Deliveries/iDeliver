@@ -1,17 +1,16 @@
 ﻿<div ng-controller="OrderCtrl">
 
-    order
 
 
-    <!--<ul class="nav nav-tabs">
+    <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link " ng-class="{'active':driver.tabs==1 }" ng-click="changeTab(1)" href="javascript:void(0);">Drivers</a>
+            <a class="nav-link " ng-class="{'active':order.tabs==1 }" ng-click="changeTab(1)" href="javascript:void(0);">Orders</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" ng-class="{'active':driver.tabs==2}" ng-click="changeTab(2)" href="javascript:void(0);">Add Driver</a>
+            <a class="nav-link" ng-class="{'active':order.tabs==2}" ng-click="changeTab(2)" href="javascript:void(0);">Add Order</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" ng-class="{'active':driver.tabs==3}" ng-click="changeTab(3)" ng-if="driver.tabs==3" href="javascript:void(0);">Edit Driver</a>
+            <a class="nav-link" ng-class="{'active':order.tabs==3}" ng-click="changeTab(3)" ng-if="order.tabs==3" href="javascript:void(0);">Edit Order</a>
         </li>
 
     </ul>
@@ -20,15 +19,13 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center my-2 mx-1">
-                    <h3>Driver Form</h3>
+                    <h3>Order Form</h3>
                 </div>
 
-                <div class="alert alert-secondary col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center p-1  my-2" role="alert">
-                    Personal Information
-                </div>-->
+            
 
                 <!-- driver usname and national number -->
-                <!--<div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
+                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
                     <label>Username</label>
                     <input type="text" ng-model="driver.obj.username" class="form-control" required>
                     <small class="text-danger" ng-if="driver.isvalid && driver.obj.username==''">This field is Required </small>
@@ -38,10 +35,10 @@
                     <label>National Number</label>
                     <input type="text" ng-model="driver.obj.nationalNumber" class="form-control" required>
                     <small class="text-danger" ng-if="driver.isvalid && driver.obj.nationalNumber==''">This field is Required </small>
-                </div>-->
+                </div>
 
                 <!-- driver name -->
-                <!--<div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
                     <label> First name</label>
                     <input type="text" ng-model="driver.obj.firstname" class="form-control">
                     <small class="text-danger" ng-if="driver.isvalid && driver.obj.firstname==''">This field is Required </small>
@@ -55,10 +52,10 @@
                     <label> Last name</label>
                     <input type="text" ng-model="driver.obj.lastname" class="form-control">
                     <small class="text-danger" ng-if="driver.isvalid && driver.obj.lastname==''">This field is Required </small>
-                </div>-->
+                </div>
 
                 <!-- address -->
-                <!--<div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
+                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
                     <label> Address</label>
                     <input type="text" ng-model="driver.obj.address" class="form-control">
                     <small class="text-danger" ng-if="driver.isvalid && driver.obj.address==''">This field is Required </small>
@@ -280,5 +277,5 @@
                 </div>
             </div>
         </div>
-    </div>-->
+    </div>
 </div>

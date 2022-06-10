@@ -141,6 +141,7 @@ namespace iDeliverDataAccess.Repositories
                                       OrderDate = order.CreationDate,
                                       LocationID= merchantDeliveryPrices.LocationId,
                                       LocationName = merchantDeliveryPrices.LocationId != null?(from c in _context.Locations where c.Id == merchantDeliveryPrices.LocationId select c.Address).FirstOrDefault():"",
+                                 DriverID= order.Status == 2|| order.Status == 3? (from c in _context.DriverOrders where order.Id == c.OrderId &&( c.Status==1 || c.Status == 3)   select c.DriverId).FirstOrDefault():0
                                   }).Distinct().OrderBy(a => a.OrderDate).ToListAsync();
                 return data;
 

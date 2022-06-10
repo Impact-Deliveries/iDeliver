@@ -26,4 +26,5 @@ namespace IDeliverObjects.DTO
         public string? phone { get; set; } = string.Empty;
         public string? name { get; set; } = string.Empty;
     }
+
 }

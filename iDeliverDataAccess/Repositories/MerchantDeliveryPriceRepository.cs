@@ -83,7 +83,41 @@ namespace iDeliverDataAccess.Repositories
                 throw;
             }
         }
+        public async Task<List<MerchantDeliveryPriceDTO>> getByBranchID(long BranchID, int status)
+        {
+            List<MerchantDeliveryPriceDTO> model = new List<MerchantDeliveryPriceDTO>();
+            switch (status)
+            {
+                case 1:
+                    model = await (from c in _context.MerchantDeliveryPrices
+                                   join d in _context.Locations on c.LocationId equals d.Id
+                                   where c.MerchantBranchId == BranchID && d.IsDeleted==false && c.IsDeleted == false
+                                   select new MerchantDeliveryPriceDTO
+                                   {
+                                       Amount = c.Amount,
+                                       LocationId = c.LocationId,
+                                       LocationName = d.Address,
+                                       Id = c.Id,
+                                       MerchantBranchId = c.MerchantBranchId
+                                   }).ToListAsync();
+                    break;
+                case 2:
+                    model = await (from c in _context.MerchantDeliveryPrices
+                                   where c.MerchantBranchId == BranchID && c.IsDeleted == false
+                                   select new MerchantDeliveryPriceDTO
+                                   {
+                                       Amount = c.Amount,
+                                       FromDistance = c.FromDistance,
+                                       ToDistance = c.ToDistance,
+                                       Id = c.Id,
+                                       MerchantBranchId = c.MerchantBranchId
+                                   }).ToListAsync();
+                    break;
+            }
+            return model;
 
-    
+        }
+
+
     }
 }

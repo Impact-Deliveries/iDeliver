@@ -17,5 +17,7 @@ namespace iDeliverDataAccess.Repositories
         Task Add(MerchantDeliveryPrice MerchantDeliveryPrice);
         Task Update(MerchantDeliveryPrice MerchantDeliveryPrice);
         Task Delete(MerchantDeliveryPrice MerchantDeliveryPrice);
-   }
+        Task<List<MerchantDeliveryPriceDTO>> getByBranchID(long BranchID, int status);
+
+    }
 }

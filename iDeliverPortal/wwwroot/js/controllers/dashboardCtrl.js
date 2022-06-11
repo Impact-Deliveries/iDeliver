@@ -26,7 +26,7 @@
             };
             //#region current Order
             $scope.GetCurrentOrders = function () {
-
+                if ($rootScope.page.PageID != "1" || !$rootScope.page.PageID) return;
                 let promise = httpService.httpGet('Order/GetCurrentOrders', null, { 'Content-Type': 'application/json' });
                 promise.then(function (res) {
                     switch (res.status) {
@@ -49,13 +49,13 @@
 
             //#region new Order
             $scope.GetNewOrders = function (isshow) {
+                if ($rootScope.page.PageID != "1" || !$rootScope.page.PageID) return;
                 $scope.newOrders.oldData=$scope.newOrders.data  ;
                 $scope.newOrders.oldNumberOfOrders = $scope.newOrders.numberOfOrders;
                 let promise = httpService.httpGet('Order/GetNewOrders', null, { 'Content-Type': 'application/json' });
                 promise.then(function (res) {
                     switch (res.status) {
                         case 200:
-                            debugger;
                             $scope.newOrders.data = res.data;
                             if ($scope.newOrders.data != null && $scope.newOrders.data.length > 0
                                 && $scope.newOrders.oldData != null && $scope.newOrders.oldData.length > 0) {
@@ -100,7 +100,6 @@
             };
 
             $scope.AssignOrder = function (driverid, orderid) {
-                console.log({ driverid, orderid })
                 if (driverid == 0 || orderid == undefined) {
                     return;
                 }

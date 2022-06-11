@@ -142,6 +142,44 @@ namespace iDeliverService.Controllers
         }
 
 
+        [HttpGet, Route("GetDeliveryPrices")]
+        public async Task<ActionResult<DriverCase>> GetDeliveryPrices([FromQuery] long? MerchantBranchID)
+        {
+            try
+            {
+                if (MerchantBranchID == null)
+                    return NotFound();
+                BranchCaseDTO model = new BranchCaseDTO();
+                var branch = await _Brepository.GetByID(MerchantBranchID.Value);
+                if (branch == null)
+                    return NotFound();
+
+                switch (branch.DeliveryStatus)
+                {
+                    case (int)DeliveryStatus.Offer:
+                        model.DeliveryStatus = (int)DeliveryStatus.Offer;
+                        model.DeliveryPriceOffer = branch.DeliveryPriceOffer;
+                        break;
+                    case (int)DeliveryStatus.Distance:
+                        model.DeliveryStatus = (int)DeliveryStatus.Distance;
+                        model.MerchantDeliveryPrice = await _repository.getByBranchID(MerchantBranchID.Value, (int)DeliveryStatus.Distance);
+                        break;
+                    case (int)DeliveryStatus.Location:
+                        model.DeliveryStatus = (int)DeliveryStatus.Location;
+                        model.MerchantDeliveryPrice = await _repository.getByBranchID(MerchantBranchID.Value, (int)DeliveryStatus.Location);
+                        break;
+                }
+
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
         private bool MerchantDeliveryPriceExists(long id)
         {
             return _repository.IsExists(w => w.Id == id);

@@ -25,6 +25,7 @@ namespace IDeliverObjects.DTO
         public double? FromDistance { get; set; }
         public double? ToDistance { get; set; }
         public decimal? Amount { get; set; }
+        public string? LocationName{ get; set; }
         public bool? IsDeleted { get; set; }
         [JsonConverter(typeof(CustomDateConverter))]
         public DateTime? ModifiedDate { get; set; }

@@ -15,192 +15,91 @@
 
     </ul>
 
-    <div ng-if="driver.tabs==2 || driver.tabs==3">
+    <div ng-if="order.tabs==2 || order.tabs==3">
         <div class="col-md-12">
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center my-2 mx-1">
                     <h3>Order Form</h3>
                 </div>
 
-            
-
-                <!-- driver usname and national number -->
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
-                    <label>Username</label>
-                    <input type="text" ng-model="driver.obj.username" class="form-control" required>
-                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.username==''">This field is Required </small>
-                </div>
-
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
-                    <label>National Number</label>
-                    <input type="text" ng-model="driver.obj.nationalNumber" class="form-control" required>
-                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.nationalNumber==''">This field is Required </small>
-                </div>
-
-                <!-- driver name -->
                 <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
-                    <label> First name</label>
-                    <input type="text" ng-model="driver.obj.firstname" class="form-control">
-                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.firstname==''">This field is Required </small>
-                </div>
-                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
-                    <label> Middle name</label>
-                    <input type="text" ng-model="driver.obj.middlename" class="form-control">
-                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.middlename==''">This field is Required </small>
-                </div>
-                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
-                    <label> Last name</label>
-                    <input type="text" ng-model="driver.obj.lastname" class="form-control">
-                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.lastname==''">This field is Required </small>
-                </div>
-
-                <!-- address -->
-                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
-                    <label> Address</label>
-                    <input type="text" ng-model="driver.obj.address" class="form-control">
-                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.address==''">This field is Required </small>
-                </div>
-
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
-                    <label>Birthday</label>
-                    <datepicker date-year-title="selected title" date-format="dd-MM-yyyy">
-                        <input ng-model="driver.obj.birthday" class="form-control">
-                    </datepicker>
-                    <small class="text-danger" ng-if="driver.isvalid && !driver.obj.birthday">This field is Required </small>
-                </div>
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
-                    <label> Social Status</label>
-                    <select ng-model="driver.obj.socialStatus" class="form-control">
-                        <option value="0" selected="selected">Please Choice</option>
-                        <option ng-repeat="item in socialStatus" value="{{item.ID}}">  {{item.EnglishTitle}}</option>
+                    <label> Merchant </label>
+                    <select ng-model="merchant.selected" class="form-control">
+                        <option value="0">Please Choice</option>
+                        <option ng-repeat="row in merchant.data" value="{{row.id}}">{{row.merchantName}}</option>
                     </select>
-                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.socialStatus=='0'">This field is Required </small>
+                    <small class="text-danger" ng-if="employeeTable.isvalid&& merchant.selected=='0'">This field is Required </small>
+
+                </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                    <label> Branch </label>
+                    <select ng-model="branch.selected" class="form-control">
+                        <option value="0">Please Choice</option>
+                        <option ng-repeat="row in branch.data" value="{{row.id}}">{{row.branchName}}</option>
+                    </select>
+                    <small class="text-danger" ng-if="employeeTable.isvalid&& branch.selected=='0'">This field is Required </small>
+
+                </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1" ng-if="price.data.deliveryStatus==1">
+
+                    <label> Locations </label>
+                    <select ng-model="price.selected" class="form-control">
+                        <option value="0">Please Choice</option>
+                        <option ng-repeat="row in price.data.merchantDeliveryPrice" value="{{row.id}}">{{row.locationName}}</option>
+                    </select>
+                    <small class="text-danger" ng-if="employeeTable.isvalid&& branch.selected=='0'">This field is Required </small>
+
+                </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1" ng-if="price.data.deliveryStatus==2">
+
+                    <label> Distance </label>
+                    <select ng-model="price.selected" class="form-control">
+                        <option value="0">Please Choice</option>
+                        <option ng-repeat="row in price.data.merchantDeliveryPrice" value="{{row.id}}">{{row.fromDistance+' - '+row.toDistance}}</option>
+                    </select>
+                    <small class="text-danger" ng-if="price.data.merchantDeliveryPrice.selected=='0'">This field is Required </small>
+
                 </div>
 
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
-                    <label> Mobile</label>
-                    <input type="text" ng-model="driver.obj.mobile" class="form-control" required>
-                    <small class="text-danger" ng-if="driver.isvalid && (driver.obj.mobile=='' ||driver.obj.mobile==null)">
-                        This field is Required
-                    </small>
-                </div>
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
-                    <label>Alternative Mobile</label>
-                    <input type="text"
-                           ng-model=" driver.obj.phone"
-                           class="form-control">
-                </div>
-                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1 row">
-                    <label> Have you been convicted in a case or have you had any lawsuits in last five years?</label>
-                    <div class="form-check col-md-6 col-lg-6 col-sm-12 ">
-                        <input class="form-check-input" type="radio" name="isHaveProblem" ng-value="true" id="isHaveProblemYes" ng-model="driver.obj.isHaveProblem">
-                        <label class="form-check-label" for="isHaveProblem1">
-                            Yes
-                        </label>
-                    </div>
-                    <div class="form-check col-md-6 col-lg-6 col-sm-12 px-lg-5">
-                        <input class="form-check-input" type="radio" ng-value="false" name="isHaveProblem" id="isHaveProblemNo" ng-model="driver.obj.isHaveProblem">
-                        <label class="form-check-label" for="isHaveProblem2">
-                            No
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1 mb-2" ng-if="driver.obj.isHaveProblem">
-                    <label> Reason</label>
-                    <input type="tel" ng-model=" driver.obj.reason" class="form-control">
-                    <small class="text-danger" ng-if="driver.isvalid  &&(driver.obj.reason==null || driver.obj.reason=='') && driver.obj.isHaveProblem">This field is Required </small>
-                </div>
-                <hr />
+
                 <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
-                    <label> Work Time</label>
-                    <select ng-model="driver.obj.workTime" class="form-control">
-                        <option value="0" selected="selected">Please Choice</option>
-                        <option ng-repeat="item in JobTime" value="{{item.ID}}">  {{item.EnglishTitle}}</option>
-                    </select>
-                    <small class="text-danger" ng-if="driver.isvalid && driver.obj.workTime=='0'">
-                        This field is Required
-                    </small>
-                </div>
-                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1" ng-if="driver.obj.workTime=='2'">
                     <div class="row">
-                        <div class="form-check col-lg-1 col-md-2 col-sm-6 m-lg-3 m-md-1 m-sm-1" ng-repeat="item in Days track by $index">
-                            <input class="form-check-input" type="checkbox" ng-click="checkday($index)" ng-checked="item.checked" value="{{item.ID}}" id="day_{{item.ID}}">
-                            <label class="form-check-label" for="day_{{item.ID}}">
-                                {{item.EnglishTitle}}
-                            </label>
+                        <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1" ng-if="price.data">
+
+                            <label> Delivery Price </label>
+                            <input type="text" class="form-control" ng-disabled="true" ng-model="price.delivery" />
+                        </div>
+                        <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1" ng-if="price.data">
+
+                            <label> Bill Amount </label>
+                            <input type="number" class="form-control" ng-model="price.bill" />
+
+                        </div>
+                        <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1" ng-if="price.data">
+                            <label> Total Amount </label>
+                            <input type="number" class="form-control" ng-disabled="true" ng-model="price.total" />
                         </div>
                     </div>
-
-                </div>
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
-                    <label> From Time</label>
-                    <input type="time" class="form-control" id="fromtime" name="fromtime" ng-model="driver.obj.fromTime"
-                           placeholder="HH:mm" />
-                    <small class="text-danger" ng-if="driver.isvalid && !driver.obj.fromTime">This field is Required </small>
-                    <small class="text-danger" ng-show="checktime()">From date must be smaller than to date</small>
-
-                </div>
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
-                    <label> To Time</label>
-                    <input type="time" class="form-control" id="totime" name="totime" ng-model="driver.obj.toTime"
-                           placeholder="HH:mm" />
-                    <small class="text-danger" ng-if="driver.isvalid && !driver.obj.toTime">This field is Required </small>
-                </div>
-                <hr />
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
-                    <label> Date to start the job</label>
-                    <datepicker date-year-title="selected title" date-format="dd-MM-yyyy">
-                        <input ng-model="driver.obj.startJob" class="form-control">
-                    </datepicker>
-                    <small class="text-danger" ng-if="driver.isvalid && !driver.obj.startJob">This field is Required </small>
                 </div>
 
-                <div class="alert alert-secondary col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center p-1  my-2" role="alert">
-                    Qualifications
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1" ng-if="price.data">
+                    <label> Driver </label>
+                    <select class="form-control my-1"
+                            ng-options="o.id as o.name for o in drivers.data" ng-model="drivers.selected">
+                    </select>
                 </div>
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-2">
-                    <label> College</label>
-                    <input type="text" ng-model="driver.obj.college" class="form-control">
-                </div>
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-2">
-                    <label> university</label>
-                    <input type="text" ng-model="driver.obj.university" class="form-control">
-                </div>
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-2">
-                    <label> Major</label>
-                    <input type="text" ng-model="driver.obj.major" class="form-control">
-                </div>
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-2">
-                    <label>Graduation Year</label>
-                    <input type="text" ng-model="driver.obj.graduationyear" class="form-control">
-                </div>
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-2">
-                    <label> Estimate</label>
-                    <input type="text" ng-model="driver.obj.estimate" class="form-control">
-                </div>
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-2">
-                    <label> advanced Studies</label>
-                    <input type="text" ng-model="driver.obj.advancedStudies" class="form-control">
+                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1" ng-if="price.data">
+                    <label> Note </label>
+                   <input  ng-model="price.Note" class="form-control"/>
                 </div>
 
-                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-2">
-                    <label>Attachments</label>
-                    <div class="input-group">
-                        <ng-dropzone class="dropzone w-100" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods"></ng-dropzone>
-                    </div>
-                </div>
-                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-2">
-                    <div ng-include="'../partial/Media.html'"></div>
-                </div>
-
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-2">
+                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-2" ng-if="price.data">
                     <button class="btn btn-success" ng-click="Submit()" type="button">Save</button>
                 </div>
             </div>
-        </div>
-    </div>
+            </div>
 
-    <div ng-if="driver.tabs==1">
+    <div ng-if="order.tabs==1">
         <div class="col-md-12">
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center my-2 mx-1">
@@ -264,8 +163,8 @@
                                     <a href="javascript:void(0);" ng-click="getDriver(row.id)" class="fw-bold text text-primary"><i class="bi bi-pencil-square"></i></a>
                                     <a href="javascript:void(0);" ng-click="deleteDriver(row.id)" class="fw-bold text text-primary"><i class="text text-danger bi bi-trash"></i></a>
                                     <a href="javascript:void(0);" ng-click="activeDriver(row.id)" class="fw-bold text text-primary">
-                                    <i ng-if="!row.isActive" class="text text-danger bi bi-dash-circle-fill"></i>
-                                    <i  ng-if="row.isActive" class="text text-success bi bi-file-check"></i>
+                                        <i ng-if="!row.isActive" class="text text-danger bi bi-dash-circle-fill"></i>
+                                        <i ng-if="row.isActive" class="text text-success bi bi-file-check"></i>
                                     </a>
 
                                 </td>

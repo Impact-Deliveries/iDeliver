@@ -28,7 +28,7 @@
                         <option value="0">Please Choice</option>
                         <option ng-repeat="row in merchant.data" value="{{row.id}}">{{row.merchantName}}</option>
                     </select>
-                    <small class="text-danger" ng-if="employeeTable.isvalid&& merchant.selected=='0'">This field is Required </small>
+                    <small class="text-danger" ng-if="price.valid&& merchant.selected=='0'">This field is Required </small>
 
                 </div>
                 <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
@@ -37,7 +37,7 @@
                         <option value="0">Please Choice</option>
                         <option ng-repeat="row in branch.data" value="{{row.id}}">{{row.branchName}}</option>
                     </select>
-                    <small class="text-danger" ng-if="employeeTable.isvalid&& branch.selected=='0'">This field is Required </small>
+                    <small class="text-danger" ng-if="price.valid&& branch.selected=='0'">This field is Required </small>
 
                 </div>
                 <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1" ng-if="price.data.deliveryStatus==1">
@@ -47,7 +47,7 @@
                         <option value="0">Please Choice</option>
                         <option ng-repeat="row in price.data.merchantDeliveryPrice" value="{{row.id}}">{{row.locationName}}</option>
                     </select>
-                    <small class="text-danger" ng-if="employeeTable.isvalid&& branch.selected=='0'">This field is Required </small>
+                    <small class="text-danger" ng-if="price.valid&& price.selected=='0'">This field is Required </small>
 
                 </div>
                 <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1" ng-if="price.data.deliveryStatus==2">
@@ -57,7 +57,7 @@
                         <option value="0">Please Choice</option>
                         <option ng-repeat="row in price.data.merchantDeliveryPrice" value="{{row.id}}">{{row.fromDistance+' - '+row.toDistance}}</option>
                     </select>
-                    <small class="text-danger" ng-if="price.data.merchantDeliveryPrice.selected=='0'">This field is Required </small>
+                    <small class="text-danger" ng-if="price.valid&& price.selected=='0'">This field is Required </small>
 
                 </div>
 
@@ -73,6 +73,7 @@
 
                             <label> Bill Amount </label>
                             <input type="number" class="form-control" ng-model="price.bill" />
+                            <small class="text-danger" ng-if="price.valid&& (price.bill=='0' || price.bill=='')">This field is Required </small>
 
                         </div>
                         <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1" ng-if="price.data">
@@ -87,6 +88,8 @@
                     <select class="form-control my-1"
                             ng-options="o.id as o.name for o in drivers.data" ng-model="drivers.selected">
                     </select>
+                    <small class="text-danger" ng-if="price.valid&& drivers.selected=='0'">This field is Required </small>
+
                 </div>
                 <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1" ng-if="price.data">
                     <label> Note </label>

@@ -1,8 +1,8 @@
 ﻿(function (app) {
     'use strict';
 
-    app.controller('loginCtrl', ['$scope', '$rootScope', '$log', 'httpService', 'commonService',
-        function ($scope, $rootScope, $log, httpService, commonService) {
+    app.controller('loginCtrl', ['$scope', '$rootScope', '$log', 'httpService', 'commonService', 'appsettings',
+        function ($scope, $rootScope, $log, httpService, commonService, appsettings) {
             $scope.form = {
                 fields: {
                     username: '',
@@ -13,7 +13,8 @@
                 },
                 authenticated: null,
                 status: null,
-                message: null
+                message: null,
+                url: appsettings.baseUrl
             };
 
             $scope.submit = function (event) {

@@ -53,26 +53,6 @@ namespace iDeliverService.Controllers
             return Ok(Order);
         }
 
-        [HttpPost("AddOrder")]
-        public async Task<ActionResult<Order>> AddOrder()//([FromBody] OrderDTO obj)
-        {
-            try
-            {
-                // bool isExistUsername = _Urepository.IsExists(w => w.Username.ToLower() == obj.username);
-                // if (isExistUsername) return BadRequest("username is exist");
-
-                // bool isExistNationalNumber = _repository.IsExists(w => w.NationalNumber == obj.nationalNumber);
-                // if (isExistNationalNumber) return BadRequest("national number is exist");
-
-                //return Ok(OrderID);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
-        }
 
         [HttpGet("GetCurrentOrders")]
         public async Task<ActionResult<OrderDTO>> GetCurrentOrders()
@@ -107,7 +87,7 @@ namespace iDeliverService.Controllers
         {
             try
             {
-                if (model == null || model.Id==null || model.DriverID == null)
+                if (model == null || model.Id == null || model.DriverID == null)
                     return NotFound();
 
                 var order = await _repository.GetByID(model.Id.Value);
@@ -145,6 +125,55 @@ namespace iDeliverService.Controllers
             return _repository.IsExists(w => w.Id == id);
         }
 
+
+        [HttpPost("AddOrder")]
+        public async Task<ActionResult> AddOrder([FromBody] OrderDTO model)
+        {
+            try
+            {
+                if (model==null)
+                    return BadRequest();
+                Order order = new Order()
+                {
+                    CreationDate = DateTime.UtcNow,
+                    ModifiedDate = DateTime.UtcNow,
+                    IsDeleted = false,
+                    Note = model.Note,
+                    Status = model.Status == null || model.Status == 0 ? (short)1 : model.Status.Value,
+                    TotalAmount = model.TotalAmount != null ? model.TotalAmount.Value : 0,
+                    DeliveryAmount = model.DeliveryAmount != null ? model.DeliveryAmount.Value : 0,
+                    MerchantBranchId = model.MerchantBranchId.Value,
+                    MerchantDeliveryPriceId= model.MerchantDeliveryPriceID==null || model.MerchantDeliveryPriceID ==0?null: model.MerchantDeliveryPriceID
+                };
+                await _repository.Add(order);
+                if (order.Status == 2)
+                {
+                    #region assign order to driver
+                    DriverOrder driver = new DriverOrder()
+                    {
+                        Status = (int)DriverOrderEnum.PenddingOrder,
+                        CreationDate = DateTime.UtcNow,
+                        ModifiedDate = DateTime.UtcNow,
+                        DriverId = model.DriverID.Value,
+                        OrderId = order.Id,
+                        IsDeleted = false,
+                        Note = "",
+                    };
+                    await _Dorepository.Add(driver);
+                    order.Status = (int)OrderStatus.AssignToDriver;
+                    await _repository.Update(order);
+                    #endregion
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+
+        }
 
         [HttpPost, Route("DeleteOrder")]
         public async Task<ActionResult> DeleteOrder([FromBody] long OrderID)

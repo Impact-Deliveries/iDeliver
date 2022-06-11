@@ -13,10 +13,11 @@ namespace IDeliverObjects.DTO
     {
 
         public long? Id { get; set; }
+        public long? MerchantDeliveryPriceID { get; set; }
         public long? MerchantBranchId { get; set; }
         public decimal? TotalAmount { get; set; }
         public decimal? DeliveryAmount { get; set; }
-        public string?DriverName{ get; set; }
+        public string? DriverName { get; set; }
         public string? DriverPhone { get; set; }
         public string? MerchantName { get; set; }
         public string? MerchantPhone { get; set; }
@@ -29,7 +30,7 @@ namespace IDeliverObjects.DTO
         public DateTime? OrderDate { get; set; }
         public bool? IsDeleted { get; set; }
 
-      
+
 
     }
 

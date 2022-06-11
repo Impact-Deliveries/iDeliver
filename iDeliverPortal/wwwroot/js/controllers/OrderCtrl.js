@@ -2,7 +2,7 @@
     'use strict';
 
     app.controller('OrderCtrl', ['$scope', '$rootScope', '$log', 'httpService', 'commonService', '$timeout'
-       , function ($scope, $rootScope, $log, httpService, commonService, $timeout) {
+        , function ($scope, $rootScope, $log, httpService, commonService, $timeout) {
             $scope.order = {
                 tabs: 1,
             };
@@ -14,7 +14,7 @@
             $scope.drivers = {
                 data: null,
                 length: 0,
-                selected:'0'
+                selected: '0'
             }
 
 
@@ -85,6 +85,7 @@
             //#region Branch Delivery Price
             $scope.price = {
                 data: null,
+                valid: false,
                 selected: "0",
                 delivery: '0',
                 Note: '',
@@ -122,7 +123,6 @@
             });
             $scope.$watch('price.bill+price.delivery', function (newvalue, oldvalue) {
                 $scope.price.total = Number($scope.price.bill) + Number($scope.price.delivery)
-
             });
 
             $scope.getDeliveryPrice = function () {
@@ -205,6 +205,43 @@
                 }, function (res) {
 
                 });
+            };
+
+            $scope.Submit = function () {
+                $scope.price.valid = true;
+                if ($scope.drivers.selected == '0' || $scope.price.bill == '0' || $scope.price.bill == ''
+                    || $scope.branch.selected == '0' || $scope.merchant.selected == '0') {
+                    return;
+                }
+                if (($scope.price.data.deliveryStatus == 1 || $scope.price.data.deliveryStatus == 2) && $scope.price.selected == '0') {
+                    return;
+                }
+                let model = {
+                    MerchantBranchId: Number($scope.branch.selected),
+                    TotalAmount: Number($scope.price.total),
+                    DeliveryAmount: Number($scope.price.delivery),
+                    Status: 2,
+                    Note: $scope.price.Note,
+                    DriverID: Number($scope.drivers.selected),
+                    MerchantDeliveryPriceID :$scope.price.selected
+                };
+
+
+                let promise = httpService.httpPost('Order/AddOrder', model,
+                    { 'Content-Type': 'application/json' });
+                promise.then(function (res) {
+                    switch (res.status) {
+                        case 200:
+                            $scope.changeTab(1);
+                            break;
+                        default:
+                            break;
+                    }
+                }, function (res) {
+                    commonService.redirect();
+                });
+
+
             };
             //#endregion
             $scope.getMerchant();

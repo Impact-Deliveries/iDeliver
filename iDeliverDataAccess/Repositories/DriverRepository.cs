@@ -115,11 +115,13 @@ namespace iDeliverDataAccess.Repositories
             try
             {
                 List<Driver> drivers = await (from a in _context.Drivers
-                                              where (String.IsNullOrEmpty(DriverName) ? 1 == 1 :
+                                              where
+                         (String.IsNullOrEmpty(DriverName) ? 1 == 1 :
                        (a.FirstName.Contains(DriverName)
                         || a.SecondName.Contains(DriverName)
                         || a.LastName.Contains(DriverName)))
                         && (IsActive != null ? a.IsActive == IsActive : 1 == 1)
+                        && a.IsDeleted==false
                                               select a)
                         .OrderBy(p => p.FirstName).ThenBy(a => a.SecondName).ThenBy(a => a.LastName)
                         .ToListAsync();
@@ -166,6 +168,7 @@ namespace iDeliverDataAccess.Repositories
                                 advancedStudies = b.AvancedStudies,
                                 nationalNumber=c.NationalNumber,
                                 username=e.Username,
+                                DeliveryPercent = b.DeliveryPercent,
                                 selecteddays = (from d in _context.DriverSchadules where id == d.DriverId select d.DayId).ToList(),
                                 Attachments = (from d in _context.Attachments where id == d.ModuleId && d.ModuleType == role select d).ToList(),
                             }).FirstOrDefaultAsync();

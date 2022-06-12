@@ -43,6 +43,7 @@ namespace IDeliverObjects.DTO
         public string? advancedStudies { get; set; }
         public List<int>? selecteddays { get; set; }
         public List<Attachment>? Attachments { get; set; }
+        public decimal? DeliveryPercent { get; set; }
     }
 
     public class DriverTableDTO

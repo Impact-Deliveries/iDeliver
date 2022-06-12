@@ -13,7 +13,12 @@
                 { ID: 1, EnglishTitle: "Full Time" },
                 { ID: 2, EnglishTitle: "Part Time" },
             ];
-
+            //$scope.deliveryPercent = [
+            //    { ID: 78, Value: "78" },
+            //    { ID: 68, Value: "68" },
+            //    { ID: 88, Value: "88" },
+            //    { ID: 100, Value: "100" },
+            //];
             $scope.Days = [
                 { ID: 1, EnglishTitle: "Saturday", checked: false },
                 { ID: 2, EnglishTitle: "Sunday", checked: false },
@@ -57,7 +62,8 @@
                     Attachments: null,
                     IsActive: true,
                     nationalNumber: '',
-                    OrganizationID: 1
+                    OrganizationID: 1,
+                    deliveryPercent:'78'
                 },
 
             };
@@ -138,7 +144,6 @@
             };
 
             $scope.Submit = function () {
-                debugger;
                 let totaldays = $scope.Days.filter(a => a.checked == true);
                 $scope.driver.isvalid = true;
                 if ($scope.driver.obj.firstname == '' || $scope.driver.obj.middlename == '' ||
@@ -255,7 +260,9 @@
                             }
                             $scope.driver.obj.socialStatus = $scope.driver.obj.socialStatus.toString();
                             $scope.driver.obj.workTime = $scope.driver.obj.workTime.toString();
-                            $scope.attachment.data = $scope.driver.obj.attachments ;
+                            $scope.attachment.data = $scope.driver.obj.attachments;
+                            $scope.driver.obj.deliveryPercent = res.data.deliveryPercent.toString();
+                            debugger;
                             break;
                         default:
                             break;

@@ -110,6 +110,7 @@ namespace iDeliverService.Controllers
                         old_details.AvancedStudies = obj.advancedStudies;
                         old_details.CreationDate = DateTime.UtcNow;
                         old_details.IsDeleted = false;
+                        old_details.DeliveryPercent = obj.DeliveryPercent;
                         await _Drepository.Update(old_details);
                     }
                 }
@@ -179,7 +180,7 @@ namespace iDeliverService.Controllers
                                     AvancedStudies = obj.advancedStudies,
                                     CreationDate = DateTime.UtcNow,
                                     IsDeleted = false,
-
+                                    DeliveryPercent=obj.DeliveryPercent
                                 };
                                 DriverID = driver.Id;
                                 await _Drepository.Add(Detail);

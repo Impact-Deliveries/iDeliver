@@ -1,7 +1,4 @@
 ﻿<div ng-controller="OrderCtrl">
-
-
-
     <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="nav-link " ng-class="{'active':order.tabs==1 }" ng-click="changeTab(1)" href="javascript:void(0);">Orders</a>
@@ -12,7 +9,6 @@
         <li class="nav-item">
             <a class="nav-link" ng-class="{'active':order.tabs==3}" ng-click="changeTab(3)" ng-if="order.tabs==3" href="javascript:void(0);">Edit Order</a>
         </li>
-
     </ul>
 
     <div ng-if="order.tabs==2 || order.tabs==3">
@@ -93,85 +89,88 @@
                 </div>
                 <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1" ng-if="price.data">
                     <label> Note </label>
-                   <input  ng-model="price.Note" class="form-control"/>
+                    <input ng-model="price.Note" class="form-control" />
                 </div>
 
                 <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-2" ng-if="price.data">
                     <button class="btn btn-success" ng-click="Submit()" type="button">Save</button>
                 </div>
             </div>
-            </div>
-
+        </div>
+    </div>
     <div ng-if="order.tabs==1">
         <div class="col-md-12">
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center my-2 mx-1">
-                    <h3>Drivers</h3>
+                    <h3>Orders</h3>
                 </div>
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
-                    <label> Active </label>
-                    <select ng-model="driverTable.objects.IsActive" class="form-control">
-                        <option value="">Please Choice</option>
-                        <option value="false">Not Active</option>
-                        <option value="true" selected="selected">Active</option>
-                    </select>
-                    <small class="text-danger" ng-if="driverTable.isvalid&& merchantTable.objects.IsActive==''">This field is Required </small>
 
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                    <label> Merchant </label>
+                    <select ng-model="order.params.objects.merchantID" class="form-control">
+                        <option value="0">All </option>
+                        <option ng-repeat="row in merchant.data" value="{{row.id}}">{{row.merchantName}}</option>
+                    </select>
                 </div>
-                <div class="form-group col-md-6 col-lg-6 col-sm-12 p-1 my-1">
-                    <label> Driver Name</label>
-                    <input type="text" ng-model="driverTable.objects.DriverName" class="form-control">
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                    <label> Branch </label>
+                    <select ng-model="order.params.objects.merchantBranchID" class="form-control">
+                        <option value="0">All</option>
+                        <option ng-repeat="row in branch.data" value="{{row.id}}">{{row.branchName}}</option>
+                    </select>
                 </div>
-                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1">
-                    <button class="btn btn-success" ng-click="getDriversTable()">Search</button>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                    <label> Driver </label>
+                    <select ng-model="order.params.objects.driverID" class="form-control">
+                        <option value="0">All</option>
+                        <option ng-repeat="row in drivers.data" value="{{row.id}}">{{row.name}}</option>
+                    </select>
+                </div>
+
+
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                    <label>From Date</label>
+                    <datepicker date-year-title="selected title" date-format="dd-MM-yyyy">
+                        <input ng-model="order.params.objects.fromdate" class="form-control">
+                    </datepicker>
+                </div>
+                <div class="form-group col-md-4 col-lg-4  col-sm-12 p-1 my-1">
+                    <label>To Date</label>
+                    <datepicker date-year-title="selected title" date-format="dd-MM-yyyy">
+                        <input ng-model=" order.params.objects.toDate" class="form-control">
+                    </datepicker>
+                </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
+                    <label> Status </label>
+                    <select ng-model=" order.params.objects.status" class="form-control">
+                        <option value="0">All</option>
+                        <option ng-repeat="row in status.data" value="{{row.id}}">{{row.name}}</option>
+                    </select>
+                </div>
+
+
+                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-2">
+                    <button class="btn btn-success" ng-click="search()" type="button">Search</button>
                 </div>
                 <hr />
-                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1" ng-if="driverTable.showResult">
-                    <table show-filter="false" class="table table-hover custom-table">
+                <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1" >
+                    <table ng-table="dtOrders" show-filter="false" class="table table-hover custom-table">
                         <thead>
                             <tr>
-                                <td class=" text-center">
-                                    Num
-                                </td>
-                                <td class="primary text-center">
-                                    Name
-                                </td>
-                                <td class="primary text-center">
-                                    Mobile
-                                </td>
-                                <td class="primary text-center">
-                                    Active
-                                </td>
-                                <td class="primary text-center">
-                                </td>
+                                <th style="width:15px;">number</th>
+                                <th>name</th>
+                               
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="row in driverTable.data track by row.id">
-                                <td class=" text-center">
-                                    IDelivery_{{calculateSequence(row.id)}}
+                            <tr ng-repeat="row in $data track by $index">
+                                <td class="disabled text-center" style="width:15px;">
+                                    <span ng-bind-html="tableRows($index)"></span>
                                 </td>
                                 <td class="primary text-center">
-                                    {{row.firstName+" " +row.lastName}}
+                                    <span>{{row}}</span>
                                 </td>
-                                <td class="primary text-center">
-                                    {{row.mobile}}
-                                </td>
-                                <td class="primary text-center">
-                                    <div class="form-check form-switch d-flex justify-content-center">
-                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" ng-click="changeVal(row.id)" ng-checked="row.isActive">
-                                    </div>
-                                </td>
-                                <td class="primary text-center">
-                                    <a href="javascript:void(0);" ng-click="getDriver(row.id)" class="fw-bold text text-primary"><i class="bi bi-pencil-square"></i></a>
-                                    <a href="javascript:void(0);" ng-click="deleteDriver(row.id)" class="fw-bold text text-primary"><i class="text text-danger bi bi-trash"></i></a>
-                                    <a href="javascript:void(0);" ng-click="activeDriver(row.id)" class="fw-bold text text-primary">
-                                        <i ng-if="!row.isActive" class="text text-danger bi bi-dash-circle-fill"></i>
-                                        <i ng-if="row.isActive" class="text text-success bi bi-file-check"></i>
-                                    </a>
-
-                                </td>
-
+                             
                             </tr>
                         </tbody>
 
@@ -180,4 +179,5 @@
             </div>
         </div>
     </div>
+
 </div>

@@ -1,10 +1,23 @@
 ﻿(function (app) {
     'use strict';
 
-    app.controller('OrderCtrl', ['$scope', '$rootScope', '$log', 'httpService', 'commonService', '$timeout'
-        , function ($scope, $rootScope, $log, httpService, commonService, $timeout) {
+    app.controller('OrderCtrl', ['$scope', '$rootScope', '$log', 'httpService', 'commonService', '$timeout', '$resource', 'NgTableParams','appsettings'
+        , function ($scope, $rootScope, $log, httpService, commonService, $timeout, $resource, NgTableParams, appsettings) {
             $scope.order = {
                 tabs: 1,
+                data:null,
+                params: {
+                    page: 1,
+                    count: 10,
+                    objects: {
+                        fromdate: moment(new Date()).format("DD-MM-yyyy"),
+                        toDate: moment(new Date()).format("DD-MM-yyyy"),
+                        status: '0',
+                        driverID: '0',
+                        merchantBranchID: '0',
+                        merchantID: '0',
+                    }
+                }
             };
 
             $scope.changeTab = function (tab) {
@@ -16,8 +29,16 @@
                 length: 0,
                 selected: '0'
             }
-
-
+            $scope.status = {
+                processing: false,
+                data: [{ name: 'Pending Order', id: 1, },
+                { name: 'Assign To Driver', id: 2, },
+                { name: 'Driver Rejected ', id: 3, },
+                { name: 'Driver Accepted ', id: 4, },
+                { name: 'Merchant Arrived', id: 5, },
+                { name: 'Order Picked ', id: 6, },
+                { name: 'Order Arrived', id: 7 },]
+            };
 
             //#region merchant
             $scope.merchant = {
@@ -223,7 +244,7 @@
                     Status: 2,
                     Note: $scope.price.Note,
                     DriverID: Number($scope.drivers.selected),
-                    MerchantDeliveryPriceID :$scope.price.selected
+                    MerchantDeliveryPriceID: $scope.price.selected
                 };
 
 
@@ -244,6 +265,43 @@
 
             };
             //#endregion
+
+            //#region
+
+            $scope.tableRows = function (index) {
+                if (index === null) return;
+                var result = (($scope.dtOrders.page() - 1) * $scope.dtOrders.count()) + (index + 1);
+                return result;
+            };
+            $scope.search = function () {
+
+                $scope.order.params.fromdate = moment($scope.order.params.fromdate).format("DD-MM-yyyy")
+                $scope.order.params.toDate = moment($scope.order.params.toDate).format("DD-MM-yyyy")
+                $scope.dtOrders = new NgTableParams({
+                    page: 1,
+                    count: 10,
+                    objects:null
+                }, {
+                    filterDelay: 300,
+                    total: 10,
+                    counts: [10, 25, 50, 100],
+                    getData: function (param) {
+                        // request to api
+
+                        return $resource(appsettings.apiBaseUrl + 'Order/GetOrders')
+                            .save(param.url(), $scope.order.params.objects)
+                            .$promise.then(function (data) {
+                                $scope.order.data = data.results;
+                                param.total(data.total);
+                                return data.results;
+                            }).catch(function (response) {
+                            });
+                    },
+                });
+
+            };
+            //#endregion
+
             $scope.getMerchant();
             $scope.getDriverLocations();
         }]);

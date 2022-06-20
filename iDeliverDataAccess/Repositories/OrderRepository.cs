@@ -122,36 +122,36 @@ namespace iDeliverDataAccess.Repositories
         {
             try
             {
-                var data =  (from order in _context.Orders
-                                  join branch in _context.MerchantBranches on order.MerchantBranchId equals branch.Id
-                                  join merchant in _context.Merchants on branch.MerchantId equals merchant.Id
-                                  // join merchantDeliveryPrices in _context.MerchantDeliveryPrices on order.MerchantDeliveryPriceId equals merchantDeliveryPrices.Id
-                                  where order.IsDeleted == false && branch.IsActive == true && merchant.IsActive == true
-                                  && (order.Status == 1 || order.Status == 2 || order.Status == 3)
-                                  select new OrderDTO
-                                  {
-                                      Id = order.Id,
-                                      MerchantBranchId = order.MerchantBranchId,
-                                      TotalAmount = order.TotalAmount,
-                                      DeliveryAmount = order.DeliveryAmount,
-                                      MerchantName = merchant.MerchantName + "-" + branch.BranchName,
-                                      MerchantPhone = branch.Phone,
-                                      Status = order.Status,
-                                      Note = order.Note,
-                                      OrderDate = order.CreationDate,
-                                      DriverID = order.Status == 2 || order.Status == 3 ? (from c in _context.DriverOrders where order.Id == c.OrderId && (c.Status == 1 || c.Status == 3) select c.DriverId).FirstOrDefault() : 0,
-                                      LocationID = 0,
-                                      LocationName =(branch.DeliveryStatus == 1 ? 
-                                      (from c in _context.MerchantDeliveryPrices
-                                       join d in _context.Locations on c.LocationId equals d.Id
-                                       where order.MerchantDeliveryPriceId == c.Id
-                                       select d.Address).FirstOrDefault():(branch.DeliveryStatus == 2?
-                                       (from c in _context.MerchantDeliveryPrices
-                                        where order.MerchantDeliveryPriceId == c.Id
-                                        select c.FromDistance.ToString()+ "-"+c.ToDistance.ToString()).FirstOrDefault()
-                                       : ""))
-                                      //merchantDeliveryPrices.LocationId != null ? (from c in _context.Locations where c.Id == merchantDeliveryPrices.LocationId select c.Address).FirstOrDefault() : "",
-                                  });
+                var data = (from order in _context.Orders
+                            join branch in _context.MerchantBranches on order.MerchantBranchId equals branch.Id
+                            join merchant in _context.Merchants on branch.MerchantId equals merchant.Id
+                            // join merchantDeliveryPrices in _context.MerchantDeliveryPrices on order.MerchantDeliveryPriceId equals merchantDeliveryPrices.Id
+                            where order.IsDeleted == false && branch.IsActive == true && merchant.IsActive == true
+                            && (order.Status == 1 || order.Status == 2 || order.Status == 3)
+                            select new OrderDTO
+                            {
+                                Id = order.Id,
+                                MerchantBranchId = order.MerchantBranchId,
+                                TotalAmount = order.TotalAmount,
+                                DeliveryAmount = order.DeliveryAmount,
+                                MerchantName = merchant.MerchantName + "-" + branch.BranchName,
+                                MerchantPhone = branch.Phone,
+                                Status = order.Status,
+                                Note = order.Note,
+                                OrderDate = order.CreationDate,
+                                DriverID = order.Status == 2 || order.Status == 3 ? (from c in _context.DriverOrders where order.Id == c.OrderId && (c.Status == 1 || c.Status == 3) select c.DriverId).FirstOrDefault() : 0,
+                                LocationID = 0,
+                                LocationName = (branch.DeliveryStatus == 1 ?
+                                (from c in _context.MerchantDeliveryPrices
+                                 join d in _context.Locations on c.LocationId equals d.Id
+                                 where order.MerchantDeliveryPriceId == c.Id
+                                 select d.Address).FirstOrDefault() : (branch.DeliveryStatus == 2 ?
+                                 (from c in _context.MerchantDeliveryPrices
+                                  where order.MerchantDeliveryPriceId == c.Id
+                                  select c.FromDistance.ToString() + "-" + c.ToDistance.ToString()).FirstOrDefault()
+                                 : ""))
+                                //merchantDeliveryPrices.LocationId != null ? (from c in _context.Locations where c.Id == merchantDeliveryPrices.LocationId select c.Address).FirstOrDefault() : "",
+                            });
                 return await data.Distinct().OrderBy(a => a.OrderDate).ToListAsync();
 
             }
@@ -162,5 +162,107 @@ namespace iDeliverDataAccess.Repositories
             }
         }
 
+
+        public async Task<List<OrderDTO>> GetOrders(NgOrderTable model)
+        {
+            try
+            {
+
+                if (model.driverID != null && model.driverID > 0)
+                {
+                    var data = (from order in _context.Orders
+                                join driverorder in _context.DriverOrders on order.Id equals driverorder.OrderId
+                                join branch in _context.MerchantBranches on order.MerchantBranchId equals branch.Id
+                                join merchant in _context.Merchants on branch.MerchantId equals merchant.Id
+                                // join merchantDeliveryPrices in _context.MerchantDeliveryPrices on order.MerchantDeliveryPriceId equals merchantDeliveryPrices.Id
+                                where order.Status > 1
+                               && order.IsDeleted == false && branch.IsActive == true && merchant.IsActive == true
+                                && (model.fromdate != null ? order.CreationDate.Date >= model.fromdate.Value : 1 == 1)
+                                && (model.toDate != null ? order.CreationDate.Date >= model.toDate.Value : 1 == 1)
+                                && (model.merchantBranchID != null && model.merchantBranchID > 0 ? order.MerchantBranchId == model.merchantBranchID : 1 == 1)
+                                && (model.status != null && model.status > 0 ? order.Status == model.status : 1 == 1)
+                                && (model.driverID != null && model.driverID > 0 ? driverorder.DriverId == model.driverID : 1 == 1)
+
+                                select new OrderDTO
+                                {
+                                    Id = order.Id,
+                                    MerchantBranchId = order.MerchantBranchId,
+                                    TotalAmount = order.TotalAmount,
+                                    DeliveryAmount = order.DeliveryAmount,
+                                    MerchantName = merchant.MerchantName + "-" + branch.BranchName,
+                                    MerchantPhone = branch.Phone,
+                                    Status = order.Status,
+                                    Note = order.Note,
+                                    OrderDate = order.CreationDate,
+
+                                    DriverName = order.Status > 1 ? (from c2 in _context.Drivers
+                                                                     where order.Id == driverorder.OrderId && driverorder.DriverId == c2.Id && (driverorder.Status == 2)
+                                                                     select c2.FirstName + ' ' + c2.LastName).FirstOrDefault() : "",
+                                    LocationID = 0,
+                                    LocationName = (branch.DeliveryStatus == 1 ?
+                                    (from c in _context.MerchantDeliveryPrices
+                                     join d in _context.Locations on c.LocationId equals d.Id
+                                     where order.MerchantDeliveryPriceId == c.Id
+                                     select d.Address).FirstOrDefault() : (branch.DeliveryStatus == 2 ?
+                                     (from c in _context.MerchantDeliveryPrices
+                                      where order.MerchantDeliveryPriceId == c.Id
+                                      select c.FromDistance.ToString() + "-" + c.ToDistance.ToString()).FirstOrDefault()
+                                     : ""))
+                                    //merchantDeliveryPrices.LocationId != null ? (from c in _context.Locations where c.Id == merchantDeliveryPrices.LocationId select c.Address).FirstOrDefault() : "",
+                                });
+                    return await data.Distinct().OrderBy(a => a.OrderDate).ToListAsync();
+                }
+                else
+                {
+                    var data = (from order in _context.Orders
+                                join branch in _context.MerchantBranches on order.MerchantBranchId equals branch.Id
+                                join merchant in _context.Merchants on branch.MerchantId equals merchant.Id
+                                // join merchantDeliveryPrices in _context.MerchantDeliveryPrices on order.MerchantDeliveryPriceId equals merchantDeliveryPrices.Id
+                                where order.IsDeleted == false && branch.IsActive == true && merchant.IsActive == true
+                               // && (model.fromdate != null ? order.CreationDate.Date >= model.fromdate.Value : 1 == 1)
+                               // && (model.toDate != null ? order.CreationDate.Date >= model.toDate.Value : 1 == 1)
+                                && (model.merchantBranchID != null && model.merchantBranchID > 0 ? order.MerchantBranchId == model.merchantBranchID : 1 == 1)
+                                && (model.status != null && model.status > 0 ? order.Status == model.status : 1 == 1)
+                                select new OrderDTO
+                                {
+                                    Id = order.Id,
+                                    MerchantBranchId = order.MerchantBranchId,
+                                    TotalAmount = order.TotalAmount,
+                                    DeliveryAmount = order.DeliveryAmount,
+                                    MerchantName = merchant.MerchantName + "-" + branch.BranchName,
+                                    MerchantPhone = branch.Phone,
+                                    Status = order.Status,
+                                    Note = order.Note,
+                                    OrderDate = order.CreationDate,
+
+                                    DriverName = order.Status > 1 ? (from c in _context.DriverOrders
+                                                                     join c2 in _context.Drivers on c.DriverId equals c2.Id
+                                                                     where order.Id == c.OrderId && (c.Status == 2)
+                                                                     select c2.FirstName + ' ' + c2.LastName).FirstOrDefault() : "",
+                                    LocationID = 0,
+                                    LocationName = (branch.DeliveryStatus == 1 ?
+                                    (from c in _context.MerchantDeliveryPrices
+                                     join d in _context.Locations on c.LocationId equals d.Id
+                                     where order.MerchantDeliveryPriceId == c.Id
+                                     select d.Address).FirstOrDefault() : (branch.DeliveryStatus == 2 ?
+                                     (from c in _context.MerchantDeliveryPrices
+                                      where order.MerchantDeliveryPriceId == c.Id
+                                      select c.FromDistance.ToString() + "-" + c.ToDistance.ToString()).FirstOrDefault()
+                                     : ""))
+                                    //merchantDeliveryPrices.LocationId != null ? (from c in _context.Locations where c.Id == merchantDeliveryPrices.LocationId select c.Address).FirstOrDefault() : "",
+                                });
+                    return await data.Distinct().OrderBy(a => a.OrderDate).ToListAsync();
+
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
     }
 }

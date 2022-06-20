@@ -196,6 +196,35 @@ namespace iDeliverService.Controllers
 
         }
 
+        [HttpPost("GetOrders")]
+        public async Task<IActionResult> GetOrders([FromQuery] NgTableParam<NgOrderTable> request, [FromBody] NgOrderTable objects)
+        {
+            try
+            {
+                NgTableResult<OrderDTO> results = new NgTableResult<OrderDTO>();
+                var page_index = request.page == 0 ? request.page : request.page - 1;
+                var page_skips = page_index * request.count;
+                int total = 0;
+
+                var orders = await _repository.GetOrders(objects);
+
+                results = new NgTableResult<OrderDTO>()
+                {
+                    results = orders.Distinct()
+                    .OrderByDescending(o => o.OrderDate)
+                    .Skip(page_skips).Take(request.count).ToList(),
+                    total = orders.Count()
+                };
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
+
         //[HttpPost, Route("ActiveOrder")]
         //public async Task<ActionResult> ActiveOrder([FromBody] long OrderID)
         //{

@@ -18,6 +18,7 @@ namespace iDeliverDataAccess.Repositories
         Task Update(Order Order);
         Task Delete(Order Order);
         Task<List<OrderDTO?>> GetCurrentOrders();
+        Task<List<OrderDTO>> GetOrders(NgOrderTable model);
         Task<List<OrderDTO?>> GetNewOrders();
     }
 }

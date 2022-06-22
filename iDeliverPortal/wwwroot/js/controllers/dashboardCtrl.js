@@ -123,6 +123,29 @@
 
 
             };
+
+            $scope.changeDate = function myfunction(orderDate) {
+                if (!orderDate) return;
+                return moment(orderDate).utc().add(3, 'hours').format('DD-MM-yyyy HH:mm');
+            }
+
+            $scope.getdate = function (orderDate) {
+                if (!orderDate) return;
+                debugger;
+                var date = moment();
+                var order = moment(orderDate);
+                var duration = date.diff(order, 'minutes');
+                $timeout(function () {
+                     date = moment();
+                     order = moment(orderDate);
+                     duration = date.diff(order, 'minutes');
+                    return duration;
+
+                }, 60000);
+                return duration;
+              
+            };
+
             //#endregion
 
             //#region drivers

@@ -1,11 +1,11 @@
 ﻿(function (app) {
     'use strict';
 
-    app.controller('OrderCtrl', ['$scope', '$rootScope', '$log', 'httpService', 'commonService', '$timeout', '$resource', 'NgTableParams','appsettings'
+    app.controller('OrderCtrl', ['$scope', '$rootScope', '$log', 'httpService', 'commonService', '$timeout', '$resource', 'NgTableParams', 'appsettings'
         , function ($scope, $rootScope, $log, httpService, commonService, $timeout, $resource, NgTableParams, appsettings) {
             $scope.order = {
                 tabs: 1,
-                data:null,
+                data: null,
                 params: {
                     page: 1,
                     count: 10,
@@ -112,6 +112,8 @@
                 Note: '',
                 bill: "0",
                 total: "0",
+                clientNumber: '',
+                clientName: ''
             };
             $scope.getPrices = function () {
                 if (!$scope.branch || $scope.branch.selected == null || $scope.branch.selected == "0") {
@@ -244,7 +246,9 @@
                     Status: 2,
                     Note: $scope.price.Note,
                     DriverID: Number($scope.drivers.selected),
-                    MerchantDeliveryPriceID: $scope.price.selected
+                    MerchantDeliveryPriceID: $scope.price.selected,
+                    ClientName: $scope.price.clientName,
+                    ClientNumber: $scope.price.clientNumber,
                 };
 
 
@@ -280,7 +284,7 @@
                 $scope.dtOrders = new NgTableParams({
                     page: 1,
                     count: 10,
-                    objects:null
+                    objects: null
                 }, {
                     filterDelay: 300,
                     total: 10,

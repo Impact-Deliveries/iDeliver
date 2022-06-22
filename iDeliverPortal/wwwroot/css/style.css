@@ -281,3 +281,81 @@
         background: var(--dark);
         border-color: var(--danger);
     }
+
+
+/* bg-table */
+.ng-table-pager {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ng-table-pagination {
+    padding: 0px;
+    margin: 0px 5px;
+}
+
+    .ng-table-pagination li {
+        display: flex;
+    }
+
+        .ng-table-pagination li a {
+            text-decoration: none;
+            color: #5a5e60;
+            width: auto;
+            min-width: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .ng-table-pagination li:first-child a,
+        .ng-table-pagination li:last-child a {
+            min-width: 30px;
+        }
+
+        .ng-table-pagination li::after {
+            content: '-';
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #a6a9ab;
+        }
+
+        .ng-table-pagination li:last-child::after {
+            display: none;
+        }
+
+.ng-table-counts {
+    border: solid 1px #dae6ec;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+    .ng-table-counts button {
+        border-right: solid 1px #dbe6eb;
+        font-size: smaller;
+        border-radius: 0px;
+    }
+
+        .ng-table-counts button:last-child {
+            border-right: none;
+        }
+
+        .ng-table-counts button.active {
+            background-color: #dbe6eb;
+        }
+
+.ng-table-pagination li.disabled a {
+    color: #a6a9ab;
+}
+
+.ng-table-pagination li.active a {
+    color: #009dc9;
+    font-weight: 700;
+}
+
+.ng-table-counts button {
+    border-left: solid 1px #dbe6eb;
+    border-right: none;
+}

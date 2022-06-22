@@ -513,6 +513,10 @@ namespace iDeliverDataAccess.Base
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.ClientName).HasMaxLength(50);
+
+                entity.Property(e => e.ClientNumber).HasMaxLength(50);
+
                 entity.Property(e => e.CreationDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("getutcdate()");
@@ -520,6 +524,8 @@ namespace iDeliverDataAccess.Base
                 entity.Property(e => e.DeliveryAmount).HasColumnType("money");
 
                 entity.Property(e => e.MerchantBranchId).HasColumnName("MerchantBranchID");
+
+                entity.Property(e => e.MerchantDeliveryPriceId).HasColumnName("MerchantDeliveryPriceID");
 
                 entity.Property(e => e.ModifiedDate)
                     .HasColumnType("datetime")
@@ -534,6 +540,11 @@ namespace iDeliverDataAccess.Base
                     .HasForeignKey(d => d.MerchantBranchId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_MerchantBranch");
+
+                entity.HasOne(d => d.MerchantDeliveryPrice)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.MerchantDeliveryPriceId)
+                    .HasConstraintName("FK_MerchantDeliveryPrice_Order");
             });
 
             modelBuilder.Entity<Organization>(entity =>

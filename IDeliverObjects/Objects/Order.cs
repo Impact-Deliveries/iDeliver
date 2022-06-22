@@ -22,6 +22,9 @@ namespace IDeliverObjects.Objects
         public DateTime CreationDate { get; set; }
         public bool IsDeleted { get; set; }
         public long? MerchantDeliveryPriceId { get; set; }
+        public string ClientName { get; set; }
+        public string ClientNumber { get; set; }
+
         public virtual MerchantBranch MerchantBranch { get; set; }
         public virtual MerchantDeliveryPrice MerchantDeliveryPrice { get; set; }
         public virtual ICollection<DriverOrder> DriverOrders { get; set; }

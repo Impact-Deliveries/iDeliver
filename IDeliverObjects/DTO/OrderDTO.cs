@@ -19,6 +19,8 @@ namespace IDeliverObjects.DTO
         public decimal? DeliveryAmount { get; set; }
         public string? DriverName { get; set; }
         public string? DriverPhone { get; set; }
+        public string? ClientName { get; set; }
+        public string? ClientNumber { get; set; }
         public string? MerchantName { get; set; }
         public string? MerchantPhone { get; set; }
         public short? Status { get; set; }

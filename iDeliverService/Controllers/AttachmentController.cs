@@ -51,7 +51,7 @@ namespace iDeliverService.Controllers
         [HttpGet("GetAttachmentByModule")]
         public async Task<IActionResult> GetAttachmentByModule(long ModuleID, int ModuleType)
         {
-            var Attachments = await _repository.Find(a => a.ModuleId == ModuleID && a.ModuleType == ModuleType);
+            var Attachments = await _repository.Find(a => a.ModuleId == ModuleID && a.ModuleType == ModuleType && a.IsDeleted==false);
             if (Attachments == null)
             {
                 return NotFound();

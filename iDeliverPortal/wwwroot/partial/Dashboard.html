@@ -37,9 +37,11 @@
                             <th>#</th>
                             <th>Merchant </th>
                             <th>Merchant Phone</th>
+                            <th>gpa</th>
+                            <th>Order time</th>
                             <th>Total Amount</th>
                             <th>Delivery Amount</th>
-                            <th>Order time</th>
+
                             <th>Location Name</th>
                             <th>Status</th>
                             <th>Drivers</th>
@@ -50,9 +52,11 @@
                             <td>{{$index+1}}</td>
                             <td>{{item.merchantName}}</td>
                             <td>{{item.merchantPhone}}</td>
+                            <td><span class="badge bg-warning">{{getdate(item.orderDate)}}</span></td>
+                            <td>{{changeDate(item.orderDate) }}</td>
                             <td>{{item.totalAmount}}</td>
                             <td>{{item.deliveryAmount}}</td>
-                            <td>{{item.orderDate }}</td>
+
                             <td>{{item.locationName}}</td>
 
                             <td>
@@ -63,10 +67,10 @@
                             <td>
                                 <div class="row">
                                     <div class="col-9">
-                                        <select class="form-control my-1"  ng-disabled="item.status==2"
-                                                ng-options="o.id as o.name for o in newOrders.activeDrivers"  ng-model="item.driverID">
+                                        <select class="form-control my-1" ng-disabled="item.status==2"
+                                                ng-options="o.id as o.name for o in newOrders.activeDrivers" ng-model="item.driverID">
                                             <!--<option value="0">Please Selected</option>
-                                            <option ng-repeat="driver in newOrders.drivers ">{{driver.name}}</option>-->
+                    <option ng-repeat="driver in newOrders.drivers ">{{driver.name}}</option>-->
                                         </select>
                                     </div>
                                     <div class="col-3">

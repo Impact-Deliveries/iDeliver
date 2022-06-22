@@ -104,6 +104,8 @@ namespace iDeliverDataAccess.Repositories
                                       MerchantName = merchant.MerchantName + "-" + branch.BranchName,
                                       MerchantPhone = branch.Phone,
                                       Status = order.Status,
+                                      ClientName = order.ClientName,
+                                      ClientNumber = order.ClientNumber,
                                       Note = order.Note,
                                       OrderDate = order.CreationDate,
                                       DriverName = driver.FirstName + " " + driver.LastName,
@@ -139,6 +141,8 @@ namespace iDeliverDataAccess.Repositories
                                 Status = order.Status,
                                 Note = order.Note,
                                 OrderDate = order.CreationDate,
+                                ClientName = order.ClientName,
+                                ClientNumber = order.ClientNumber,
                                 DriverID = order.Status == 2 || order.Status == 3 ? (from c in _context.DriverOrders where order.Id == c.OrderId && (c.Status == 1 || c.Status == 3) select c.DriverId).FirstOrDefault() : 0,
                                 LocationID = 0,
                                 LocationName = (branch.DeliveryStatus == 1 ?
@@ -194,7 +198,8 @@ namespace iDeliverDataAccess.Repositories
                                     Status = order.Status,
                                     Note = order.Note,
                                     OrderDate = order.CreationDate,
-
+                                    ClientName = order.ClientName,
+                                    ClientNumber = order.ClientNumber,
                                     DriverName = order.Status > 1 ? (from c2 in _context.Drivers
                                                                      where order.Id == driverorder.OrderId && driverorder.DriverId == c2.Id && (driverorder.Status == 2)
                                                                      select c2.FirstName + ' ' + c2.LastName).FirstOrDefault() : "",
@@ -234,10 +239,11 @@ namespace iDeliverDataAccess.Repositories
                                     Status = order.Status,
                                     Note = order.Note,
                                     OrderDate = order.CreationDate,
-
+                                    ClientName=order.ClientName,
+                                    ClientNumber=order.ClientNumber,
                                     DriverName = order.Status > 1 ? (from c in _context.DriverOrders
                                                                      join c2 in _context.Drivers on c.DriverId equals c2.Id
-                                                                     where order.Id == c.OrderId && (c.Status == 2)
+                                                                     where order.Id == c.OrderId && (c.Status == 2 || c.Status ==1)
                                                                      select c2.FirstName + ' ' + c2.LastName).FirstOrDefault() : "",
                                     LocationID = 0,
                                     LocationName = (branch.DeliveryStatus == 1 ?

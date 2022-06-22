@@ -143,6 +143,8 @@ namespace iDeliverService.Controllers
                     TotalAmount = model.TotalAmount != null ? model.TotalAmount.Value : 0,
                     DeliveryAmount = model.DeliveryAmount != null ? model.DeliveryAmount.Value : 0,
                     MerchantBranchId = model.MerchantBranchId.Value,
+                    ClientNumber=model.ClientNumber,
+                    ClientName=model.ClientName,
                     MerchantDeliveryPriceId= model.MerchantDeliveryPriceID==null || model.MerchantDeliveryPriceID ==0?null: model.MerchantDeliveryPriceID
                 };
                 await _repository.Add(order);

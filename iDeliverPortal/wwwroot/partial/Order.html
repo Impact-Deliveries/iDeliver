@@ -87,6 +87,14 @@
                     <small class="text-danger" ng-if="price.valid&& drivers.selected=='0'">This field is Required </small>
 
                 </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1" ng-if="price.data">
+                    <label> Client Name </label>
+                    <input type="text" class="form-control" ng-model="price.clientName" />
+                </div>
+                <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1" ng-if="price.data">
+                    <label> Client Number </label>
+                    <input type="text" class="form-control" ng-model="price.clientNumber" />
+                </div>
                 <div class="form-group col-md-12 col-lg-12 col-sm-12 p-1 my-1" ng-if="price.data">
                     <label> Note </label>
                     <input ng-model="price.Note" class="form-control" />
@@ -157,9 +165,15 @@
                     <table ng-table="dtOrders" show-filter="false" class="table table-hover custom-table">
                         <thead>
                             <tr>
-                                <th style="width:15px;">number</th>
-                                <th>name</th>
-                               
+                                <th style="width:15px;">#</th>
+                                <th>Merchant/Branch</th>
+                                <th>Amount</th>
+                                <th>Client</th>
+                                <th>Delivery</th>
+                                <th>Order Time</th>
+                                <th>Location</th>
+                                <th>Driver Name</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -168,9 +182,36 @@
                                     <span ng-bind-html="tableRows($index)"></span>
                                 </td>
                                 <td class="primary text-center">
-                                    <span>{{row}}</span>
+                                    <span>{{row.merchantName}}</span>
                                 </td>
-                             
+                                <td class="primary text-center">
+                                    <span>{{row.totalAmount}}</span>
+                                </td>
+                                <td class="primary text-center">
+                                    <span>{{(row.clientName?row.clientName:'')+(row.clientNumber?'('+row.clientNumber+')':'')}}</span>
+                                </td>
+                                <td class="primary text-center">
+                                    <span>{{row.deliveryAmount}}</span>
+                                </td>
+                                <td class="primary text-center">
+                                    <span>{{row.orderDate | date:'medium'}}</span>
+                                </td>
+                                <td class="primary text-center">
+                                    <span>{{row.locationName}}</span>
+                                </td>
+                                <td class="primary text-center">
+                                    <span>{{row.driverName}}</span>
+                                </td>
+                                <td class="primary text-center">
+                                    <span ng-if="row.status==1" class="badge bg-warning"> Pending Order</span>
+                                    <span ng-if="row.status==2" class="badge bg-primary"> Assign To Driver</span>
+                                    <span ng-if="row.status==3" class="badge bg-danger"> Driver Rejected</span>
+                                    <span ng-if="row.status==4" class="badge bg-succes"> Driver Accepted</span>
+                                    <span ng-if="row.status==5" class="badge bg-info">Merchant Arrived </span>
+                                    <span ng-if="row.status==6" class="badge bg-secondary"> Order Picked</span>
+                                    <span ng-if="row.status==7" class="badge bg-success"> Order Arrived</span>
+                                </td>
+
                             </tr>
                         </tbody>
 

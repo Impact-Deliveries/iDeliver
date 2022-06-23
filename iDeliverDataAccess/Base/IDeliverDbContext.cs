@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using iDeliverDataAccess;
 using IDeliverObjects.Objects;
 
 namespace iDeliverDataAccess.Base
@@ -28,6 +27,7 @@ namespace iDeliverDataAccess.Base
         public virtual DbSet<DriverOrder> DriverOrders { get; set; }
         public virtual DbSet<DriverSchadule> DriverSchadules { get; set; }
         public virtual DbSet<Enrolment> Enrolments { get; set; }
+        public virtual DbSet<EnrolmentDevice> EnrolmentDevices { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Merchant> Merchants { get; set; }
         public virtual DbSet<MerchantBranch> MerchantBranches { get; set; }
@@ -290,6 +290,37 @@ namespace iDeliverDataAccess.Base
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Enrolment_User");
+            });
+
+            modelBuilder.Entity<EnrolmentDevice>(entity =>
+            {
+                entity.ToTable("EnrolmentDevice");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CreationDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("getutcdate()");
+
+                entity.Property(e => e.DeviceId)
+                    .HasMaxLength(50)
+                    .HasColumnName("DeviceID");
+
+                entity.Property(e => e.DeviceName).HasMaxLength(100);
+
+                entity.Property(e => e.DeviceToken).HasMaxLength(100);
+
+                entity.Property(e => e.EnrolmentId).HasColumnName("EnrolmentID");
+
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("getutcdate()");
+
+                entity.HasOne(d => d.Enrolment)
+                    .WithMany(p => p.EnrolmentDevices)
+                    .HasForeignKey(d => d.EnrolmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Enrolment_Device");
             });
 
             modelBuilder.Entity<Location>(entity =>

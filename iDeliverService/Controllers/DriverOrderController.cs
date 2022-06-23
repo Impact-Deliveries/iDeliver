@@ -13,11 +13,9 @@ namespace iDeliverService.Controllers
     {
         private readonly IDriverOrderRepository _repository;
 
-        private Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
-        public DriverOrderController(IDriverOrderRepository repository, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        public DriverOrderController(IDriverOrderRepository repository)
         {
             _repository = repository;
-            _env = env;
         }
 
         // GET: api/DriverOrder

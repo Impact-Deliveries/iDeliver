@@ -20,6 +20,7 @@ namespace iDeliverDataAccess.Base
             services.AddScoped<IDriverDetailsRepository, DriverDetailRepository>();
             services.AddScoped<IDriverSchaduleRepository, DriverSchaduleRepository>();
             services.AddScoped<IEnrolmentRepository, EnrolmentRepository>();
+            services.AddScoped<IEnrolmentDeviceRepository, EnrolmentDeviceRepository>();
             services.AddScoped<IOrganizationRepository,OrganizationRepository >();
             services.AddScoped<IMerchantRepository, MerchantRepository>();
             services.AddScoped<IMerchantBranchRepository, MerchantBranchRepository>();

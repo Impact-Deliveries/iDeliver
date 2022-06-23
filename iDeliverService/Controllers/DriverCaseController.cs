@@ -13,24 +13,10 @@ namespace iDeliverService.Controllers
     public class DriverCaseController : ControllerBase
     {
         private readonly IDriverCaseRepository _repository;
-        private readonly IDriverRepository _Drepository;
-        private readonly IDriverDetailsRepository _Derepository;
-        private readonly IDriverSchaduleRepository _Srepository;
-        private readonly IEnrolmentRepository _Erepository;
-        private readonly IUserRepository _Urepository;
-        private Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
 
-        public DriverCaseController(IDriverCaseRepository repository,IDriverRepository Drepository, IDriverDetailsRepository Derepository,
-            IDriverSchaduleRepository Srepository, IEnrolmentRepository Erepository,
-            Microsoft.AspNetCore.Hosting.IHostingEnvironment env, IUserRepository Urepository)
+        public DriverCaseController(IDriverCaseRepository repository)
         {
             _repository = repository;
-            _Drepository = Drepository;
-            _Derepository = Derepository;
-            _Srepository = Srepository;
-            _Erepository = Erepository;
-            _Urepository = Urepository;
-            _env = env;
         }
 
         // GET: api/DriverCase

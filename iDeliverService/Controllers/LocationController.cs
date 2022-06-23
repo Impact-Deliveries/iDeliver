@@ -12,12 +12,9 @@ namespace iDeliverService.Controllers
     public class LocationController : ControllerBase
     {
         private readonly ILocationRepository _repository;
-        private Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
-        public LocationController(ILocationRepository repository
-            , Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        public LocationController(ILocationRepository repository)
         {
             _repository = repository;
-            _env = env;
         }
 
         // GET: api/Location

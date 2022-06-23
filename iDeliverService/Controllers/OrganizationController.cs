@@ -13,16 +13,9 @@ namespace iDeliverService.Controllers
     public class OrganizationController : ControllerBase
     {
         private readonly IOrganizationRepository _repository;
-        private readonly IEnrolmentRepository _Erepository;
-        private readonly IUserRepository _Urepository;
-        private Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
-        public OrganizationController(IOrganizationRepository repository, IEnrolmentRepository Erepository,
-            Microsoft.AspNetCore.Hosting.IHostingEnvironment env, IUserRepository Urepository)
+        public OrganizationController(IOrganizationRepository repository)
         {
             _repository = repository;
-            _Erepository = Erepository;
-            _Urepository = Urepository;
-            _env = env;
         }
 
         // GET: api/Organization

@@ -90,5 +90,6 @@
     <Build Include="dbo\tables\DriverCase.sql" />
     <Build Include="dbo\tables\Order.sql" />
     <Build Include="dbo\tables\DriverOrders.sql" />
+    <Build Include="dbo\tables\EnrolmentDevice.sql" />
   </ItemGroup>
 </Project>

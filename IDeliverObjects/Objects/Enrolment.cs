@@ -10,6 +10,7 @@ namespace IDeliverObjects.Objects
         public Enrolment()
         {
             Drivers = new HashSet<Driver>();
+            EnrolmentDevices = new HashSet<EnrolmentDevice>();
             MerchantEmployees = new HashSet<MerchantEmployee>();
             OrganizationEmployees = new HashSet<OrganizationEmployee>();
         }
@@ -20,6 +21,7 @@ namespace IDeliverObjects.Objects
 
         public virtual User User { get; set; }
         public virtual ICollection<Driver> Drivers { get; set; }
+        public virtual ICollection<EnrolmentDevice> EnrolmentDevices { get; set; }
         public virtual ICollection<MerchantEmployee> MerchantEmployees { get; set; }
         public virtual ICollection<OrganizationEmployee> OrganizationEmployees { get; set; }
     }

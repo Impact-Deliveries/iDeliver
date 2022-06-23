@@ -16,14 +16,11 @@ namespace iDeliverService.Controllers
 
         private readonly IEnrolmentRepository _Erepository;
         private readonly IUserRepository _Urepository;
-        private Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
-        public MerchantEmployeeController(IMerchantEmployeeRepository repository, IEnrolmentRepository Erepository,
-            Microsoft.AspNetCore.Hosting.IHostingEnvironment env, IUserRepository Urepository)
+        public MerchantEmployeeController(IMerchantEmployeeRepository repository, IEnrolmentRepository Erepository, IUserRepository Urepository)
         {
             _repository = repository;
             _Erepository = Erepository;
             _Urepository = Urepository;
-            _env = env;
         }
 
         // GET: api/MerchantEmployee
@@ -127,7 +124,7 @@ namespace iDeliverService.Controllers
                         Enrolment enroll = new Enrolment()
                         {
                             UserId = user.Id,
-                            RoleId = (int)Roles.MerchantEmployee
+                            RoleId = (int)IDeliverObjects.Enum.Roles.MerchantEmployee
                         };
                         await _Erepository.Add(enroll);
                         Employee.EnrolmentId = enroll.Id;

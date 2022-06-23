@@ -14,14 +14,11 @@ namespace iDeliverService.Controllers
     {
         private readonly IMerchantDeliveryPriceRepository _repository;
         private readonly IMerchantBranchRepository _Brepository;
-        private Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
 
-        public MerchantDeliveryPriceController(IMerchantDeliveryPriceRepository repository, IMerchantBranchRepository Brepository,
-            Microsoft.AspNetCore.Hosting.IHostingEnvironment env, IUserRepository Urepository)
+        public MerchantDeliveryPriceController(IMerchantDeliveryPriceRepository repository, IMerchantBranchRepository Brepository, IUserRepository Urepository)
         {
             _repository = repository;
             _Brepository = Brepository;
-            _env = env;
         }
 
         // GET: api/MerchantDeliveryPrice

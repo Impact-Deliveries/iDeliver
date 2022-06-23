@@ -13,11 +13,9 @@ namespace iDeliverService.Controllers
     {
         private readonly IMerchantBranchRepository _repository;
 
-        private Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
-        public MerchantBranchController(IMerchantBranchRepository repository, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        public MerchantBranchController(IMerchantBranchRepository repository)
         {
             _repository = repository;
-            _env = env;
         }
 
         // GET: api/MerchantBranch

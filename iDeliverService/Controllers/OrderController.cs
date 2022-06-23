@@ -17,18 +17,15 @@ namespace iDeliverService.Controllers
         private readonly IDriverRepository _Drrepository;
         private readonly IDriverDetailsRepository _DDepository;
         private readonly IDriverSchaduleRepository _Srepository;
-        private Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
 
         public OrderController(IOrderRepository repository, IDriverOrderRepository Dorepository, IDriverRepository Drrepository, IDriverDetailsRepository DDepository,
-            IDriverSchaduleRepository Srepository,
-            Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+            IDriverSchaduleRepository Srepository)
         {
             _repository = repository;
             _Dorepository = Dorepository;
             _Drrepository = Drrepository;
             _DDepository = DDepository;
             _Srepository = Srepository;
-            _env = env;
         }
 
         // GET: api/Order

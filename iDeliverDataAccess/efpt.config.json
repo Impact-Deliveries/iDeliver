@@ -1,17 +1,17 @@
 ﻿{
    "CodeGenerationMode": 2,
    "ContextClassName": "IDeliverDbContext",
-   "ContextNamespace": null,
+   "ContextNamespace": "iDeliverDataAccess.Base",
    "DefaultDacpacSchema": null,
    "FilterSchemas": false,
    "IncludeConnectionString": false,
-   "ModelNamespace": null,
+   "ModelNamespace": "IDeliverObjects.Objects",
    "OutputContextPath": "Base",
-   "OutputPath": null,
-   "ProjectRootNamespace": "iDeliverDataAccess",
+   "OutputPath": "..\/IDeliverObjects\/Objects",
+   "ProjectRootNamespace": "",
    "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
-   "SelectedToBeGenerated": 1,
+   "SelectedToBeGenerated": 0,
    "Tables": [
       {
          "Name": "[dbo].[Attachment]",
@@ -43,6 +43,10 @@
       },
       {
          "Name": "[dbo].[Enrolment]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EnrolmentDevice]",
          "ObjectType": 0
       },
       {

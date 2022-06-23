@@ -13,6 +13,7 @@ namespace IDeliverObjects.Enum
         driver = 3,
         MerchantEmployee = 4
     }
+
     public enum SocialStatus
     {
         single = 1,
@@ -20,11 +21,13 @@ namespace IDeliverObjects.Enum
         married = 3,
         divorced = 4,
     }
+
     public enum WorkTime
     {
         FullTime = 1,
         partTime = 2,
     }
+
     public enum Days
     {
         Saturday = 1,
@@ -35,6 +38,7 @@ namespace IDeliverObjects.Enum
         Thursday = 6,
         Friday = 7
     }
+
     public enum Module
     {
         administrator = 1,
@@ -43,6 +47,7 @@ namespace IDeliverObjects.Enum
         MerchantBranch = 4,
         MerchantEmployee = 5,
     }
+
     public enum DeliveryStatus
     {
         Location = 1,
@@ -57,6 +62,7 @@ namespace IDeliverObjects.Enum
         unavailable = 3,
         block = 4
     }
+
     public enum MediaType
     {
         Image = 1,
@@ -65,20 +71,29 @@ namespace IDeliverObjects.Enum
         File = 4,
 
     }
+
     public enum OrderStatus
     {
         PendingOrder = 1,
         AssignToDriver = 2,
         DriverRejected = 3,
         DriverAccepted = 4,
-        MerchantArrived= 5,
+        MerchantArrived = 5,
         OrderPicked = 6,
         OrderArrived = 7,
     }
+
     public enum DriverOrderEnum
     {
         PenddingOrder = 1,
         AcceptedOrder = 2,
         RejectedOrder = 3,
+    }
+
+    public enum DeviceType
+    {
+        desktop = 1,
+        web = 2,
+        mobile = 3,
     }
 }

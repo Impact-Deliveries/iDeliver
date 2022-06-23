@@ -17,18 +17,15 @@ namespace iDeliverService.Controllers
         private readonly IDriverSchaduleRepository _Srepository;
         private readonly IEnrolmentRepository _Erepository;
         private readonly IUserRepository _Urepository;
-        private Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
 
         public DriverController(IDriverRepository repository, IDriverDetailsRepository Drepository,
-            IDriverSchaduleRepository Srepository, IEnrolmentRepository Erepository,
-            Microsoft.AspNetCore.Hosting.IHostingEnvironment env, IUserRepository Urepository)
+            IDriverSchaduleRepository Srepository, IEnrolmentRepository Erepository, IUserRepository Urepository)
         {
             _repository = repository;
             _Drepository = Drepository;
             _Srepository = Srepository;
             _Erepository = Erepository;
             _Urepository = Urepository;
-            _env = env;
         }
 
         // GET: api/Driver
@@ -65,11 +62,11 @@ namespace iDeliverService.Controllers
         {
             try
             {
-              // bool isExistUsername = _Urepository.IsExists(w => w.Username.ToLower() == obj.username);
-              // if (isExistUsername) return BadRequest("username is exist");
-              
-              // bool isExistNationalNumber = _repository.IsExists(w => w.NationalNumber == obj.nationalNumber);
-              // if (isExistNationalNumber) return BadRequest("national number is exist");
+                // bool isExistUsername = _Urepository.IsExists(w => w.Username.ToLower() == obj.username);
+                // if (isExistUsername) return BadRequest("username is exist");
+
+                // bool isExistNationalNumber = _repository.IsExists(w => w.NationalNumber == obj.nationalNumber);
+                // if (isExistNationalNumber) return BadRequest("national number is exist");
 
                 long DriverID = 0;
                 Driver driver = new Driver();
@@ -132,7 +129,7 @@ namespace iDeliverService.Controllers
                         IsDeleted = false,
                         IsActive = obj.IsActive,
                         IsHaveProblem = obj.isHaveProblem,
-                        Reason = obj.isHaveProblem != null && obj.isHaveProblem == true ? obj.reason : "",
+                        Reason = (obj.isHaveProblem != null && obj.isHaveProblem == true) ? obj.reason : "",
                     };
                     #region User
                     Common.HashKey.CreateMD5Hash("1234", out string hash);
@@ -155,7 +152,7 @@ namespace iDeliverService.Controllers
                         Enrolment enroll = new Enrolment()
                         {
                             UserId = user.Id,
-                            RoleId = (int)Roles.driver
+                            RoleId = (int)IDeliverObjects.Enum.Roles.driver
                         };
                         await _Erepository.Add(enroll);
                         driver.EnrolmentId = enroll.Id;
@@ -180,7 +177,7 @@ namespace iDeliverService.Controllers
                                     AvancedStudies = obj.advancedStudies,
                                     CreationDate = DateTime.UtcNow,
                                     IsDeleted = false,
-                                    DeliveryPercent=obj.DeliveryPercent
+                                    DeliveryPercent = obj.DeliveryPercent
                                 };
                                 DriverID = driver.Id;
                                 await _Drepository.Add(Detail);

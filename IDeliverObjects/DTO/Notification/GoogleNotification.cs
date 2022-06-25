@@ -7,13 +7,13 @@ using Newtonsoft.Json;
 
 namespace IDeliverObjects.DTO.Notification
 {
-    public class GoogleNotification
+    public class GoogleNotification<T> where T : class
     {
         [JsonProperty("priority")]
         public string Priority { get; set; } = "high";
         [JsonProperty("data")]
-        public DataPayload Data { get; set; }
+        public DataPayload<T> Data { get; set; }
         [JsonProperty("notification")]
-        public DataPayload Notification { get; set; }
+        public DataPayload<T> Notification { get; set; }
     }
 }

@@ -87,7 +87,16 @@ namespace iDeliverDataAccess.Repositories
                                          }).FirstOrDefaultAsync();
 
                         if (account is not null)
+                        {
                             accounts.Add(account);
+                            var accountDevice = await (from device in _context.EnrolmentDevices
+                                                       where device.EnrolmentId == item.Id
+                                                       select device).FirstOrDefaultAsync();
+
+                            if (accountDevice is not null)
+                                account.Device = accountDevice;
+                        }
+
                         break;
                     case 2:
                     // marchent employee
@@ -109,8 +118,17 @@ namespace iDeliverDataAccess.Repositories
                                                  Timezone = driver.Organization.Timezone
                                              },
                                          }).FirstOrDefaultAsync();
+
                         if (account is not null)
+                        {
                             accounts.Add(account);
+                            var accountDevice = await (from device in _context.EnrolmentDevices
+                                                       where device.EnrolmentId == item.Id
+                                                       select device).FirstOrDefaultAsync();
+
+                            if (accountDevice is not null)
+                                account.Device = accountDevice;
+                        };
                         break;
                 }
             }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace iDeliverService.Common.Service
 {
-    public class NotificationService : INotificationService
+    public class NotificationService<T> : INotificationService<T> where T : class
     {
         private readonly FcmNotificationSetting _fcmNotificationSetting;
         public NotificationService(IOptions<FcmNotificationSetting> settings)
@@ -16,7 +16,7 @@ namespace iDeliverService.Common.Service
             _fcmNotificationSetting = settings.Value;
         }
 
-        public async Task<Response> SendNotification(Notification notification)
+        public async Task<Response> SendNotification(Notification<T> notification)
         {
             Response response = new Response();
             try
@@ -38,11 +38,12 @@ namespace iDeliverService.Common.Service
                     httpClient.DefaultRequestHeaders.Accept
                             .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    DataPayload dataPayload = new DataPayload();
+                    DataPayload<T> dataPayload = new DataPayload<T>();
                     dataPayload.Title = notification.Title;
                     dataPayload.Body = notification.Body;
+                    dataPayload.Data = notification.Data;
 
-                    GoogleNotification googleNotification = new GoogleNotification();
+                    GoogleNotification<T> googleNotification = new GoogleNotification<T>();
                     googleNotification.Data = dataPayload;
                     googleNotification.Notification = dataPayload;
 

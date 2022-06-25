@@ -4,7 +4,7 @@
     [EnrolmentID] BIGINT NOT NULL,
     [DeviceID] NVARCHAR(50) NULL, 
     [DeviceName] NVARCHAR(100) NULL,  
-    [DeviceToken] NVARCHAR(100) NULL, 
+    [DeviceToken] NVARCHAR(MAX) NULL, 
     [DeviceType] SMALLINT NOT NULL, 
     [IsDeleted] BIT NOT NULL DEFAULT 0, 
     [CreationDate] DATETIME NOT NULL DEFAULT GETUTCDATE(), 

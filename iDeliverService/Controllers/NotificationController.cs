@@ -10,15 +10,15 @@ namespace iDeliverService.Controllers
     [Authorize]
     public class NotificationController : ControllerBase
     {
-        private readonly INotificationService _notificationService;
-        public NotificationController(INotificationService notificationService)
+        private readonly INotificationService<string> _notificationService;
+        public NotificationController(INotificationService<string> notificationService)
         {
             _notificationService = notificationService;
         }
 
         [Route("send")]
         [HttpPost]
-        public async Task<IActionResult> SendNotification(Notification notification)
+        public async Task<IActionResult> SendNotification(Notification<string> notification)
         {
             var result = await _notificationService.SendNotification(notification);
             return Ok(result);

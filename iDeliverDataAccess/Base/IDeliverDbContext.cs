@@ -308,8 +308,6 @@ namespace iDeliverDataAccess.Base
 
                 entity.Property(e => e.DeviceName).HasMaxLength(100);
 
-                entity.Property(e => e.DeviceToken).HasMaxLength(100);
-
                 entity.Property(e => e.EnrolmentId).HasColumnName("EnrolmentID");
 
                 entity.Property(e => e.ModifiedDate)

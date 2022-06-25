@@ -17,5 +17,6 @@ namespace IDeliverObjects.DTO
         public string ProfilePicture { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
         public OrganizationDTO? Organization { get; set; } = new OrganizationDTO();
+        public EnrolmentDevice? Device { get; set; }
     }
 }

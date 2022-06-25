@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IDeliverObjects.DTO.Notification
 {
-    public class Notification
+    public class Notification<T> where T : class
     {
         [JsonProperty("deviceId")]
         public string DeviceId { get; set; } = String.Empty;
@@ -17,5 +17,8 @@ namespace IDeliverObjects.DTO.Notification
         public string Title { get; set; } = String.Empty;
         [JsonProperty("body")]
         public string Body { get; set; } = String.Empty;
+
+        [JsonProperty("data")]
+        public T? Data { get; set; } 
     }
 }

@@ -2,8 +2,8 @@
 
 namespace iDeliverService.Common.Service
 {
-    public interface INotificationService
+    public interface INotificationService<T> where T : class
     {
-        Task<Response> SendNotification(Notification notification);
+        Task<Response> SendNotification(Notification<T> notification);
     }
 }

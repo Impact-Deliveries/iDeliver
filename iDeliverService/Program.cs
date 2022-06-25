@@ -1,4 +1,7 @@
+using CorePush.Apple;
+using CorePush.Google;
 using iDeliverDataAccess.Base;
+using IDeliverObjects.DTO.Notification;
 using iDeliverService.Common.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +23,15 @@ builder.Services.AddDbContext<IDeliverDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("IDeliverDB"));
 });
 builder.Services.AddScoped<IUserService, UserService>();
+//builder.Services.AddTransient<INotificationService, NotificationService>();
+builder.Services.AddTransient(typeof(INotificationService<>), typeof(NotificationService<>));
+builder.Services.AddHttpClient<FcmSender>();
+builder.Services.AddHttpClient<ApnSender>();
+
+// Configure strongly typed settings objects
+var appSettingsSection = builder.Configuration.GetSection("FcmNotification");
+builder.Services.Configure<FcmNotificationSetting>(appSettingsSection);
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(options =>
 {

@@ -54,6 +54,8 @@ namespace iDeliverService.Controllers
                 enrolmentDevice.DeviceId = row.DeviceId;
                 enrolmentDevice.DeviceName = row.DeviceName;
                 enrolmentDevice.DeviceToken = row.DeviceToken;
+
+
                 await _repository.Update(enrolmentDevice);
                 return Ok(enrolmentDevice);
             }

@@ -80,12 +80,12 @@ namespace IDeliverObjects.Enum
         DriverAccepted = 4,
         MerchantArrived = 5,
         OrderPicked = 6,
-        OrderArrived = 7,
+        OrderCompleted = 7,
     }
 
     public enum DriverOrderEnum
     {
-        PenddingOrder = 1,
+        PendingOrder = 1,
         AcceptedOrder = 2,
         RejectedOrder = 3,
     }
@@ -95,5 +95,10 @@ namespace IDeliverObjects.Enum
         desktop = 1,
         web = 2,
         mobile = 3,
+    }
+
+    public enum NotificationModule
+    {
+        DriverOrder = 1
     }
 }

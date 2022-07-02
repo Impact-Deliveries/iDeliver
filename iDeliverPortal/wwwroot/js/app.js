@@ -7,9 +7,9 @@
         //baseUrl: "http://localhost/iDeliverPortal/",
         //cdnUrl: "http://localhost/iDeliverPortal/"
 
-        apiBaseUrl: "http://localhost:5117/api/",
-        baseUrl: "http://localhost/iDeliverPortal/",
-        cdnUrl: "http://localhost/iDeliverPortal/"
+        apiBaseUrl: "http://10.0.0.234/iDeliveryService/api/",
+        baseUrl: "http://10.0.0.234/iDeliverPortal/",
+        cdnUrl: "http://10.0.0.234/iDeliverPortal/"
 
     });
 

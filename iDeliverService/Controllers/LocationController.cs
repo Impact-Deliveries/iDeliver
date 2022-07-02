@@ -56,7 +56,7 @@ namespace iDeliverService.Controllers
                         location.ModifiedDate = DateTime.UtcNow;
                         location.City = model.City;
                         location.Address = model.Address;
-                        _repository.Update(location);
+                        await _repository.Update(location);
                     }
                 }
                 else
@@ -70,7 +70,7 @@ namespace iDeliverService.Controllers
                         CreationDate = DateTime.UtcNow,
                         IsDeleted = false
                     };
-                    _repository.Add(location);
+                    await _repository.Add(location);
                 }
                 return Ok();
             }

@@ -1,7 +1,10 @@
 ﻿using iDeliverDataAccess.Repositories;
 using IDeliverObjects.DTO;
+using IDeliverObjects.DTO.Notification.Models;
 using IDeliverObjects.Enum;
 using IDeliverObjects.Objects;
+
+using iDeliverService.Common.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,19 +16,28 @@ namespace iDeliverService.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderRepository _repository;
-        private readonly IDriverOrderRepository _Dorepository;
-        private readonly IDriverRepository _Drrepository;
-        private readonly IDriverDetailsRepository _DDepository;
-        private readonly IDriverSchaduleRepository _Srepository;
+        private readonly IDriverOrderRepository _driverOrderRepository;
+        private readonly IEnrolmentDeviceRepository _enrolmentDeviceRepository;
+        private readonly IDriverRepository _driverRepository;
+        private readonly IDriverCaseRepository _driverCaseRepository;
+        private readonly IMerchantBranchRepository _merchantBranchRepository;
+        private readonly INotificationService<OrderNotification> _notificationService;
 
-        public OrderController(IOrderRepository repository, IDriverOrderRepository Dorepository, IDriverRepository Drrepository, IDriverDetailsRepository DDepository,
-            IDriverSchaduleRepository Srepository)
+        public OrderController(IOrderRepository repository,
+            IDriverOrderRepository driverOrderRepository,
+            IEnrolmentDeviceRepository enrolmentDeviceRepository,
+            IDriverRepository driverRepository,
+            IDriverCaseRepository driverCaseRepository,
+            IMerchantBranchRepository merchantBranchRepository,
+            INotificationService<OrderNotification> notificationService)
         {
             _repository = repository;
-            _Dorepository = Dorepository;
-            _Drrepository = Drrepository;
-            _DDepository = DDepository;
-            _Srepository = Srepository;
+            _driverOrderRepository = driverOrderRepository;
+            _enrolmentDeviceRepository = enrolmentDeviceRepository;
+            _driverRepository = driverRepository;
+            _driverCaseRepository = driverCaseRepository;
+            _merchantBranchRepository = merchantBranchRepository;
+            _notificationService = notificationService;
         }
 
         // GET: api/Order
@@ -80,23 +92,25 @@ namespace iDeliverService.Controllers
         }
 
         [HttpPost("AssignOrderToDriver")]
-        public async Task<ActionResult<Order>> AssignOrderToDriver([FromBody] OrderDTO model)
+        public async Task<ActionResult> AssignOrderToDriver([FromBody] OrderDTO model)
         {
             try
             {
-                if (model == null || model.Id == null || model.DriverID == null)
+                if (model is null || model.Id is null || model.DriverID is null)
                     return NotFound();
 
                 var order = await _repository.GetByID(model.Id.Value);
-                if (order == null)
+                if (order is null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    DriverOrder driver = new DriverOrder()
+
+                    // assgin order to driver
+                    DriverOrder driverOrder = new DriverOrder()
                     {
-                        Status = (int)DriverOrderEnum.PenddingOrder,
+                        Status = (int)DriverOrderEnum.PendingOrder,
                         CreationDate = DateTime.UtcNow,
                         ModifiedDate = DateTime.UtcNow,
                         DriverId = model.DriverID.Value,
@@ -104,11 +118,57 @@ namespace iDeliverService.Controllers
                         IsDeleted = false,
                         Note = "",
                     };
-                    await _Dorepository.Add(driver);
+
+                    await _driverOrderRepository.Add(driverOrder);
+
                     order.Status = (int)OrderStatus.AssignToDriver;
                     await _repository.Update(order);
+
+
+                    // Send Notification
+                    var driver = await _driverRepository.FindRow(f => f.Id == model.DriverID.Value);
+
+                    if (driver is not null)
+                    {
+                        var enrolmentDevice = await _enrolmentDeviceRepository.FindRow(f => f.EnrolmentId == driver.EnrolmentId &&
+                        f.IsDeleted == false);
+
+                        if (enrolmentDevice is not null)
+                        {
+                            var merchantBranch = await _merchantBranchRepository.FindRow(f => f.Id == order.MerchantBranchId && f.IsActive == true);
+
+                            if (merchantBranch is not null)
+                            {
+                                IDeliverObjects.DTO.Notification.Notification<OrderNotification>
+                                    notification = new IDeliverObjects.DTO.Notification.Notification<OrderNotification>()
+                                    {
+                                        DeviceId = enrolmentDevice.DeviceToken,
+                                        Title = $"Order #{order.Id}",
+                                        Body = $"Order from {order.MerchantBranch}",
+                                        IsAndroiodDevice = true,
+                                        Data = new OrderNotification()
+                                        {
+                                            OrderID = order.Id,
+                                            Note = order.Note,
+                                            Status = order.Status,
+                                            ClientName = order.ClientName,
+                                            ClientNumber = order.ClientNumber,
+                                            DriverID = driver.Id,
+                                            DriverOrderNote = driverOrder.Note,
+                                            DriverOrderStatus = driverOrder.Status,
+                                            MerchantBranchID = order.MerchantBranchId,
+                                            MerchantName = merchantBranch.Merchant.MerchantName
+                                        }
+                                    };
+
+                                var result = await _notificationService.SendNotification(notification);
+                            }
+                        }
+                    }
+
+                    return Ok();
                 }
-                return Ok();
+
             }
             catch (Exception ex)
             {
@@ -128,29 +188,33 @@ namespace iDeliverService.Controllers
         {
             try
             {
-                if (model==null)
+                if (model == null)
                     return BadRequest();
+
                 Order order = new Order()
                 {
                     CreationDate = DateTime.UtcNow,
                     ModifiedDate = DateTime.UtcNow,
                     IsDeleted = false,
                     Note = model.Note,
-                    Status = model.Status == null || model.Status == 0 ? (short)1 : model.Status.Value,
+                    Status = (model.Status == null || model.Status == 0) ? (short)OrderStatus.PendingOrder : model.Status.Value,
                     TotalAmount = model.TotalAmount != null ? model.TotalAmount.Value : 0,
                     DeliveryAmount = model.DeliveryAmount != null ? model.DeliveryAmount.Value : 0,
                     MerchantBranchId = model.MerchantBranchId.Value,
-                    ClientNumber=model.ClientNumber,
-                    ClientName=model.ClientName,
-                    MerchantDeliveryPriceId= model.MerchantDeliveryPriceID==null || model.MerchantDeliveryPriceID ==0?null: model.MerchantDeliveryPriceID
+                    ClientNumber = model.ClientNumber,
+                    ClientName = model.ClientName,
+                    MerchantDeliveryPriceId = model.MerchantDeliveryPriceID == null || model.MerchantDeliveryPriceID == 0 ? null : model.MerchantDeliveryPriceID
                 };
+
+
                 await _repository.Add(order);
+
                 if (order.Status == 2)
                 {
                     #region assign order to driver
-                    DriverOrder driver = new DriverOrder()
+                    DriverOrder driverOrder = new DriverOrder()
                     {
-                        Status = (int)DriverOrderEnum.PenddingOrder,
+                        Status = (int)DriverOrderEnum.PendingOrder,
                         CreationDate = DateTime.UtcNow,
                         ModifiedDate = DateTime.UtcNow,
                         DriverId = model.DriverID.Value,
@@ -158,10 +222,55 @@ namespace iDeliverService.Controllers
                         IsDeleted = false,
                         Note = "",
                     };
-                    await _Dorepository.Add(driver);
+                    await _driverOrderRepository.Add(driverOrder);
+
                     order.Status = (int)OrderStatus.AssignToDriver;
                     await _repository.Update(order);
                     #endregion
+
+                    // Send Notification
+                    var driver = await _driverRepository.FindRow(f => f.Id == model.DriverID.Value);
+
+                    if (driver is not null)
+                    {
+                        var enrolmentDevice = await _enrolmentDeviceRepository.FindRow(f => f.EnrolmentId == driver.EnrolmentId &&
+                        f.IsDeleted == false);
+
+                        if (enrolmentDevice is not null)
+                        {
+                            var merchantBranch = await _merchantBranchRepository.FindRow(f => f.Id == order.MerchantBranchId && f.IsActive == true);
+
+                            if (merchantBranch is not null)
+                            {
+                                IDeliverObjects.DTO.Notification.Notification<OrderNotification>
+                                    notification = new IDeliverObjects.DTO.Notification.Notification<OrderNotification>()
+                                    {
+                                        DeviceId = enrolmentDevice.DeviceToken,
+                                        Title = $"Order #{order.Id}",
+                                        Body = $"Order from {merchantBranch.Merchant.MerchantName}",
+                                        IsAndroiodDevice = true,
+                                        Module = (int)IDeliverObjects.Enum.NotificationModule.DriverOrder,
+                                        Data = new OrderNotification()
+                                        {
+                                            OrderID = order.Id,
+                                            Note = order.Note,
+                                            Status = order.Status,
+                                            ClientName = order.ClientName,
+                                            ClientNumber = order.ClientNumber,
+                                            DriverID = driver.Id,
+                                            DriverOrderNote = driverOrder.Note,
+                                            DriverOrderStatus = driverOrder.Status,
+                                            MerchantBranchID = order.MerchantBranchId,
+                                            MerchantName = merchantBranch.Merchant.MerchantName
+                                        }
+                                    };
+
+                                var result = await _notificationService.SendNotification(notification);
+                            }
+                        }
+                    }
+
+
                 }
 
                 return Ok();
@@ -223,6 +332,83 @@ namespace iDeliverService.Controllers
             }
         }
 
+
+        [HttpPost("SetDriverOrderOperation")]
+        public async Task<ActionResult> SetDriverOrderOperation([FromBody] OrderDTO model)
+        {
+            try
+            {
+                /*
+                 * model.id => orderID
+                 * model.DriverID => driverID
+                 * model.Status => Enum.OrderStatus
+                 * model.EnrolmentID => enrolmentID
+                 */
+                var driverOrder = await _driverOrderRepository.FindRow(f => f.DriverId == model.DriverID &&
+                f.IsDeleted == false && f.Status !=
+                (short)IDeliverObjects.Enum.DriverOrderEnum.RejectedOrder && f.OrderId == model.Id);
+
+                if (driverOrder is not null)
+                {
+                    short driverCaseStatus = (short)IDeliverObjects.Enum.DriverCaseStatus.hold;
+                    switch (model.Status.Value)
+                    {
+                        case (int)IDeliverObjects.Enum.OrderStatus.DriverAccepted:
+                            driverOrder.Status = (int)IDeliverObjects.Enum.DriverOrderEnum.AcceptedOrder;
+                            driverCaseStatus = (short)IDeliverObjects.Enum.DriverCaseStatus.hold;
+                            break;
+                        case (int)IDeliverObjects.Enum.OrderStatus.DriverRejected:
+                            driverCaseStatus = (short)(short)IDeliverObjects.Enum.DriverCaseStatus.available;
+                            driverOrder.Status = (int)IDeliverObjects.Enum.DriverOrderEnum.RejectedOrder;
+                            break;
+                        case (int)IDeliverObjects.Enum.OrderStatus.PendingOrder:
+                            driverCaseStatus = (short)IDeliverObjects.Enum.DriverCaseStatus.available;
+                            driverOrder.Status = (int)IDeliverObjects.Enum.DriverOrderEnum.PendingOrder;
+                            break;
+                        case (int)IDeliverObjects.Enum.OrderStatus.OrderCompleted:
+                            driverCaseStatus = (short)IDeliverObjects.Enum.DriverCaseStatus.available;
+                            break;
+                        default:
+                            driverCaseStatus = (short)IDeliverObjects.Enum.DriverCaseStatus.hold;
+                            break;
+
+                    }
+
+                    driverOrder.ModifiedDate = DateTime.UtcNow;
+
+                    var order = await _repository.FindRow(f => f.Id == driverOrder.Id && f.IsDeleted == false);
+
+                    if (order is not null)
+                    {
+                        order.Status = model.Status.Value;
+                        order.ModifiedDate = DateTime.UtcNow;
+
+                        await _repository.Update(order).ConfigureAwait(false);
+                        await _driverOrderRepository.Update(driverOrder).ConfigureAwait(false);
+                        await _driverCaseRepository.SetDriverCase(new DriverCaseDTO()
+                        {
+                            EnrolmentID = model.EnrolmentID.Value,
+                            Status = driverCaseStatus,
+                        }).ConfigureAwait(false);
+                        
+                        return Ok();
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
 
         //[HttpPost, Route("ActiveOrder")]
         //public async Task<ActionResult> ActiveOrder([FromBody] long OrderID)

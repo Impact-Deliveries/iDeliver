@@ -38,7 +38,7 @@ namespace iDeliverDataAccess.Repositories
             await _context.MerchantBranches.Where(where).ToListAsync();
 
         public async Task<MerchantBranch?> FindRow(Expression<Func<MerchantBranch, bool>> where) =>
-            await _context.MerchantBranches.Where(where).FirstOrDefaultAsync();
+            await _context.MerchantBranches.Where(where).Include("Merchant").FirstOrDefaultAsync();
 
         public bool IsExists(Expression<Func<MerchantBranch, bool>> where) =>
              _context.MerchantBranches.Any(where);

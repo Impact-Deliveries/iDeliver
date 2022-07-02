@@ -53,7 +53,7 @@ namespace iDeliverDataAccess.Repositories
 
                 if (driverCase is not null)
                 {
-                    //Update
+                    // update driver case  
                     driverCase.ModifiedDate = DateTime.UtcNow;
                     if (!string.IsNullOrEmpty(request.Longitude) && !string.IsNullOrEmpty(request.Latitude))
                     {
@@ -75,23 +75,40 @@ namespace iDeliverDataAccess.Repositories
                 }
                 else
                 {
+                    // driver longitude and latitude 
+                    string longitude = "", latitude = "";
+                    if (!string.IsNullOrEmpty(request.Longitude) && !string.IsNullOrEmpty(request.Latitude))
+                    {
+                        longitude = request.Longitude;
+                        latitude = request.Latitude;
+                    }
 
-                    //Insert
-                    driverCase = new DriverCase();
+                    // driver is online
+                    bool isOnline = false;
+                    if (request.IsOnline is not null)
+                    {
+                        isOnline = request.IsOnline.Value;
+                    }
+
+                    // driver case status
+                    short drvierCaseStatus = (short)DriverCaseStatus.unavailable;
+                    if (request.Status != 0)
+                    {
+                        drvierCaseStatus = request.Status;
+                    }
+
                     driverCase = new DriverCase()
                     {
-                        Longitude = request.Longitude,
-                        Latitude = request.Latitude,
+                        Longitude = longitude,
+                        Latitude = latitude,
                         DriverId = driverID,
                         IsDeleted = false,
-                        IsOnline = false,
-                        Status = (int)DriverCaseStatus.unavailable,
+                        IsOnline = isOnline,
+                        Status = drvierCaseStatus,
                         CreationDate = DateTime.UtcNow,
-                        ModifiedDate = DateTime.UtcNow,
+                        ModifiedDate = DateTime.UtcNow
                     };
                     _context.DriverCases.Add(driverCase);
-
-
                 }
                 await _context.SaveChangesAsync();
                 return driverCase;
@@ -162,7 +179,7 @@ namespace iDeliverDataAccess.Repositories
                                 Status = c.Status,
                                 phone = d.Phone,
                                 name = d.FirstName + ' ' + d.LastName,
-                                DriverID = c.Id,
+                                DriverID = d.Id,
                             }).ToListAsync();
 
                 return await data;

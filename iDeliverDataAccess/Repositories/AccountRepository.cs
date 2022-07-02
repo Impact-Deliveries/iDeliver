@@ -83,20 +83,24 @@ namespace iDeliverDataAccess.Repositories
                                                  Timezone = employee.Organization.Timezone
                                              },
                                              Role = ((IDeliverObjects.Enum.Roles)employee.Enrolment.RoleId).ToString(),
-                                             ProfilePicture = employee.ProfilePicture
+                                             ProfilePicture = employee.ProfilePicture,
+                                             Status = (short)IDeliverObjects.Enum.DriverCaseStatus.available,
+                                             IsOnline = true
                                          }).FirstOrDefaultAsync();
 
                         if (account is not null)
                         {
                             accounts.Add(account);
+
+                            #region account device                            
                             var accountDevice = await (from device in _context.EnrolmentDevices
                                                        where device.EnrolmentId == item.Id
                                                        select device).FirstOrDefaultAsync();
 
                             if (accountDevice is not null)
                                 account.Device = accountDevice;
+                            #endregion
                         }
-
                         break;
                     case 2:
                     // marchent employee
@@ -107,10 +111,13 @@ namespace iDeliverDataAccess.Repositories
                                          select new Account()
                                          {
                                              EnrolmentID = driver.EnrolmentId,
+                                             EmployeeID = driver.Id,
                                              FirstName = driver.FirstName,
                                              LastName = driver.LastName,
                                              MiddleName = driver.SecondName,
                                              Role = ((IDeliverObjects.Enum.Roles)driver.Enrolment.RoleId).ToString(),
+                                             IsOnline = false,
+                                             Status = (short)IDeliverObjects.Enum.DriverCaseStatus.unavailable,
                                              Organization = new OrganizationDTO()
                                              {
                                                  Id = driver.Organization.Id,
@@ -122,12 +129,28 @@ namespace iDeliverDataAccess.Repositories
                         if (account is not null)
                         {
                             accounts.Add(account);
+
+                            #region account case
+                            var accountCase = await (from driverCase in _context.DriverCases
+                                                     where driverCase.DriverId == account.EmployeeID
+                                                     select driverCase).FirstOrDefaultAsync();
+
+                            if (accountCase is not null)
+                            {
+                                account.IsOnline = accountCase.IsOnline;
+                                account.Status = accountCase.Status;
+                            }
+                                
+                            #endregion
+
+                            #region account device
                             var accountDevice = await (from device in _context.EnrolmentDevices
                                                        where device.EnrolmentId == item.Id
                                                        select device).FirstOrDefaultAsync();
 
                             if (accountDevice is not null)
                                 account.Device = accountDevice;
+                            #endregion
                         };
                         break;
                 }

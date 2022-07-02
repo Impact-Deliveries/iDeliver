@@ -224,8 +224,8 @@ namespace iDeliverDataAccess.Repositories
                                 join merchant in _context.Merchants on branch.MerchantId equals merchant.Id
                                 // join merchantDeliveryPrices in _context.MerchantDeliveryPrices on order.MerchantDeliveryPriceId equals merchantDeliveryPrices.Id
                                 where order.IsDeleted == false && branch.IsActive == true && merchant.IsActive == true
-                               // && (model.fromdate != null ? order.CreationDate.Date >= model.fromdate.Value : 1 == 1)
-                               // && (model.toDate != null ? order.CreationDate.Date >= model.toDate.Value : 1 == 1)
+                                // && (model.fromdate != null ? order.CreationDate.Date >= model.fromdate.Value : 1 == 1)
+                                // && (model.toDate != null ? order.CreationDate.Date >= model.toDate.Value : 1 == 1)
                                 && (model.merchantBranchID != null && model.merchantBranchID > 0 ? order.MerchantBranchId == model.merchantBranchID : 1 == 1)
                                 && (model.status != null && model.status > 0 ? order.Status == model.status : 1 == 1)
                                 select new OrderDTO
@@ -239,11 +239,11 @@ namespace iDeliverDataAccess.Repositories
                                     Status = order.Status,
                                     Note = order.Note,
                                     OrderDate = order.CreationDate,
-                                    ClientName=order.ClientName,
-                                    ClientNumber=order.ClientNumber,
+                                    ClientName = order.ClientName,
+                                    ClientNumber = order.ClientNumber,
                                     DriverName = order.Status > 1 ? (from c in _context.DriverOrders
                                                                      join c2 in _context.Drivers on c.DriverId equals c2.Id
-                                                                     where order.Id == c.OrderId && (c.Status == 2 || c.Status ==1)
+                                                                     where order.Id == c.OrderId && (c.Status == 2 || c.Status == 1)
                                                                      select c2.FirstName + ' ' + c2.LastName).FirstOrDefault() : "",
                                     LocationID = 0,
                                     LocationName = (branch.DeliveryStatus == 1 ?

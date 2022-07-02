@@ -16,6 +16,8 @@ namespace IDeliverObjects.DTO
         public string LastName { get; set; } = string.Empty;
         public string ProfilePicture { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
+        public bool IsOnline { get; set; } = true;
+        public short Status { get; set; }
         public OrganizationDTO? Organization { get; set; } = new OrganizationDTO();
         public EnrolmentDevice? Device { get; set; }
     }

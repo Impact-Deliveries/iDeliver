@@ -17,8 +17,10 @@ namespace IDeliverObjects.DTO.Notification
         public string Title { get; set; } = String.Empty;
         [JsonProperty("body")]
         public string Body { get; set; } = String.Empty;
+        [JsonProperty("module")]
+        public short Module { get; set; } = (int)Enum.NotificationModule.DriverOrder;
 
         [JsonProperty("data")]
-        public T? Data { get; set; } 
+        public T? Data { get; set; }
     }
 }

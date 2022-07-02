@@ -28,6 +28,7 @@ namespace IDeliverObjects.DTO
         public string? LocationName { get; set; }
         public long? LocationID { get; set; }
         public long? DriverID { get; set; }
+        public long? EnrolmentID { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public DateTime? OrderDate { get; set; }
         public bool? IsDeleted { get; set; }

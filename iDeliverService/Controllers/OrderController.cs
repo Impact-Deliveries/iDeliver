@@ -333,8 +333,8 @@ namespace iDeliverService.Controllers
         }
 
 
-        [HttpPost("SetDriverOrderOperation")]
-        public async Task<ActionResult> SetDriverOrderOperation([FromBody] OrderDTO model)
+        [HttpPost("SetOrderStatus")]
+        public async Task<ActionResult> SetOrderStatus([FromBody] OrderDTO model)
         {
             try
             {

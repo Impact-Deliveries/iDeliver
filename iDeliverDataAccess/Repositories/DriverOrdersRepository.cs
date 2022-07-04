@@ -37,6 +37,12 @@ namespace iDeliverDataAccess.Repositories
         public async Task<IEnumerable<DriverOrder>> Find(Expression<Func<DriverOrder, bool>> where) =>
             await _context.DriverOrders.Where(where).ToListAsync();
 
+        public async Task<IEnumerable<DriverOrder>> GetDriverOrders(Expression<Func<DriverOrder, bool>> where) =>
+            await _context.DriverOrders.Include("Order")
+                        .Include("Order.MerchantBranch")
+                        .Include("Order.MerchantBranch.Merchant")
+            .Where(where).ToListAsync();
+
         public async Task<DriverOrder?> FindRow(Expression<Func<DriverOrder, bool>> where) =>
             await _context.DriverOrders.Where(where).FirstOrDefaultAsync();
 
@@ -84,6 +90,31 @@ namespace iDeliverDataAccess.Repositories
             }
         }
 
+        public async Task<DriverOrder?> GetHoldDriverOrder(long driverID)
+        {
+
+            List<int> iOrderStatus = new List<int>() { (int)OrderStatus.DriverRejected, (int)OrderStatus.OrderCompleted };
+
+            return await _context.DriverOrders
+                        .Include("Order")
+                        .Include("Order.MerchantBranch")
+                        .Include("Order.MerchantBranch.Merchant")
+                        .Where(w => w.DriverId == driverID && w.IsDeleted == false && !iOrderStatus.Contains(w.Order.Status))
+                        .OrderByDescending(o => o.ModifiedDate)
+                        .FirstOrDefaultAsync();
+        }
+
+        public async Task<DriverOrder?> GetOrder(long orderID, long driverID)
+        {
+            List<int> iOrderStatus = new List<int>() { (int)OrderStatus.DriverRejected, (int)OrderStatus.OrderCompleted };
+            return await _context.DriverOrders
+                        .Include("Order")
+                        .Include("Order.MerchantBranch")
+                        .Include("Order.MerchantBranch.Merchant")
+                        .Where(w => w.DriverId == driverID && w.OrderId == orderID && w.IsDeleted == false && !iOrderStatus.Contains(w.Order.Status))
+                        .OrderByDescending(o => o.ModifiedDate)
+                        .FirstOrDefaultAsync();
+        }
 
     }
 }

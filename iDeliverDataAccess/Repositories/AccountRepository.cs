@@ -139,8 +139,7 @@ namespace iDeliverDataAccess.Repositories
                             {
                                 account.IsOnline = accountCase.IsOnline;
                                 account.Status = accountCase.Status;
-                            }
-                                
+                            } 
                             #endregion
 
                             #region account device

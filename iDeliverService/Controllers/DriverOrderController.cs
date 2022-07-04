@@ -41,6 +41,14 @@ namespace iDeliverService.Controllers
             return Ok(DriverOrder);
         }
 
+        [HttpGet("GetHoldDriverOrder/{driverID}")]
+        public async Task<ActionResult<DriverOrder>> GetHoldDriverOrder(long driverID) => Ok(await _repository.GetHoldDriverOrder(driverID));
+
+        [HttpGet("GetOrder/{orderID}/{driverID}")]
+        public async Task<ActionResult<DriverOrder>> GetOrder(long orderID, long driverID) => Ok(await _repository.GetOrder(orderID, driverID));
+
+        [HttpGet("GetDriverOrders/{driverID}")]
+        public async Task<ActionResult<DriverOrder>> GetDriverOrders(long driverID) => Ok(await _repository.GetDriverOrders(f => f.DriverId == driverID && f.IsDeleted == false && f.Status == (int)IDeliverObjects.Enum.DriverOrderEnum.AcceptedOrder));
         //[HttpPost("AddDriverOrder")]
         //public async Task<ActionResult<DriverOrderDTO>> AddDriverOrder(DriverOrderDTO modal)
         //{

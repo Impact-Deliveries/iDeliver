@@ -7,11 +7,15 @@
         //baseUrl: "http://localhost/iDeliverPortal/",
         //cdnUrl: "http://localhost/iDeliverPortal/"
 
-        apiBaseUrl: "http://10.0.0.234/iDeliveryService/api/",
-        baseUrl: "http://10.0.0.234/iDeliverPortal/",
-        cdnUrl: "http://10.0.0.234/iDeliverPortal/"
+        //apiBaseUrl: "http://10.0.0.234/iDeliveryService/api/",
+        //baseUrl: "http://10.0.0.234/iDeliverPortal/",
+        //cdnUrl: "http://10.0.0.234/iDeliverPortal/"
 
+        apiBaseUrl: "http://abdawwad1-001-site1.itempurl.com/api/",
+        baseUrl: "http://www.ideliveryapp.com/",
+        cdnUrl: "http://www.ideliveryapp.com/"
     });
+
 
     app.config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push('interceptor');

@@ -22,7 +22,9 @@
                 <div class="alert alert-secondary col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center p-1  my-2" role="alert">
                     Personal Information
                 </div>
-
+                <div ng-if="driver.error" class="alert alert-danger col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center p-1  my-2" role="alert">
+                    {{driver.errormsg}}
+                </div>
                 <!-- driver usname and national number -->
                 <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
                     <label>Username</label>
@@ -38,9 +40,9 @@
                 <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">
                     <label>Delivery Percent</label>
                     <!--<select class="form-control" ng-model="driver.obj.deliveryPercent">
-                        <option ng-repeat="item in deliveryPercent" value="{{item.ID}}">{{item.Value}}</option>
-                    </select>-->
-                    <input  class="form-control" ng-model="driver.obj.deliveryPercent"/>
+            <option ng-repeat="item in deliveryPercent" value="{{item.ID}}">{{item.Value}}</option>
+        </select>-->
+                    <input class="form-control" ng-model="driver.obj.deliveryPercent" />
                 </div>
                 <!-- driver name -->
                 <div class="form-group col-md-4 col-lg-4 col-sm-12 p-1 my-1">

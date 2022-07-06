@@ -8,7 +8,7 @@
       "sslPort": 0
     },
     "iis": {
-      "applicationUrl": "http://localhost/iDeliveryService",
+      "applicationUrl": "http://localhost/iDeliverService",
       "sslPort": 0
     }
   },
@@ -18,7 +18,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost/iDeliveryService",
+      "applicationUrl": "http://localhost/iDeliverService",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

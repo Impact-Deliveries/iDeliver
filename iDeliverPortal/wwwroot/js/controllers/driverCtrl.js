@@ -35,6 +35,8 @@
                 tabs: 1,
                 myDropzone: null,
                 driverid: 0,
+                error: false,
+                errormsg:'',
                 obj: {
                     DriverID: null,
                     username: '',
@@ -63,13 +65,44 @@
                     IsActive: true,
                     nationalNumber: '',
                     OrganizationID: 1,
-                    deliveryPercent:'78'
+                    deliveryPercent: '78'
                 },
 
             };
 
+            $scope.clearData = function () {
+                $scope.driver.obj.DriverID = null;
+                $scope.driver.obj.username = '';
+                $scope.driver.obj.firstname = '';
+                $scope.driver.obj.middlename = '';
+                $scope.driver.obj.lastname = '';
+                $scope.driver.obj.address = '';
+                $scope.driver.obj.phone = null;
+                $scope.driver.obj.mobile = null;
+                $scope.driver.obj.birthday = moment().utc().format("DD-MM-yyyy").toString();
+                $scope.driver.obj.socialStatus = "0";
+                $scope.driver.obj.isHaveProblem = false;
+                $scope.driver.obj.reason = null;
+                $scope.driver.obj.workTime = "0";
+                $scope.driver.obj.fromTime = null;
+                $scope.driver.obj.toTime = null;
+                $scope.driver.obj.startJob = moment().utc().format("DD-MM-yyyy").toString();
+                $scope.driver.obj.college = '';
+                $scope.driver.obj.university = '';
+                $scope.driver.obj.major = '';
+                $scope.driver.obj.graduationyear = '';
+                $scope.driver.obj.estimate = '';
+                $scope.driver.obj.advancedStudies = '';
+                $scope.driver.obj.selecteddays = [];
+                $scope.driver.obj.Attachments = null;
+                $scope.driver.obj.IsActive = true;
+                $scope.driver.obj.nationalNumber = '';
+                $scope.driver.obj.OrganizationID = 1;
+                $scope.driver.obj.deliveryPercent = '78'
+            };
             $scope.changeTab = function (i) {
                 $scope.driver.tabs = i;
+                $scope.clearData();
                 switch (i) {
                     case 1:
                         $scope.getDriversTable();
@@ -161,6 +194,7 @@
                 ) {
                     return;
                 }
+                $scope.driver.obj.birthday = moment($scope.driver.obj.birthday).format("DD-MM-yyyy");
                 $scope.driver.obj.selecteddays = $scope.Days.filter(a => a.checked == true).map(t => t.ID);
                 //$scope.driver.obj.birthday = moment($scope.driver.obj.birthday).utc().format("DD-MM-yyyy")
                 //$scope.driver.obj.startJob = moment($scope.driver.obj.startJob).utc().format("DD-MM-yyyy")
@@ -175,11 +209,17 @@
                             $scope.driver.driverid = res.data;
                             if ($scope.driver.myDropzone != null && $scope.driver.myDropzone.files.length > 0) {
                                 $scope.driver.myDropzone.processQueue();
-                            }
+                            }                          
                             $scope.changeTab(1);
 
                             break;
                         default:
+                            $scope.driver.errormsg = res.data;
+                            $scope.driver.error = true;
+                            $timeout(function () {
+                                $scope.driver.errormsg ='';
+                                $scope.driver.error = false;
+                            },10000);
                             break;
                     }
                 }, function (res) {
@@ -316,8 +356,8 @@
             $scope.deleteAttachment = function (id) {
                 if (!id) return;
                 let promise = httpService.httpPost('attachment/DeleteAttachment',
-                  id
-                ,
+                    id
+                    ,
                     { 'Content-Type': 'application/json' });
                 promise.then(function (res) {
                     switch (res.status) {
@@ -333,11 +373,11 @@
             };
 
             $scope.getAttachment = function () {
-                let promise = httpService.httpGet('attachment/GetAttachmentByModule?ModuleID=' + $scope.driver.obj.driverID+'&ModuleType=3', null, { 'Content-Type': 'application/json' });
+                let promise = httpService.httpGet('attachment/GetAttachmentByModule?ModuleID=' + $scope.driver.obj.driverID + '&ModuleType=3', null, { 'Content-Type': 'application/json' });
                 promise.then(function (res) {
                     switch (res.status) {
                         case 200:
-                            $scope.attachment.data  = res.data;
+                            $scope.attachment.data = res.data;
                             break;
                         default:
                             break;

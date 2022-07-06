@@ -3,7 +3,7 @@
 
     app.controller('profileCtrl', ['$scope', '$rootScope', '$log', 'httpService', 'commonService',
         function ($scope, $rootScope, $log, httpService, commonService) {
-
+            debugger;
             $scope.profile = null;
             $scope.SelectedModules = "0";
             $scope.loggedin = function () {

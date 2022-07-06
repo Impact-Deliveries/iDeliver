@@ -62,18 +62,19 @@ namespace iDeliverService.Controllers
         {
             try
             {
-                // bool isExistUsername = _Urepository.IsExists(w => w.Username.ToLower() == obj.username);
-                // if (isExistUsername) return BadRequest("username is exist");
-
-                // bool isExistNationalNumber = _repository.IsExists(w => w.NationalNumber == obj.nationalNumber);
-                // if (isExistNationalNumber) return BadRequest("national number is exist");
-
+                
                 long DriverID = 0;
                 Driver driver = new Driver();
                 DriverDetail Detail = new DriverDetail();
                 var Old_driver = obj.DriverID != null ? await _repository.GetByID(obj.DriverID.Value) : null;
                 if (Old_driver != null && Old_driver.Id > 0)
                 {
+                     bool isExistUsername = _Urepository.IsExists(w => w.Username.ToLower() == obj.username && Old_driver.Id!=w.Id);
+                     if (isExistUsername) return BadRequest("username is exist");
+
+                     bool isExistNationalNumber = _repository.IsExists(w => w.NationalNumber == obj.nationalNumber && Old_driver.Id != w.Id);
+                     if (isExistNationalNumber) return BadRequest("national number is exist");
+
                     DriverID = Old_driver.Id;
                     Old_driver.FirstName = obj.firstname;
                     Old_driver.SecondName = obj.middlename;
@@ -113,6 +114,11 @@ namespace iDeliverService.Controllers
                 }
                 else
                 {
+                    bool isExistUsername = _Urepository.IsExists(w => w.Username.ToLower() == obj.username);
+                    if (isExistUsername) return BadRequest("username is exist");
+
+                    bool isExistNationalNumber = _repository.IsExists(w => w.NationalNumber == obj.nationalNumber);
+                    if (isExistNationalNumber) return BadRequest("national number is exist");
                     driver = new Driver()
                     {
                         //  EnrolmentId = enroll.Id,
